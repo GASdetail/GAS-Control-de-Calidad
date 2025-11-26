@@ -5,89 +5,168 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario de Inspección de Entrega - GAS Paint & Detail</title>
     <style>
+        /* --- VARIABLES DE COLOR (Ajustadas para Dark Mode) --- */
         :root {
-            --primary: #2c3e50;
-            --success: #27ae60;
-            --gray: #ecf0f1;
-            --border: #bdc3c7;
+            --primary-dark: #202D3F; /* Fondo principal (Body) */
+            --container-bg: #2c3e50; /* Fondo del Contenedor (Formulario) */
+            --primary-blue: #007bff; /* Azul vibrante para énfasis */
+            --text-light: #ecf0f1;   /* Texto principal (blanco/gris claro) */
+            --text-muted: #bdc3c7;   /* Texto secundario/subtítulos */
+            --success: #27ae60;      /* Verde para completado */
+            --border-dark: #495a6b;  /* Borde/divisor sutil */
+            --input-bg: #34495e;     /* Fondo de inputs */
         }
+        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f6f7;
+            background-color: var(--primary-dark);
             margin: 0;
             padding: 20px;
+            color: var(--text-light); /* Color de texto predeterminado */
         }
         .container {
             max-width: 850px;
             margin: 0 auto;
-            background: white;
+            background: var(--container-bg); /* Fondo del formulario oscuro */
             padding: 30px;
             border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.4);
         }
 
-        /* --- Estilos del Logo Agregados --- */
         .logo-container {
-            text-align: center; /* Centra el logo */
-            margin-bottom: 20px; /* Espacio debajo del logo */
+            text-align: center;
+            margin-bottom: 20px;
         }
         .logo-container img {
-            max-width: 250px; /* Tamaño máximo del logo */
+            max-width: 250px;
             height: auto;
-            display: block; /* Para que margin: auto funcione */
-            margin: 0 auto; /* Centra la imagen */
+            display: block;
+            margin: 0 auto;
         }
-        /* ---------------------------------- */
 
         h1 {
             text-align: center;
-            color: var(--primary);
-            border-bottom: 2px solid var(--primary);
+            color: var(--text-light);
+            border-bottom: 2px solid var(--primary-blue);
             padding-bottom: 10px;
-            margin-top: 20px; /* Ajuste para darle espacio al logo */
+            margin-top: 20px;
         }
         
         /* Estilos Generales y Secciones */
         .form-group { display: flex; flex-direction: column; margin-bottom: 10px; }
-        .form-group label { font-weight: bold; margin-bottom: 5px; font-size: 0.9em; }
+        .form-group label { font-weight: bold; margin-bottom: 5px; font-size: 0.9em; color: var(--text-muted); }
+
         input[type="text"], input[type="number"], select, input[type="date"], input[type="time"] {
-            padding: 10px; border: 1px solid var(--border); border-radius: 4px; font-size: 14px;
+            padding: 10px; 
+            border: 1px solid var(--border-dark);
+            border-radius: 4px; 
+            font-size: 14px;
+            background-color: var(--input-bg); /* Fondo de inputs oscuro */
+            color: var(--text-light); /* Texto de inputs claro */
         }
+        /* Corregir el color de las opciones de select en algunos navegadores */
+        select option {
+            background: var(--input-bg);
+            color: var(--text-light);
+        }
+
         .header-info {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;
-            background: var(--gray); padding: 15px; border-radius: 5px;
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+            gap: 15px; 
+            margin-bottom: 20px;
+            background: var(--input-bg); /* Fondo de la sección de info del vehículo */
+            padding: 15px; 
+            border-radius: 5px;
+            border: 1px solid var(--border-dark);
         }
         .section {
-            border: 1px solid var(--border); border-radius: 6px; margin-bottom: 20px; overflow: hidden;
-            background: #fff; transition: all 0.3s ease;
+            border: 1px solid var(--border-dark); 
+            border-radius: 6px; 
+            margin-bottom: 20px; 
+            overflow: hidden;
+            background: var(--input-bg); /* Fondo de sección oscuro */
+            transition: box-shadow 0.3s ease; /* Animación de sombra */
         }
+        .section:hover {
+            box-shadow: 0 0 15px rgba(0, 123, 255, 0.2); /* Sombra azul sutil al pasar el mouse */
+        }
+
         .section-header {
-            background-color: #e0e0e0; padding: 15px; font-weight: bold; display: flex;
-            justify-content: space-between; align-items: center; font-size: 1.1em;
+            background-color: var(--primary-dark); /* Fondo del encabezado más oscuro que el contenedor */
+            color: var(--text-light); 
+            padding: 15px; 
+            font-weight: bold; 
+            display: flex;
+            justify-content: space-between; 
+            align-items: center; 
+            font-size: 1.1em;
+            transition: background-color 0.3s;
         }
         .status-indicator {
-            background: #95a5a6; color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.8em;
+            background: var(--border-dark); /* Gris oscuro para pendiente */
+            color: white; 
+            padding: 5px 15px; 
+            border-radius: 20px; 
+            font-size: 0.8em;
+            transition: background-color 0.3s;
         }
-        .section-header.completed { background-color: #d5f5e3 !important; color: var(--success) !important; border-bottom: 1px solid var(--success); }
-        .section-header.completed .status-indicator { background: var(--success) !important; }
+        .section-header.completed { 
+            background-color: var(--success) !important; 
+            color: white !important; 
+            border-bottom: 1px solid var(--success); 
+        }
+        .section-header.completed .status-indicator { 
+            background: white !important; 
+            color: var(--success) !important; 
+        }
 
         /* Estilos Administrativos */
-        .admin-row { padding: 15px; border-bottom: 1px solid #eee; background-color: #fafafa; }
-        .admin-question { font-weight: 600; color: var(--primary); margin-bottom: 10px; display: block; }
+        .admin-row { 
+            padding: 15px; 
+            border-bottom: 1px solid var(--border-dark); 
+            background-color: var(--input-bg); 
+        }
+        .admin-question { 
+            font-weight: 600; 
+            color: var(--text-light); 
+            margin-bottom: 10px; 
+            display: block; 
+        }
         .input-cluster { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-        .sub-note { font-size: 0.85em; color: #7f8c8d; margin-top: 5px; font-style: italic; }
-        .highlight-box { padding: 10px; border-radius: 4px; margin-top: 10px; border: 1px solid; }
+        .sub-note { font-size: 0.85em; color: var(--text-muted); margin-top: 5px; font-style: italic; }
+        .highlight-box { 
+            padding: 10px; 
+            border-radius: 4px; 
+            margin-top: 10px; 
+            border: 1px solid; 
+        }
         
-        /* Colores de las cajas */
-        #devolucion-block { background-color: #fff3cd; border-color: #ffeeba; }
-        #corregido-block { background-color: #e8f8f5; border-color: #d1f2eb; }
+        /* Colores de las cajas de resaltado (Ajustados para Dark Mode) */
+        #devolucion-block { 
+            background-color: #5d4037; /* Marrón oscuro para advertencia */
+            border-color: #8d6e63;   
+            color: var(--text-light);
+        }
+        #corregido-block { 
+            background-color: #004d40; /* Verde oscuro para corrección */
+            border-color: #26a69a;   
+            color: var(--text-light);
+        }
+        #devolucion-block .sub-note, #corregido-block .sub-note { color: var(--text-light); }
 
         .checklist { padding: 15px; }
-        .check-item { display: flex; align-items: center; padding: 8px 0; border-bottom: 1px solid #eee; }
+        .check-item { 
+            display: flex; 
+            align-items: center; 
+            padding: 8px 0; 
+            border-bottom: 1px solid var(--border-dark); 
+        }
         .check-item input[type="checkbox"] { transform: scale(1.5); margin-right: 15px; cursor: pointer; }
         .check-item label { cursor: pointer; width: 100%; }
+        .check-item:last-child { border-bottom: none; } /* Quitar borde del último ítem */
 
-        /* Estilos de botones */
+        /* Estilos de botones con Animación */
         .button-group {
             display: flex;
             gap: 10px; 
@@ -100,51 +179,57 @@
             border-radius: 5px;
             font-size: 1.2em;
             cursor: pointer;
-            transition: background-color 0.3s;
+            color: white; 
+            /* Animación */
+            transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
         }
         .btn-submit {
-            background-color: var(--primary); 
-            color: white;
+            background-color: var(--primary-blue); 
         }
         .btn-clear {
             background-color: #e74c3c; 
-            color: white;
+        }
+        
+        /* Animación de Hover para Botones */
+        .btn-submit:hover {
+            background-color: #0056b3; 
+            transform: scale(1.02); /* Escala ligeramente */
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4); /* Sombra azul */
         }
         .btn-clear:hover {
             background-color: #c0392b;
-        }
-        .btn-submit:hover {
-            background-color: #34495e;
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4); /* Sombra roja */
         }
 
         /* --- REGLAS DE IMPRESIÓN --- */
         @media print {
             @page { margin: 0.5cm; }
-            body { background-color: white; padding: 0; }
-            .container { box-shadow: none; border: none; padding: 0; width: 100%; max-width: 100%; }
+            body { background-color: white; padding: 0; color: #000; }
+            .container { box-shadow: none; border: none; padding: 0; width: 100%; max-width: 100%; background: white; }
             .button-group { display: none !important; } 
             
-            /* Asegurar que el logo se imprima bien */
-            .logo-container img {
-                max-width: 200px; 
+            /* Asegurar que los elementos oscuros se impriman en blanco o gris claro */
+            .section-header, .status-indicator, .section, .admin-row, .header-info, input, select {
+                background-color: #f0f0f0 !important; 
+                color: #000 !important;
+                border: 1px solid #ccc !important;
             }
-            
-            /* Ocultar condicionalmente Devuelto/Corregido */
-            .ocultar-admin-print { display: none !important; }
-            
-            /* Ocultar secciones incompletas */
-            .section.ocultar-impresion { display: none !important; }
-            
-            /* Lógica para ítems: Ocultar si no están marcados, mostrar si sí */
+            .section-header.completed {
+                background-color: #d5f5e3 !important; 
+            }
+            #devolucion-block, #corregido-block {
+                background-color: #fff !important; 
+                border-color: #ccc !important;
+            }
+            .form-group label, .admin-question, .sub-note {
+                color: #000 !important;
+            }
+            .logo-container img { max-width: 200px; }
+            .ocultar-admin-print, .section.ocultar-impresion { display: none !important; }
             .check-item { display: none !important; } 
-            .check-item.checked-print { 
-                display: flex !important;
-                border-bottom: 1px dashed #ccc; 
-                padding: 5px 0;
-            }
+            .check-item.checked-print { display: flex !important; border-bottom: 1px dashed #ccc; padding: 5px 0; }
             .check-item.checked-print input[type="checkbox"] { display: none !important; }
-            
-            /* Asegurar colores para impresión */
             * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
         }
     </style>
@@ -164,7 +249,7 @@
             <input type="text" id="orderNum" placeholder="Ej: OT-1234">
         </div>
         <div class="form-group">
-            <label>Placa:</label>
+            <label>Placa (9 Dígitos):</label>
             <input type="text" id="plate" maxlength="9" placeholder="Ej: 123456789">
         </div>
         <div class="form-group">
@@ -213,7 +298,7 @@
                 </div>
             </div>
 
-            <div id="corregido-block" class="highlight-box" style="background-color: #e8f8f5; border-color: #d1f2eb;">
+            <div id="corregido-block" class="highlight-box">
                 <span class="sub-note">3. Revisado por Operaciones y debidamente corregidos los servicios incompletos.</span>
                 <div class="input-cluster" style="margin-top:5px;">
                     <label>Corregido:</label>
@@ -224,7 +309,7 @@
         </div>
 
         <div class="checklist">
-            <div class="check-item" style="background-color: #fdfdfd; border: 1px dashed #ccc; padding: 10px;">
+            <div class="check-item" style="background-color: var(--input-bg); padding: 10px;">
                 <input type="checkbox" id="admin-ok" onchange="checkSection('sec-sistema'); saveForm();">
                 <label for="admin-ok"><strong>CONFIRMAR:</strong> La revisión administrativa está completa.</label>
             </div>
@@ -387,7 +472,7 @@
         const data = {};
 
         document.querySelectorAll("input, select, textarea").forEach(el => {
-            if (!el.id) return; // solo guarda elementos con id
+            if (!el.id) return; 
 
             if (el.type === "checkbox") {
                 data[el.id] = el.checked;
@@ -526,4 +611,5 @@
 
 </body>
 </html>
+
 
