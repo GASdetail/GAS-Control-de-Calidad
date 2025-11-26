@@ -25,11 +25,26 @@
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
+
+        /* --- Estilos del Logo Agregados --- */
+        .logo-container {
+            text-align: center; /* Centra el logo */
+            margin-bottom: 20px; /* Espacio debajo del logo */
+        }
+        .logo-container img {
+            max-width: 250px; /* Tamaño máximo del logo */
+            height: auto;
+            display: block; /* Para que margin: auto funcione */
+            margin: 0 auto; /* Centra la imagen */
+        }
+        /* ---------------------------------- */
+
         h1 {
             text-align: center;
             color: var(--primary);
             border-bottom: 2px solid var(--primary);
             padding-bottom: 10px;
+            margin-top: 20px; /* Ajuste para darle espacio al logo */
         }
         
         /* Estilos Generales y Secciones */
@@ -109,6 +124,11 @@
             .container { box-shadow: none; border: none; padding: 0; width: 100%; max-width: 100%; }
             .button-group { display: none !important; } 
             
+            /* Asegurar que el logo se imprima bien */
+            .logo-container img {
+                max-width: 200px; 
+            }
+            
             /* Ocultar condicionalmente Devuelto/Corregido */
             .ocultar-admin-print { display: none !important; }
             
@@ -132,6 +152,10 @@
 <body>
 
 <div class="container">
+    
+    <div class="logo-container">
+        <img src="assets/logo.jpeg" alt="GAS Paint & Detail Logo">
+    </div>
     <h1>Inspección de Entrega - GAS Paint</h1>
 
     <div class="header-info">
