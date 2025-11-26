@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Inspección de Entrega - GAS Paint & Detail</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --success: #27ae60;
+            --gray: #ecf0f1;
+            --border: #bdc3c7;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f7;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
+        }
+        
+        /* Estilos Generales y Secciones (Mantienen el diseño anterior) */
+        .form-group { display: flex; flex-direction: column; margin-bottom: 10px; }
+        .form-group label { font-weight: bold; margin-bottom: 5px; font-size: 0.9em; }
+        input[type="text"], input[type="number"], select, input[type="date"], input[type="time"] {
+            padding: 10px; border: 1px solid var(--border); border-radius: 4px; font-size: 14px;
+        }
+        .header-info {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;
+            background: var(--gray); padding: 15px; border-radius: 5px;
+        }
+        .section {
+            border: 1px solid var(--border); border-radius: 6px; margin-bottom: 20px; overflow: hidden;
+            background: #fff; transition: all 0.3s ease;
+        }
+        .section-header {
+            background-color: #e0e0e0; padding: 15px; font-weight: bold; display: flex;
+            justify-content: space-between; align-items: center; font-size: 1.1em;
+        }
+        .status-indicator {
+            background: #95a5a6; color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.8em;
+        }
+        .section-header.completed { background-color: #d5f5e3 !important; color: var(--success) !important; border-bottom: 1px solid var(--success); }
+        .section-header.completed .status-indicator { background: var(--success) !important; }
+
+        /* Estilos Administrativos (Mantienen el diseño anterior) */
+        .admin-row { padding: 15px; border-bottom: 1px solid #eee; background-color: #fafafa; }
+        .admin-question { font-weight: 600; color: var(--primary); margin-bottom: 10px; display: block; }
+        .input-cluster { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+        .sub-note { font-size: 0.85em; color: #7f8c8d; margin-top: 5px; font-style: italic; }
+        .highlight-box { background-color: #fff3cd; padding: 10px; border-radius: 4px; margin-top: 10px; border: 1px solid #ffeeba; }
+        .checklist { padding: 15px; }
+        .check-item { display: flex; align-items: center; padding: 8px 0; border-bottom: 1px solid #eee; }
+        .check-item input[type="checkbox"] { transform: scale(1.5); margin-right: 15px; cursor: pointer; }
+        .check-item label { cursor: pointer; width: 100%; }
+
+        /* --- NUEVOS ESTILOS PARA LOS BOTONES --- */
+        .button-group {
+            display: flex;
+            gap: 10px; /* Espacio entre los botones */
+            margin-top: 30px;
+        }
+        .btn-submit, .btn-clear {
+            flex-grow: 1; /* Ambos botones ocupan el mismo ancho */
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn-submit {
+            background-color: var(--primary); /* Azul oscuro */
+            color: white;
+        }
+        .btn-clear {
+            background-color: #e74c3c; /* Rojo para acción de limpieza/peligro */
+            color: white;
+        }
+        .btn-clear:hover {
+            background-color: #c0392b;
+        }
+        .btn-submit:hover {
+            background-color: #34495e;
+        }
+
+        /* --- REGLAS DE IMPRESIÓN --- */
+        @media print {
+            @page { margin: 0.5cm; }
+            body { background-color: white; padding: 0; }
+            .container { box-shadow: none; border: none; padding: 0; width: 100%; max-width: 100%; }
+            .button-group { display: none; } /* Ocultar el grupo de botones */
+            .section.ocultar-impresion { display: none !important; }
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Inspección de Entrega - GAS Paint</h1>
+
+    <div class="header-info">
+        <div class="form-group">
+            <label>Nº Orden de Trabajo:</label>
+            <input type="text" id="orderNum" placeholder="Ej: OT-1234">
+        </div>
+        <div class="form-group">
+            <label>Placa (9 Dígitos):</label>
+            <input type="text" id="plate" maxlength="9" placeholder="Ej: 123456789">
+        </div>
+        <div class="form-group">
+            <label>Marca del Vehículo:</label>
+            <input type="text" id="brand" placeholder="Ej: Toyota">
+        </div>
+    </div>
+
+    <div class="section" id="sec-sistema">
+        <div class="section-header">
+            <span>A. ORDEN DE TRABAJO Y SISTEMA</span>
+            <span class="status-indicator">PENDIENTE</span>
+        </div>
+        
+        <div class="admin-row">
+            <span class="admin-question">1. ¿Se encuentra la Orden de Trabajo finalizada en el Sistema?</span>
+            <div class="input-cluster">
+                <select id="sys-finalizada">
+                    <option value="">Seleccione...</option>
+                    <option value="SI">SÍ</option>
+                    <option value="NO">NO</option>
+                </select>
+                <input type="date" title="Fecha">
+                <input type="time" title="Hora">
+            </div>
+        </div>
+
+        <div class="admin-row">
+            <span class="admin-question">2.a. ¿Todos los servicios en la Orden verificables, se ejecutaron?</span>
+            <div class="input-cluster">
+                <select id="sys-ejecutados">
+                    <option value="">Seleccione...</option>
+                    <option value="SI">SÍ</option>
+                    <option value="NO">NO</option>
+                </select>
+                <input type="date" title="Fecha">
+                <input type="time" title="Hora">
+            </div>
+            
+            <div class="highlight-box">
+                <span class="sub-note">2.b. En caso negativo, devolver a Operaciones el vehículo y este Formulario.</span>
+                <div class="input-cluster" style="margin-top:5px;">
+                    <label>Devuelto:</label>
+                    <input type="date" title="Fecha Devolución">
+                    <input type="time" title="Hora Devolución">
+                </div>
+            </div>
+
+            <div class="highlight-box" style="background-color: #e8f8f5; border-color: #d1f2eb;">
+                <span class="sub-note">3. Revisado por Operaciones y debidamente corregidos los servicios incompletos.</span>
+                <div class="input-cluster" style="margin-top:5px;">
+                    <label>Corregido:</label>
+                    <input type="date" title="Fecha Corrección">
+                    <input type="time" title="Hora Corrección">
+                </div>
+            </div>
+        </div>
+
+        <div class="checklist">
+            <div class="check-item" style="background-color: #fdfdfd; border: 1px dashed #ccc; padding: 10px;">
+                <input type="checkbox" id="admin-ok" onchange="checkSection('sec-sistema')">
+                <label for="admin-ok"><strong>CONFIRMAR:</strong> La revisión administrativa está completa.</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="section" id="sec-pintura">
+        <div class="section-header">
+            <span>B. PINTURA</span>
+            <span class="status-indicator">PENDIENTE</span>
+        </div>
+        <div class="checklist">
+            <div class="check-item">
+                <input type="checkbox" id="p1" onchange="checkSection('sec-pintura')">
+                <label for="p1">Textura del transparente correcta (conforme a originalidad)</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="section" id="sec-pulido">
+        <div class="section-header">
+            <span>C. PULIDO Y EXTERIOR</span>
+            <span class="status-indicator">PENDIENTE</span>
+        </div>
+        <div class="checklist">
+            <div class="check-item">
+                <input type="checkbox" id="pu1" onchange="checkSection('sec-pulido')">
+                <label for="pu1">Sin rayas, manchas u opacamiento por pulido</label>
+            </div>
+            <div class="check-item">
+                <input type="checkbox" id="pu2" onchange="checkSection('sec-pulido')">
+                <label for="pu2">Vidrios pulidos (sin manchas ni marcas de agua)</label>
+            </div>
+            <div class="check-item">
+                <input type="checkbox" id="pu3" onchange="checkSection('sec-pulido')">
+                <label for="pu3">Partes negras acondicionadas</label>
+            </div>
+            <div class="check-item">
+                <input type="checkbox" id="pu4" onchange="checkSection('sec-pulido')">
+                <label for="pu4">Manillas de puertas limpias (interior y exterior)</label>
+            </div>
+            <div class="check-item">
+                <input type="checkbox" id="pu5" onchange="checkSection('sec-pulido')">
+                <label for="pu5">Torpedo y escobillas detallados correctamente</label>
+            </div>
+            <div class="check-item">
+                <input type="checkbox" id="pu6" onchange="checkSection('sec-pulido')">
+                <label for="pu6">Bordes del vehículo sin residuos (polish/cera)</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="section" id="sec-tapiceria">
+        <div class="section-header">
+            <span>D. TAPICERÍA E INTERIOR</span>
+            <span class="status-indicator">PENDIENTE</span>
+        </div>
+        <div class="checklist">
+            <div class="check-item">
+                <input type="checkbox" id="t1" onchange="checkSection('sec-tapiceria')">
+                <label for="t1">Aspirado de piso y alfombras detallado</label>
+            </div>
+            <div class="check-item">
+                <input type="checkbox" id="t2" onchange="checkSection('sec-tapiceria')">
+                <label for="t2">Tapicería aspirada y detallada correctamente</label>
+            </div>
+            <div class="check-item">
+                <input type="checkbox" id="t3" onchange="checkSection('sec-tapiceria')">
+                <label for="t3">Rejillas de ventilación limpias y detalladas</label>
+            </div>
+            <div class="check-item">
+                <input type="checkbox" id="t4" onchange="checkSection('sec-tapiceria')">
+                <label for="t4">Dash limpio y detallado</label>
+            </div>
+            <div class="check-item">
+                <input type="checkbox" id="t5" onchange="checkSection('sec-tapiceria')">
+                <label for="t5">Guarda soles limpios y detallados</label>
+            </div>
+            <div class="check-item">
+                <input type="checkbox" id="t6" onchange="checkSection('sec-tapiceria')">
+                <label for="t6">Consola central limpia y detallada</label>
+            </div>
+            <div class="check-item">
+                <input type="checkbox" id="t7" onchange="checkSection('sec-tapiceria')">
+                <label for="t7">Guantera y compartimientos limpios</label>
+            </div>
+            <div class="check-item">
+                <input type="checkbox" id="t8" onchange="checkSection('sec-tapiceria')">
+                <label for="t8">Cielo (techo) detallado y limpio</label>
+            </div>
+            <div class="check-item">
+                <input type="checkbox" id="t9" onchange="checkSection('sec-tapiceria')">
+                <label for="t9">Asientos detallados y limpios</label>
+            </div>
+            <div class="check-item">
+                <input type="checkbox" id="t10" onchange="checkSection('sec-tapiceria')">
+                <label for="t10">Empaques externos limpios y detallados</label>
+            </div>
+            <div class="check-item">
+                <input type="checkbox" id="t11" onchange="checkSection('sec-tapiceria')">
+                <label for="t11">Empaques internos limpios y detallados</label>
+            </div>
+            <div class="check-item">
+                <input type="checkbox" id="t12" onchange="checkSection('sec-tapiceria')">
+                <label for="t12">Empaque del capó limpio y detallado</label>
+            </div>
+            <div class="check-item">
+                <input type="checkbox" id="t13" onchange="checkSection('sec-tapiceria')">
+                <label for="t13">Empaque de la cajuela limpio y detallado</label>
+            </div>
+            <div class="check-item">
+                <input type="checkbox" id="t14" onchange="checkSection('sec-tapiceria')">
+                <label for="t14">Pantallas y espejos limpios</label>
+            </div>
+            <div class="check-item">
+                <input type="checkbox" id="t15" onchange="checkSection('sec-tapiceria')">
+                <label for="t15">Pedales correctamente limpios y detallados</label>
+            </div>
+            <div class="check-item">
+                <input type="checkbox" id="t16" onchange="checkSection('sec-tapiceria')">
+                <label for="t16">Cajuela aspirada y limpia</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="button-group">
+        <button class="btn-clear" onclick="limpiarFormulario()">Limpiar</button>
+        <button class="btn-submit" onclick="generarReporte()">Finalizar e Imprimir Reporte</button>
+    </div>
+</div>
+
+<script>
+    const STORAGE_KEY = "form-calidad-gas";
+
+    function checkSection(sectionId) {
+        const section = document.getElementById(sectionId);
+        const header = section.querySelector('.section-header');
+        const indicator = section.querySelector('.status-indicator');
+        const checkboxes = section.querySelectorAll('input[type="checkbox"]');
+        
+        let allChecked = true;
+        
+        checkboxes.forEach(box => {
+            if (!box.checked) {
+                allChecked = false;
+            }
+        });
+
+        if (allChecked) {
+            header.classList.add('completed');
+            indicator.textContent = "✔ COMPLETADO";
+        } else {
+            header.classList.remove('completed');
+            indicator.textContent = "PENDIENTE";
+        }
+    }
+
+    // 👉 Guarda todos los campos en localStorage
+    function saveForm() {
+        const data = {};
+
+        document.querySelectorAll("input, select, textarea").forEach(el => {
+            if (!el.id) return; // solo guarda elementos con id
+
+            if (el.type === "checkbox") {
+                data[el.id] = el.checked;
+            } else {
+                data[el.id] = el.value;
+            }
+        });
+
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+    // 👉 Carga los datos desde localStorage
+    function loadForm() {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+
+        const data = JSON.parse(raw);
+
+        for (let id in data) {
+            const el = document.getElementById(id);
+            if (!el) continue;
+
+            if (el.type === "checkbox") {
+                el.checked = data[id];
+            } else {
+                el.value = data[id];
+            }
+        }
+
+        // Actualizar estados de secciones después de cargar
+        ["sec-sistema", "sec-pintura", "sec-pulido", "sec-tapiceria"].forEach(id => {
+            if (document.getElementById(id)) {
+                checkSection(id);
+            }
+        });
+    }
+
+    // 👉 Limpia todo: pantalla + almacenamiento local
+    function limpiarFormulario() {
+        if (confirm("¿Está seguro que desea limpiar todo el formulario? Se perderán todos los datos guardados.")) {
+            localStorage.removeItem(STORAGE_KEY);
+            window.location.reload();
+        }
+    }
+
+    function generarReporte() {
+        const placa = document.getElementById('plate').value;
+
+        if (placa.length < 1) {
+            alert("Por favor ingrese al menos la PLACA del vehículo.");
+            return;
+        }
+
+        const sections = document.querySelectorAll('.section');
+        let contadorCompletados = 0;
+
+        sections.forEach(sec => {
+            const header = sec.querySelector('.section-header');
+            
+            if (!header.classList.contains('completed')) {
+                sec.classList.add('ocultar-impresion');
+            } else {
+                sec.classList.remove('ocultar-impresion');
+                contadorCompletados++;
+            }
+        });
+
+        if (contadorCompletados === 0) {
+            if (!confirm("No ha completado ninguna sección completa (en verde). El reporte saldrá casi vacío. ¿Desea continuar?")) {
+                return;
+            }
+        }
+
+        window.print();
+        
+        setTimeout(() => {
+            sections.forEach(sec => {
+                sec.classList.remove('ocultar-impresion');
+            });
+        }, 1000);
+    }
+
+    // 👉 Al cargar la página: cargar datos y activar autosave
+    window.addEventListener("DOMContentLoaded", () => {
+        loadForm();
+
+        document.querySelectorAll("input, select, textarea").forEach(el => {
+            el.addEventListener("input", saveForm);
+            el.addEventListener("change", saveForm);
+        });
+    });
+</script>
+
+</body>
+</html>
