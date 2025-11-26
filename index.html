@@ -32,7 +32,7 @@
             padding-bottom: 10px;
         }
         
-        /* Estilos Generales y Secciones (Mantienen el diseño anterior) */
+        /* Estilos Generales y Secciones */
         .form-group { display: flex; flex-direction: column; margin-bottom: 10px; }
         .form-group label { font-weight: bold; margin-bottom: 5px; font-size: 0.9em; }
         input[type="text"], input[type="number"], select, input[type="date"], input[type="time"] {
@@ -56,25 +56,30 @@
         .section-header.completed { background-color: #d5f5e3 !important; color: var(--success) !important; border-bottom: 1px solid var(--success); }
         .section-header.completed .status-indicator { background: var(--success) !important; }
 
-        /* Estilos Administrativos (Mantienen el diseño anterior) */
+        /* Estilos Administrativos */
         .admin-row { padding: 15px; border-bottom: 1px solid #eee; background-color: #fafafa; }
         .admin-question { font-weight: 600; color: var(--primary); margin-bottom: 10px; display: block; }
         .input-cluster { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
         .sub-note { font-size: 0.85em; color: #7f8c8d; margin-top: 5px; font-style: italic; }
-        .highlight-box { background-color: #fff3cd; padding: 10px; border-radius: 4px; margin-top: 10px; border: 1px solid #ffeeba; }
+        .highlight-box { padding: 10px; border-radius: 4px; margin-top: 10px; border: 1px solid; }
+        
+        /* Colores de las cajas */
+        #devolucion-block { background-color: #fff3cd; border-color: #ffeeba; }
+        #corregido-block { background-color: #e8f8f5; border-color: #d1f2eb; }
+
         .checklist { padding: 15px; }
         .check-item { display: flex; align-items: center; padding: 8px 0; border-bottom: 1px solid #eee; }
         .check-item input[type="checkbox"] { transform: scale(1.5); margin-right: 15px; cursor: pointer; }
         .check-item label { cursor: pointer; width: 100%; }
 
-        /* --- NUEVOS ESTILOS PARA LOS BOTONES --- */
+        /* Estilos de botones */
         .button-group {
             display: flex;
-            gap: 10px; /* Espacio entre los botones */
+            gap: 10px; 
             margin-top: 30px;
         }
         .btn-submit, .btn-clear {
-            flex-grow: 1; /* Ambos botones ocupan el mismo ancho */
+            flex-grow: 1; 
             padding: 15px;
             border: none;
             border-radius: 5px;
@@ -83,11 +88,11 @@
             transition: background-color 0.3s;
         }
         .btn-submit {
-            background-color: var(--primary); /* Azul oscuro */
+            background-color: var(--primary); 
             color: white;
         }
         .btn-clear {
-            background-color: #e74c3c; /* Rojo para acción de limpieza/peligro */
+            background-color: #e74c3c; 
             color: white;
         }
         .btn-clear:hover {
@@ -102,11 +107,26 @@
             @page { margin: 0.5cm; }
             body { background-color: white; padding: 0; }
             .container { box-shadow: none; border: none; padding: 0; width: 100%; max-width: 100%; }
-            .button-group { display: none; } /* Ocultar el grupo de botones */
+            .button-group { display: none !important; } 
+            
+            /* Ocultar condicionalmente Devuelto/Corregido */
+            .ocultar-admin-print { display: none !important; }
+            
+            /* Ocultar secciones incompletas */
             .section.ocultar-impresion { display: none !important; }
+            
+            /* Lógica para ítems: Ocultar si no están marcados, mostrar si sí */
+            .check-item { display: none !important; } 
+            .check-item.checked-print { 
+                display: flex !important;
+                border-bottom: 1px dashed #ccc; 
+                padding: 5px 0;
+            }
+            .check-item.checked-print input[type="checkbox"] { display: none !important; }
+            
+            /* Asegurar colores para impresión */
             * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
         }
-
     </style>
 </head>
 <body>
@@ -151,7 +171,7 @@
         <div class="admin-row">
             <span class="admin-question">2.a. ¿Todos los servicios en la Orden verificables, se ejecutaron?</span>
             <div class="input-cluster">
-                <select id="sys-ejecutados">
+                <select id="sys-ejecutados" onchange="saveForm()">
                     <option value="">Seleccione...</option>
                     <option value="SI">SÍ</option>
                     <option value="NO">NO</option>
@@ -160,7 +180,7 @@
                 <input type="time" title="Hora">
             </div>
             
-            <div class="highlight-box">
+            <div id="devolucion-block" class="highlight-box">
                 <span class="sub-note">2.b. En caso negativo, devolver a Operaciones el vehículo y este Formulario.</span>
                 <div class="input-cluster" style="margin-top:5px;">
                     <label>Devuelto:</label>
@@ -169,7 +189,7 @@
                 </div>
             </div>
 
-            <div class="highlight-box" style="background-color: #e8f8f5; border-color: #d1f2eb;">
+            <div id="corregido-block" class="highlight-box" style="background-color: #e8f8f5; border-color: #d1f2eb;">
                 <span class="sub-note">3. Revisado por Operaciones y debidamente corregidos los servicios incompletos.</span>
                 <div class="input-cluster" style="margin-top:5px;">
                     <label>Corregido:</label>
@@ -181,7 +201,7 @@
 
         <div class="checklist">
             <div class="check-item" style="background-color: #fdfdfd; border: 1px dashed #ccc; padding: 10px;">
-                <input type="checkbox" id="admin-ok" onchange="checkSection('sec-sistema')">
+                <input type="checkbox" id="admin-ok" onchange="checkSection('sec-sistema'); saveForm();">
                 <label for="admin-ok"><strong>CONFIRMAR:</strong> La revisión administrativa está completa.</label>
             </div>
         </div>
@@ -194,7 +214,7 @@
         </div>
         <div class="checklist">
             <div class="check-item">
-                <input type="checkbox" id="p1" onchange="checkSection('sec-pintura')">
+                <input type="checkbox" id="p1" onchange="checkSection('sec-pintura'); saveForm();">
                 <label for="p1">Textura del transparente correcta (conforme a originalidad)</label>
             </div>
         </div>
@@ -207,27 +227,27 @@
         </div>
         <div class="checklist">
             <div class="check-item">
-                <input type="checkbox" id="pu1" onchange="checkSection('sec-pulido')">
+                <input type="checkbox" id="pu1" onchange="checkSection('sec-pulido'); saveForm();">
                 <label for="pu1">Sin rayas, manchas u opacamiento por pulido</label>
             </div>
             <div class="check-item">
-                <input type="checkbox" id="pu2" onchange="checkSection('sec-pulido')">
+                <input type="checkbox" id="pu2" onchange="checkSection('sec-pulido'); saveForm();">
                 <label for="pu2">Vidrios pulidos (sin manchas ni marcas de agua)</label>
             </div>
             <div class="check-item">
-                <input type="checkbox" id="pu3" onchange="checkSection('sec-pulido')">
+                <input type="checkbox" id="pu3" onchange="checkSection('sec-pulido'); saveForm();">
                 <label for="pu3">Partes negras acondicionadas</label>
             </div>
             <div class="check-item">
-                <input type="checkbox" id="pu4" onchange="checkSection('sec-pulido')">
+                <input type="checkbox" id="pu4" onchange="checkSection('sec-pulido'); saveForm();">
                 <label for="pu4">Manillas de puertas limpias (interior y exterior)</label>
             </div>
             <div class="check-item">
-                <input type="checkbox" id="pu5" onchange="checkSection('sec-pulido')">
+                <input type="checkbox" id="pu5" onchange="checkSection('sec-pulido'); saveForm();">
                 <label for="pu5">Torpedo y escobillas detallados correctamente</label>
             </div>
             <div class="check-item">
-                <input type="checkbox" id="pu6" onchange="checkSection('sec-pulido')">
+                <input type="checkbox" id="pu6" onchange="checkSection('sec-pulido'); saveForm();">
                 <label for="pu6">Bordes del vehículo sin residuos (polish/cera)</label>
             </div>
         </div>
@@ -240,67 +260,67 @@
         </div>
         <div class="checklist">
             <div class="check-item">
-                <input type="checkbox" id="t1" onchange="checkSection('sec-tapiceria')">
+                <input type="checkbox" id="t1" onchange="checkSection('sec-tapiceria'); saveForm();">
                 <label for="t1">Aspirado de piso y alfombras detallado</label>
             </div>
             <div class="check-item">
-                <input type="checkbox" id="t2" onchange="checkSection('sec-tapiceria')">
+                <input type="checkbox" id="t2" onchange="checkSection('sec-tapiceria'); saveForm();">
                 <label for="t2">Tapicería aspirada y detallada correctamente</label>
             </div>
             <div class="check-item">
-                <input type="checkbox" id="t3" onchange="checkSection('sec-tapiceria')">
+                <input type="checkbox" id="t3" onchange="checkSection('sec-tapiceria'); saveForm();">
                 <label for="t3">Rejillas de ventilación limpias y detalladas</label>
             </div>
             <div class="check-item">
-                <input type="checkbox" id="t4" onchange="checkSection('sec-tapiceria')">
+                <input type="checkbox" id="t4" onchange="checkSection('sec-tapiceria'); saveForm();">
                 <label for="t4">Dash limpio y detallado</label>
             </div>
             <div class="check-item">
-                <input type="checkbox" id="t5" onchange="checkSection('sec-tapiceria')">
+                <input type="checkbox" id="t5" onchange="checkSection('sec-tapiceria'); saveForm();">
                 <label for="t5">Guarda soles limpios y detallados</label>
             </div>
             <div class="check-item">
-                <input type="checkbox" id="t6" onchange="checkSection('sec-tapiceria')">
+                <input type="checkbox" id="t6" onchange="checkSection('sec-tapiceria'); saveForm();">
                 <label for="t6">Consola central limpia y detallada</label>
             </div>
             <div class="check-item">
-                <input type="checkbox" id="t7" onchange="checkSection('sec-tapiceria')">
+                <input type="checkbox" id="t7" onchange="checkSection('sec-tapiceria'); saveForm();">
                 <label for="t7">Guantera y compartimientos limpios</label>
             </div>
             <div class="check-item">
-                <input type="checkbox" id="t8" onchange="checkSection('sec-tapiceria')">
+                <input type="checkbox" id="t8" onchange="checkSection('sec-tapiceria'); saveForm();">
                 <label for="t8">Cielo (techo) detallado y limpio</label>
             </div>
             <div class="check-item">
-                <input type="checkbox" id="t9" onchange="checkSection('sec-tapiceria')">
+                <input type="checkbox" id="t9" onchange="checkSection('sec-tapiceria'); saveForm();">
                 <label for="t9">Asientos detallados y limpios</label>
             </div>
             <div class="check-item">
-                <input type="checkbox" id="t10" onchange="checkSection('sec-tapiceria')">
+                <input type="checkbox" id="t10" onchange="checkSection('sec-tapiceria'); saveForm();">
                 <label for="t10">Empaques externos limpios y detallados</label>
             </div>
             <div class="check-item">
-                <input type="checkbox" id="t11" onchange="checkSection('sec-tapiceria')">
+                <input type="checkbox" id="t11" onchange="checkSection('sec-tapiceria'); saveForm();">
                 <label for="t11">Empaques internos limpios y detallados</label>
             </div>
             <div class="check-item">
-                <input type="checkbox" id="t12" onchange="checkSection('sec-tapiceria')">
+                <input type="checkbox" id="t12" onchange="checkSection('sec-tapiceria'); saveForm();">
                 <label for="t12">Empaque del capó limpio y detallado</label>
             </div>
             <div class="check-item">
-                <input type="checkbox" id="t13" onchange="checkSection('sec-tapiceria')">
+                <input type="checkbox" id="t13" onchange="checkSection('sec-tapiceria'); saveForm();">
                 <label for="t13">Empaque de la cajuela limpio y detallado</label>
             </div>
             <div class="check-item">
-                <input type="checkbox" id="t14" onchange="checkSection('sec-tapiceria')">
+                <input type="checkbox" id="t14" onchange="checkSection('sec-tapiceria'); saveForm();">
                 <label for="t14">Pantallas y espejos limpios</label>
             </div>
             <div class="check-item">
-                <input type="checkbox" id="t15" onchange="checkSection('sec-tapiceria')">
+                <input type="checkbox" id="t15" onchange="checkSection('sec-tapiceria'); saveForm();">
                 <label for="t15">Pedales correctamente limpios y detallados</label>
             </div>
             <div class="check-item">
-                <input type="checkbox" id="t16" onchange="checkSection('sec-tapiceria')">
+                <input type="checkbox" id="t16" onchange="checkSection('sec-tapiceria'); saveForm();">
                 <label for="t16">Cajuela aspirada y limpia</label>
             </div>
         </div>
@@ -397,9 +417,27 @@
             return;
         }
 
+        // --- LÓGICA CONDICIONAL SÓLO PARA IMPRESIÓN (Bloques Admin) ---
+        const ejecutadosSelect = document.getElementById('sys-ejecutados').value;
+        const devolucion = document.getElementById('devolucion-block');
+        const corregido = document.getElementById('corregido-block');
+        
+        // Si SÍ se ejecutaron, preparamos los bloques para ser ocultados en la impresión
+        if (ejecutadosSelect === 'SI') {
+            devolucion.classList.add('ocultar-admin-print');
+            corregido.classList.add('ocultar-admin-print');
+        } else {
+            // Aseguramos que se muestren si no se seleccionó SI
+            devolucion.classList.remove('ocultar-admin-print');
+            corregido.classList.remove('ocultar-admin-print');
+        }
+        // -----------------------------------------------------------------
+
         const sections = document.querySelectorAll('.section');
+        const allCheckItems = document.querySelectorAll('.check-item');
         let contadorCompletados = 0;
 
+        // 1. Lógica para secciones COMPLETAS (ocultar secciones grises)
         sections.forEach(sec => {
             const header = sec.querySelector('.section-header');
             
@@ -410,19 +448,43 @@
                 contadorCompletados++;
             }
         });
+        
+        // 2. Lógica para ítems INDIVIDUALES (ocultar checks no marcados)
+        allCheckItems.forEach(item => {
+            const checkbox = item.querySelector('input[type="checkbox"]');
+            
+            if (checkbox && checkbox.checked) {
+                item.classList.add('checked-print');
+            } else {
+                item.classList.remove('checked-print');
+            }
+        });
+
 
         if (contadorCompletados === 0) {
             if (!confirm("No ha completado ninguna sección completa (en verde). El reporte saldrá casi vacío. ¿Desea continuar?")) {
+                // Si el usuario cancela, revertimos todas las clases de impresión temporales
+                sections.forEach(sec => sec.classList.remove('ocultar-impresion'));
+                allCheckItems.forEach(item => item.classList.remove('checked-print'));
+                devolucion.classList.remove('ocultar-admin-print');
+                corregido.classList.remove('ocultar-admin-print');
                 return;
             }
         }
 
+        // 3. Imprimir
         window.print();
         
+        // 4. Restaurar la vista del formulario después de imprimir (QUITAR TODAS LAS CLASES TEMPORALES)
         setTimeout(() => {
             sections.forEach(sec => {
                 sec.classList.remove('ocultar-impresion');
             });
+            allCheckItems.forEach(item => {
+                item.classList.remove('checked-print');
+            });
+            devolucion.classList.remove('ocultar-admin-print');
+            corregido.classList.remove('ocultar-admin-print');
         }, 1000);
     }
 
@@ -430,6 +492,7 @@
     window.addEventListener("DOMContentLoaded", () => {
         loadForm();
 
+        // Escucha cambios en todos los elementos relevantes para guardar automáticamente
         document.querySelectorAll("input, select, textarea").forEach(el => {
             el.addEventListener("input", saveForm);
             el.addEventListener("change", saveForm);
