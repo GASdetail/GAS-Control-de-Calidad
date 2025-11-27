@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario de Inspección de Entrega - GAS Paint & Detail</title>
+
+    <!-- Flatpickr CSS (picker moderno para fechas/horas) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <style>
         /* --- VARIABLES DE COLOR (Ajustadas para Dark Mode en Pantalla) --- */
         :root {
@@ -15,6 +18,7 @@
             --success: #27ae60; 
             --border-dark: #495a6b; 
             --input-bg: #34495e; 
+            --error: #e74c3c;
         }
         
         body {
@@ -151,6 +155,54 @@
         #corregido-block { background-color: #004d40; border-color: #26a69a; color: var(--text-light); }
         #devolucion-block .sub-note, #corregido-block .sub-note { color: var(--text-light); }
 
+        /* Error / validación */
+        .input-invalid { border-color: var(--error) !important; box-shadow: 0 0 8px rgba(231,76,60,0.25); }
+        .error-text { color: var(--error); font-size: 0.85em; margin-top: 6px; display: none; }
+        .error-text.visible { display: block; }
+
+        /* --- REGLAS PARA FLATPICKR (Dark mode) --- */
+        /* Asegurar que los altInputs / flatpickr inputs usen el tema oscuro y no se vuelvan blancos en hover/focus */
+        .flatpickr-input,
+        input.flatpickr-input,
+        .flatpickr-alt-input {
+            background-color: var(--input-bg) !important;
+            color: var(--text-light) !important;
+            border: 1px solid var(--border-dark) !important;
+            padding: 10px !important;
+            border-radius: 4px !important;
+            box-sizing: border-box !important;
+        }
+        .flatpickr-input::placeholder,
+        .flatpickr-alt-input::placeholder {
+            color: var(--text-muted) !important;
+            opacity: 0.9;
+        }
+        .flatpickr-input:hover,
+        .flatpickr-input:focus,
+        .flatpickr-alt-input:hover,
+        .flatpickr-alt-input:focus {
+            background-color: var(--input-bg) !important;
+            color: var(--text-light) !important;
+            outline: none !important;
+            box-shadow: 0 0 0 4px rgba(0,123,255,0.06) !important;
+        }
+
+        /* Si flatpickr genera elementos con clase .flatpickr-time, aseguramos contraste en inputs internos */
+        .flatpickr-time input {
+            background-color: var(--input-bg) !important;
+            color: var(--text-light) !important;
+            border: 1px solid var(--border-dark) !important;
+        }
+
+        /* Si la librería añade clases inline o estilos más específicos, forzamos con selector más específico */
+        .input-cluster .flatpickr-input,
+        .input-cluster input.flatpickr-input,
+        .input-cluster .flatpickr-alt-input {
+            background-color: var(--input-bg) !important;
+            color: var(--text-light) !important;
+        }
+        /* Fin reglas flatpickr */
+
         /* Área de observaciones dentro de secciones */
         .obs-area {
             padding: 15px;
@@ -192,11 +244,17 @@
 
         /* Botones */
         .button-group { display: flex; gap: 10px; margin-top: 30px; }
-        .btn-submit, .btn-clear { flex-grow: 1; padding: 15px; border: none; border-radius: 5px; font-size: 1.2em; cursor: pointer; color: white; transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s; }
+        .btn-submit, .btn-clear { flex-grow: 1; padding: 15px; border: none; border-radius: 5px; font-size: 1.2em; cursor: pointer; color: white; transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s; }
         .btn-submit { background-color: var(--primary-blue); }
         .btn-clear { background-color: #e74c3c; }
         .btn-submit:hover { background-color: #0056b3; transform: scale(1.02); box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4); }
         .btn-clear:hover { background-color: #c0392b; transform: scale(1.02); box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4); }
+
+        .btn-submit[disabled] {
+            opacity: 0.6;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
 
         /* INDICADOR DE GUARDADO */
         #save-indicator {
@@ -256,7 +314,7 @@
         /* FIN ESTILOS SUBRAYADO DE TEXTO ADAPTADO */
 
 
-        /* ==========================================================================
+        /* ========================================================================== 
            ✅ REGLAS DE IMPRESIÓN (Tu logo aparecerá aquí)
            ========================================================================== */
         @media print {
@@ -392,7 +450,7 @@
             .check-item:last-child { border-bottom: none; }
 
             /* Ocultar checkbox real */
-            .check-item input[type="checkbox"] { display: none; }
+            .check-item input[type="checkbox"] { display: none !important; }
             .check-item label { color: #000 !important; display: inline; } 
 
             /* Símbolo de check **Marcado** siempre a la izquierda del texto */
@@ -470,8 +528,8 @@
                     <option value="SI">SÍ</option>
                     <option value="NO">NO</option>
                 </select>
-                <input type="date" title="Fecha">
-                <input type="time" title="Hora">
+                <input type="text" id="sys-finalizada-date" class="flat-date" title="Fecha" placeholder="DD/MM/YYYY" aria-label="Fecha finalización">
+                <input type="text" id="sys-finalizada-time" class="flat-time" title="Hora" placeholder="HH:MM" aria-label="Hora finalización">
             </div>
         </div>
 
@@ -483,16 +541,16 @@
                     <option value="SI">SÍ</option>
                     <option value="NO">NO</option>
                 </select>
-                <input type="date" title="Fecha">
-                <input type="time" title="Hora">
+                <input type="text" id="sys-ejecutados-date" class="flat-date" title="Fecha" placeholder="DD/MM/YYYY" aria-label="Fecha ejecución">
+                <input type="text" id="sys-ejecutados-time" class="flat-time" title="Hora" placeholder="HH:MM" aria-label="Hora ejecución">
             </div>
             
             <div id="devolucion-block" class="highlight-box">
                 <span class="sub-note">2.b. En caso negativo, devolver a Operaciones el vehículo y este Formulario.</span>
                 <div class="input-cluster" style="margin-top:5px;">
                     <label>Devuelto:</label>
-                    <input type="date" title="Fecha Devolución">
-                    <input type="time" title="Hora Devolución">
+                    <input type="text" id="devuelto-date" class="flat-date" title="Fecha Devolución" placeholder="DD/MM/YYYY" aria-label="Fecha de devolución">
+                    <input type="text" id="devuelto-time" class="flat-time" title="Hora Devolución" placeholder="HH:MM" aria-label="Hora de devolución">
                 </div>
             </div>
 
@@ -500,9 +558,10 @@
                 <span class="sub-note">3. Revisado por Operaciones y debidamente corregidos los servicios incompletos.</span>
                 <div class="input-cluster" style="margin-top:5px;">
                     <label>Corregido:</label>
-                    <input type="date" title="Fecha Corrección">
-                    <input type="time" title="Hora Corrección">
+                    <input type="text" id="corregido-date" class="flat-date" title="Fecha Corrección" placeholder="DD/MM/YYYY" aria-label="Fecha de corrección" aria-describedby="corregido-error">
+                    <input type="text" id="corregido-time" class="flat-time" title="Hora Corrección" placeholder="HH:MM" aria-label="Hora de corrección" aria-describedby="corregido-error">
                 </div>
+                <div id="corregido-error" class="error-text">La fecha/hora de corrección no puede ser anterior a la fecha/hora de devolución.</div>
             </div>
         </div>
 
@@ -585,7 +644,7 @@
 
     <div class="button-group">
         <button class="btn-clear" onclick="limpiarFormulario()">Limpiar</button>
-        <button class="btn-submit" onclick="generarReporte()">Finalizar e Imprimir Reporte</button>
+        <button id="btn-print" class="btn-submit" onclick="generarReporte()">Finalizar e Imprimir Reporte</button>
     </div>
     
     <div class="footer-info">
@@ -593,8 +652,15 @@
     </div>
 </div>
 
+<!-- Flatpickr JS -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
 <script>
     const STORAGE_KEY = "form-calidad-gas";
+
+    // Variables para instancias de flatpickr (se inicializan en initFlatpickr)
+    let datePickers = [];
+    let timePickers = [];
 
     function checkSection(sectionId) {
         const section = document.getElementById(sectionId);
@@ -619,6 +685,91 @@
         }
     }
 
+    // Inicializa flatpickr en los inputs con clase .flat-date y .flat-time
+    function initFlatpickr() {
+        // Fecha -> guardamos en Y-m-d (ISO) pero mostramos en d/m/Y
+        datePickers = Array.from(document.querySelectorAll(".flat-date")).map(el => flatpickr(el, {
+            dateFormat: "Y-m-d",      // valor real que se guarda en el input (facil para parsear)
+            altInput: true,
+            altFormat: "d/m/Y",       // formato visible para el usuario
+            allowInput: true,
+            clickOpens: true,
+            onChange: function(selectedDates, dateStr, instance) { 
+                saveForm(); 
+                validateCorrectionAfterReturn();
+            }
+        }));
+
+        // Hora -> usamos formato 24h, guardamos "H:i" y también mostramos "H:i"
+        timePickers = Array.from(document.querySelectorAll(".flat-time")).map(el => flatpickr(el, {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",    // valor real guardado en el input
+            altInput: true,
+            altFormat: "H:i",
+            time_24hr: true,
+            allowInput: true,
+            clickOpens: true,
+            onChange: function(selectedDates, dateStr, instance) {
+                saveForm();
+                validateCorrectionAfterReturn();
+            }
+        }));
+    }
+
+    // Helper: devuelve un objeto Date combinado desde inputs de fecha (Y-m-d) y hora (H:i).
+    // Si falta fecha, retorna null. Si falta hora, se asume 00:00.
+    function getDateTimeFromInputs(dateId, timeId) {
+        const dateEl = document.getElementById(dateId);
+        if (!dateEl || !dateEl.value) return null; // fecha obligatoria para construir
+        const timeEl = document.getElementById(timeId);
+        const dateStr = dateEl.value; // YYYY-MM-DD (flatpickr dateFormat)
+        const timeStr = (timeEl && timeEl.value) ? timeEl.value : "00:00"; // HH:MM
+
+        // Construir ISO string: YYYY-MM-DDTHH:MM:00
+        const iso = dateStr + "T" + timeStr + ":00";
+        const dt = new Date(iso);
+        if (isNaN(dt.getTime())) return null;
+        return dt;
+    }
+
+    // Valida que la fecha/hora de corrección no sea anterior a la de devolución.
+    // Muestra mensaje y marca inputs si hay un problema; también deshabilita el botón de imprimir.
+    function validateCorrectionAfterReturn() {
+        const devuelto = getDateTimeFromInputs("devuelto-date", "devuelto-time");
+        const corregido = getDateTimeFromInputs("corregido-date", "corregido-time");
+        const errorEl = document.getElementById("corregido-error");
+        const corregidoDateEl = document.getElementById("corregido-date");
+        const corregidoTimeEl = document.getElementById("corregido-time");
+        const btnPrint = document.getElementById("btn-print");
+
+        // Si no hay fecha de devolución, no aplicamos validación
+        if (!devuelto || !corregido) {
+            // limpiar estados
+            if (errorEl) errorEl.classList.remove("visible");
+            if (corregidoDateEl) corregidoDateEl.classList.remove("input-invalid");
+            if (corregidoTimeEl) corregidoTimeEl.classList.remove("input-invalid");
+            if (btnPrint) btnPrint.removeAttribute("disabled");
+            return true;
+        }
+
+        if (corregido < devuelto) {
+            // invalid
+            if (errorEl) errorEl.classList.add("visible");
+            if (corregidoDateEl) corregidoDateEl.classList.add("input-invalid");
+            if (corregidoTimeEl) corregidoTimeEl.classList.add("input-invalid");
+            if (btnPrint) btnPrint.setAttribute("disabled", "true");
+            return false;
+        } else {
+            // valid
+            if (errorEl) errorEl.classList.remove("visible");
+            if (corregidoDateEl) corregidoDateEl.classList.remove("input-invalid");
+            if (corregidoTimeEl) corregidoTimeEl.classList.remove("input-invalid");
+            if (btnPrint) btnPrint.removeAttribute("disabled");
+            return true;
+        }
+    }
+
     // 👉 Guarda todos los campos en localStorage
     function saveForm() {
         const data = {};
@@ -640,7 +791,7 @@
         indicator.style.opacity = 1;
         setTimeout(() => {
             indicator.style.opacity = 0;
-        }, 1500); // Ocultar después de 1.5 segundos
+        }, 900); // Ocultar después de 0.9 segundos
     }
 
     // 👉 Carga los datos desde localStorage
@@ -661,12 +812,36 @@
             }
         }
 
+        // Si hay pickers inicializados, sincronizarlos con los valores cargados
+        if (datePickers && datePickers.length) {
+            datePickers.forEach(inst => {
+                try {
+                    if (inst.input && inst.input.value) {
+                        // inst.setDate acepta el valor real (Y-m-d)
+                        inst.setDate(inst.input.value, false, "Y-m-d");
+                    }
+                } catch (e) { /* ignore invalid dates */ }
+            });
+        }
+        if (timePickers && timePickers.length) {
+            timePickers.forEach(inst => {
+                try {
+                    if (inst.input && inst.input.value) {
+                        inst.setDate(inst.input.value, false, "H:i");
+                    }
+                } catch (e) { /* ignore invalid times */ }
+            });
+        }
+
         // Actualizar estados de secciones después de cargar
         ["sec-sistema", "sec-pintura", "sec-pulido", "sec-tapiceria"].forEach(id => {
             if (document.getElementById(id)) {
                 checkSection(id);
             }
         });
+
+        // Ejecutar validaciones iniciales
+        validateCorrectionAfterReturn();
     }
 
     // 👉 Limpia todo: pantalla + almacenamiento local
@@ -678,6 +853,13 @@
     }
 
     function generarReporte() {
+        // Re-ejecutar validación antes de imprimir
+        const valid = validateCorrectionAfterReturn();
+        if (!valid) {
+            alert("Hay un error en las fechas: la fecha/hora de corrección no puede ser anterior a la de devolución. Corrija antes de imprimir.");
+            return;
+        }
+
         const placa = document.getElementById('plate').value;
 
         if (placa.length < 1) {
@@ -733,7 +915,6 @@
             }
         });
 
-
         // 5. Imprimir
         window.print();
         
@@ -776,14 +957,28 @@
     }
 
 
-    // 👉 Al cargar la página: cargar datos y activar autosave
+    // 👉 Al cargar la página: inicializar pickers, cargar datos y activar autosave
     window.addEventListener("DOMContentLoaded", () => {
+        // 1) Inicializa flatpickr en los inputs (antes de cargar valores)
+        initFlatpickr();
+
+        // 2) Carga valores guardados en localStorage y sincroniza con los pickers
         loadForm();
+
+        // 3) Resto de listeners y comportamiento
         setupFocusListeners(); 
 
         document.querySelectorAll("input, select, textarea").forEach(el => {
             el.addEventListener("input", saveForm);
             el.addEventListener("change", saveForm);
+        });
+
+        // Ejecutar validación cada vez que los campos de devolución/corrección cambian (cuando no hay picker events por alguna razón)
+        ["devuelto-date","devuelto-time","corregido-date","corregido-time"].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.addEventListener("blur", validateCorrectionAfterReturn);
+            }
         });
 
         document.querySelectorAll('.uppercase-input').forEach(input => {
@@ -799,3 +994,4 @@
 
 </body>
 </html>
+
