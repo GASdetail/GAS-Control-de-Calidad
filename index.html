@@ -270,7 +270,7 @@
                 display: none !important; 
             }
             
-            /* 👉 OCULTAR LETRA DE ÍNDICE (A., B., C.) */
+            /* OCULTAR LETRA DE ÍNDICE (A., B., C.) */
             .section-index {
                 display: none !important;
             }
@@ -299,11 +299,22 @@
             .button-group, h1 { display: none !important; }
             .logo-container { 
                 text-align: left; margin-bottom: 15px; padding: 0 0 10px 0; border-bottom: 2px solid #000;
+                display: flex; /* Para alinear el logo y el título en la misma línea */
+                align-items: center; /* Centrar verticalmente */
             }
-            .logo-container img { display: none; }
+            /* MOSTRAR IMAGEN DEL LOGO */
+            .logo-container img { 
+                max-width: 150px !important; /* Ajusta el tamaño para la impresión */
+                height: auto !important;
+                display: inline-block !important; /* Asegura que se muestre y respete el espacio */
+                margin-right: 15px !important; /* Espacio entre el logo y el título */
+            }
             .logo-container::after { 
                 content: "REPORTE DE INSPECCIÓN DE CALIDAD - GAS PAINT"; 
                 font-size: 14pt; font-weight: bold; display: block;
+                /* Ajuste para que el texto se alinee al lado del logo */
+                flex-grow: 1; /* Permite que ocupe el espacio restante */
+                text-align: left; 
             }
 
             /* INPUTS */
@@ -412,7 +423,7 @@
                 resize: none !important; 
             }
 
-            /* OCULTAR EL ÁREA COMPLETA SI NO HAY TEXTO */
+            /* OCULTAR EL ÁREA COMPLETA SI NO HAY TEXTO Y SECCIÓN SISTEMA VACÍA */
             .obs-area.empty-print, .section.empty-print {
                 display: none !important;
             }
@@ -689,7 +700,7 @@
             corregido.classList.remove('ocultar-admin-print');
         }
         
-        // 2. 👉 LÓGICA CONDICIONAL PARA SECCIÓN A. SISTEMA (QUITAR SECCIÓN VACÍA)
+        // 2. LÓGICA CONDICIONAL PARA SECCIÓN A. SISTEMA (QUITAR SECCIÓN VACÍA)
         const secSistema = document.getElementById('sec-sistema');
         const adminOkChecked = document.getElementById('admin-ok').checked;
         const obsSistemaVacia = document.getElementById('obs-sistema').value.trim() === '';
@@ -736,7 +747,7 @@
             });
             devolucion.classList.remove('ocultar-admin-print');
             corregido.classList.remove('ocultar-admin-print');
-            secSistema.classList.remove('empty-print'); // 👉 Restaurar la sección A
+            secSistema.classList.remove('empty-print'); // Restaurar la sección A
         }, 1000);
     }
     
