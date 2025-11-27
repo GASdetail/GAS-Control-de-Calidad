@@ -6,9 +6,6 @@
     <title>Formulario de Inspección de Entrega - GAS Paint & Detail</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    
-    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
-
     <style>
         /* --- VARIABLES DE COLOR (Ajustadas para Dark Mode en Pantalla) --- */
         :root {
@@ -163,7 +160,6 @@
         .error-text.visible { display: block; }
 
         /* --- REGLAS PARA FLATPICKR (Dark mode) --- */
-        /* Asegurar que los altInputs / flatpickr inputs usen el tema oscuro y no se vuelvan blancos en hover/focus */
         .flatpickr-input,
         input.flatpickr-input,
         .flatpickr-alt-input {
@@ -189,21 +185,18 @@
             box-shadow: 0 0 0 4px rgba(0,123,255,0.06) !important;
         }
 
-        /* Si flatpickr genera elementos con clase .flatpickr-time, aseguramos contraste en inputs internos */
         .flatpickr-time input {
             background-color: var(--input-bg) !important;
             color: var(--text-light) !important;
             border: 1px solid var(--border-dark) !important;
         }
 
-        /* Si la librería añade clases inline o estilos más específicos, forzamos con selector más específico */
         .input-cluster .flatpickr-input,
         .input-cluster input.flatpickr-input,
         .input-cluster .flatpickr-alt-input {
             background-color: var(--input-bg) !important;
             color: var(--text-light) !important;
         }
-        /* Fin reglas flatpickr */
 
         /* Área de observaciones dentro de secciones */
         .obs-area {
@@ -284,16 +277,39 @@
             color: var(--text-muted);
         }
 
-        /* ESTILOS DEL CANVAS DE FIRMA */
-        #firma-inspector {
-            /* Forzar fondo blanco y borde negro para la firma */
-            border: 1px solid var(--border-dark); 
-            border-radius: 4px; 
-            background-color: white; /* Fondo blanco para dibujar */
-            touch-action: none; /* Mejor experiencia en móviles */
-            /* Asegurar que el canvas sea responsivo en el layout */
-            max-width: 100%; 
-            height: auto;
+        /* ESTILOS DEL SUBRAYADO DE TEXTO ADAPTADO */
+        .hover-underline {
+            font-size: 1em; 
+            color: var(--text-muted);
+            position: relative;
+            display: inline-block;
+            cursor: default;
+        }
+
+        .hover-underline::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(to right, var(--primary-blue), var(--success)); 
+            bottom: -3px; 
+            left: 0;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s ease-out;
+        }
+
+        .hover-underline:hover {
+            color: var(--text-light);
+        }
+
+        .hover-underline:hover::after {
+            transform: scaleX(1);
+        }
+        
+        /* --- ESTILO PARA FIRMA (OCULTO EN PANTALLA) --- */
+        .signature-box {
+            display: none; 
         }
 
         /* REGLAS DE IMPRESIÓN */
@@ -335,764 +351,720 @@
             
             /* Encabezado y botones */
             .button-group, h1 { display: none !important; }
-
-            .logo-container { text-align: left; margin-bottom: 15px; padding: 0 0 10px 0; border-bottom: 2px solid #000; display: flex; align-items: center; } 
-            .logo-container img { max-width: 150px !important; height: auto !important; display: inline-block !important; margin-right: 15px !important; }
-            .logo-container::after { content: "REPORTE DE INSPECCIÓN DE CALIDAD - GAS PAINT"; font-size: 14pt; font-weight: bold; display: block; flex-grow: 1; text-align: left; }
+            .logo-container { 
+                text-align: left; margin-bottom: 15px; padding: 0 0 10px 0; border-bottom: 2px solid #000;
+                display: flex; 
+                align-items: center; 
+            }
+            .logo-container img { 
+                max-width: 150px !important; 
+                height: auto !important;
+                display: inline-block !important; 
+                margin-right: 15px !important; 
+            }
+            .logo-container::after { 
+                content: "REPORTE DE INSPECCIÓN DE CALIDAD - GAS PAINT"; 
+                font-size: 14pt; font-weight: bold; display: block;
+                flex-grow: 1; 
+                text-align: left; 
+            }
 
             /* INPUTS */
-            input[type="text"], input[type="date"], input[type="time"], input[type="number"], select, textarea { border: 1px solid #000 !important; border-radius: 0 !important; font-weight: bold; padding: 3px; background: white !important; color: black !important; font-size: 10pt; }
-            .flatpickr-input, input.flatpickr-input, .flatpickr-alt-input, .flat-date, .flat-time { color: #000000 !important; background-color: #ffffff !important; border-color: #000000 !important; } /* FIX: Forzar color negro para fechas/horas */
-
-            .section { border-color: #ccc; margin-bottom: 10px; }
-            .section-header { background-color: #f0f0f0 !important; color: #000 !important; border-bottom: 1px solid #000; font-size: 10pt; padding: 5px 15px; }
-            .section-header.completed { background-color: #d4edda !important; color: #155724 !important; border-bottom: 1px solid #155724; }
-            .status-indicator { background: #ccc !important; color: #000 !important; font-size: 8pt; font-weight: normal; }
-
-            /* Listas de verificación */
-            .checklist { padding: 5px 15px; }
-            .check-item { display: none; padding: 5px 0; border-bottom: 1px dashed #ccc; font-size: 10pt; font-weight: normal; }
-            .check-item.is-checked-print { display: flex !important; align-items: flex-start; } /* Mostrar solo los items marcados */
-            .check-item:last-child { border-bottom: none; }
-            .check-item input[type="checkbox"] { display: none !important; }
-            .check-item label { color: #000 !important; display: inline; flex-grow: 1; }
-            .check-item.is-checked-print label { font-weight: bold; }
-            .check-item.is-checked-print label::before { font-family: Arial, sans-serif; font-size: 12pt; margin-right: 5px; font-weight: bold; content: "☑ "; } /* Símbolo de check */
-
-            /* Áreas de Observaciones */
-            .obs-area { border-top: 1px solid #000; background: #fff !important; padding: 10px; }
-            .obs-area label { font-size: 10pt; color: #000 !important; }
-            textarea { border: 1px solid #000 !important; min-height: 40px; padding: 5px; font-size: 10pt; resize: none !important; }
-            .obs-area.empty-print, .section.empty-print { display: none !important; }
+            input[type="text"], input[type="date"], input[type="time"], input[type="number"], select, textarea {
+                border: 1px solid #000 !important; 
+                border-radius: 0 !important; 
+                font-weight: bold; 
+                padding: 3px; 
+                background: white !important;
+                color: black !important;
+                appearance: none; -webkit-appearance: none;
+                margin-top: 2px;
+                height: auto !important;
+            }
             
-            /* ✅ NUEVO: FIRMA PARA IMPRESIÓN */
-            #firma-inspector-img {
-                display: block !important; /* Mostrar el placeholder de la firma */
-                max-width: 100%;
-                height: 100px; /* Altura fija para la impresión */
+            /* Cabecera de Datos del Vehículo */
+            .header-info {
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 5px;
                 border: 1px solid #000;
+                padding: 8px;
+                margin-bottom: 15px;
+            }
+            .header-info label { color: #000 !important; font-weight: normal; font-size: 10pt; }
+
+            /* Secciones */
+            .section {
+                border: 1px solid #000;
+                margin-bottom: 12px;
+                page-break-inside: avoid; 
+                background: white !important;
+            }
+            .section-header {
+                border-bottom: 1px solid #000;
+                padding: 8px 10px;
+                background-color: #e0e0e0 !important; 
+                font-size: 12pt;
+                font-weight: bold;
+            }
+            .section-header.completed { 
+                background-color: #aaddaa !important; 
+                border-bottom-color: #000 !important; 
+            }
+            .status-indicator { display: none; } 
+
+            /* Preguntas Admin */
+            .admin-row { border-bottom: 1px solid #ccc; padding: 8px 10px; background: white !important; }
+            .admin-question { margin-bottom: 2px; font-weight: bold; color: #000 !important; font-size: 10pt; }
+            
+            #devolucion-block, #corregido-block {
+                border: 1px solid #000 !important;
+                background: #fff !important;
+                padding: 5px;
                 margin-top: 5px;
             }
-            #firma-inspector, #sec-firmas .btn-clear {
-                display: none !important; /* Ocultar el canvas de dibujo y el botón "Borrar" */
+            .ocultar-admin-print { display: none !important; }
+
+            .checklist { padding: 10px 10px 5px 10px; }
+            .check-item { 
+                display: none !important; 
+                padding: 4px 0; 
+                border-bottom: 1px dotted #ccc; 
+                font-size: 10pt;
+                font-weight: normal; 
             }
-            #sec-firmas .checklist {
-                 background-color: #ffffff !important;
-                 padding: 5px 15px !important;
+            
+            .check-item.is-checked-print {
+                display: block !important; 
             }
-            #sec-firmas .form-group {
-                border: none !important;
+            
+            .check-item:last-child { border-bottom: none; }
+
+            .check-item input[type="checkbox"] { display: none !important; }
+            .check-item label { color: #000 !important; display: inline; } 
+
+            .check-item.is-checked-print label {
+                font-weight: bold; 
+            }
+            .check-item.is-checked-print label::before {
+                font-family: Arial, sans-serif;
+                font-size: 12pt;
+                margin-right: 5px;
+                font-weight: bold;
+                content: "☑ "; 
+            }
+
+            .obs-area {
+                border-top: 1px solid #000;
+                background: #fff !important;
+                padding: 10px;
+            }
+            .obs-area label { font-size: 10pt; color: #000 !important; }
+            textarea { 
+                border: 1px solid #000 !important; 
+                min-height: 40px; 
+                padding: 5px; 
+                font-size: 10pt;
+                resize: none !important; 
+            }
+
+            .obs-area.empty-print, .section.empty-print {
+                display: none !important;
+            }
+
+            /* --- MOSTRAR NOMBRE Y FIRMA AL IMPRIMIR --- */
+            .signature-box {
+                display: flex !important; /* Usamos flex para ponerlos lado a lado */
+                justify-content: space-between; /* Uno a la izquierda, otro a la derecha */
+                margin-top: 50px;
+                margin-bottom: 20px;
+                page-break-inside: avoid;
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+            .signature-box div {
+                font-size: 14pt;
+                font-weight: bold;
+                color: #000 !important;
             }
         }
     </style>
 </head>
 <body>
     <div id="save-indicator">💾 Guardado</div>
-    <div class="container">
-        <div class="logo-container">
-            <img src="assets/logo.jpeg" alt="GAS Paint & Detail Logo" onerror="this.style.display='none'">
+
+<div class="container">
+    
+    <div class="logo-container">
+        <img src="assets/logo.jpeg" alt="GAS Paint & Detail Logo" onerror="this.style.display='none'">
+    </div>
+    <h1>Inspección de Entrega - GAS Paint</h1>
+
+    <div class="header-info">
+        <div class="form-group">
+            <label>Nº Orden de Trabajo:</label>
+            <input type="text" id="orderNum" class="uppercase-input" placeholder="Ej: OT-1234">
         </div>
-        <h1>Inspección de Entrega - GAS Paint</h1>
-
-        <div class="header-info">
-            <div class="form-group">
-                <label for="ot-number">Nº Orden de Trabajo</label>
-                <input type="number" id="ot-number" placeholder="Ej: 12345" onchange="saveForm();">
-            </div>
-            <div class="form-group">
-                <label for="placa">Placa</label>
-                <input type="text" id="placa" class="uppercase-input" placeholder="Ej: ABC123" onchange="saveForm();">
-            </div>
-            <div class="form-group">
-                <label for="modelo">Modelo</label>
-                <input type="text" id="modelo" placeholder="Ej: Toyota Hilux" onchange="saveForm();">
-            </div>
-            <div class="form-group">
-                <label for="fecha-inspeccion">Fecha de Inspección</label>
-                <input type="text" id="fecha-inspeccion" class="flat-date" placeholder="DD/MM/YYYY" onchange="saveForm();">
-            </div>
-            <div class="form-group">
-                <label for="inspector">Inspector</label>
-                <input type="text" id="inspector" placeholder="Nombre completo" onchange="saveForm();">
-            </div>
+        <div class="form-group">
+            <label>Placa:</label>
+            <input type="text" id="plate" class="uppercase-input" maxlength="9" placeholder="Ej: 123456789">
         </div>
-
-        <div class="section" id="sec-sistema">
-            <div class="section-header">
-                <span><span class="print-hidden-icon">💻</span> <span class="section-index">A.</span> SISTEMA ADMINISTRATIVO</span>
-                <span class="status-indicator">PENDIENTE</span>
-            </div>
-
-            <div class="admin-row">
-                <span class="admin-question">1. ¿Se encuentra la Orden de Trabajo finalizada en el Sistema?</span>
-                <div class="input-cluster">
-                    <select id="sys-finalizada" onchange="saveForm();">
-                        <option value="" selected disabled hidden>Seleccione...</option>
-                        <option value="SI">SÍ</option>
-                        <option value="NO">NO</option>
-                    </select>
-                    <input type="text" id="finalizada-date" class="flat-date" title="Fecha Finalizada" placeholder="DD/MM/YYYY" aria-label="Fecha Finalizada">
-                    <input type="text" id="finalizada-time" class="flat-time" title="Hora Finalizada" placeholder="HH:MM" aria-label="Hora Finalizada">
-                </div>
-            </div>
-
-            <div class="admin-row">
-                <span class="admin-question">2.a. ¿Todos los servicios en la Orden verificables, se ejecutaron?</span>
-                <div class="input-cluster">
-                    <select id="sys-ejecutados" onchange="conditionalDisplay(); saveForm();">
-                        <option value="" selected disabled hidden>Seleccione...</option>
-                        <option value="SI">SÍ</option>
-                        <option value="NO">NO</option>
-                    </select>
-                    <span id="ot-servicios" class="sub-note" style="margin-left: 15px;">2.b. (Si la respuesta es NO) Detalle a continuación los servicios pendientes.</span>
-                </div>
-            </div>
-
-            <div class="admin-row" id="devolucion-block" style="display: none;">
-                <span class="admin-question">ORDEN DEVUELTA</span>
-                <span class="sub-note">1. Devolución al área productiva para corrección de servicios faltantes.</span>
-                <div class="input-cluster" style="margin-top:5px;">
-                    <label>Devuelto:</label>
-                    <input type="text" id="devuelto-date" class="flat-date" title="Fecha Devolución" placeholder="DD/MM/YYYY" aria-label="Fecha de devolución" onchange="validateCorrectionAfterReturn(); saveForm();">
-                    <input type="text" id="devuelto-time" class="flat-time" title="Hora Devolución" placeholder="HH:MM" aria-label="Hora de devolución" onchange="validateCorrectionAfterReturn(); saveForm();">
-                </div>
-                
-                <span id="devolucion-observacion" class="sub-note">2. Servicios a corregir:</span>
-                <textarea id="obs-devolucion" placeholder="Especifique los servicios pendientes (ej: Pulir puerta trasera, Retoques en capó)..." onchange="saveForm();"></textarea>
-            </div>
-
-            <div class="admin-row" id="corregido-block" style="display: none;">
-                <span class="admin-question">ORDEN CORREGIDA</span>
-                <span class="sub-note">3. Revisado por Operaciones y debidamente corregidos los servicios incompletos.</span>
-                <div class="input-cluster" style="margin-top:5px;">
-                    <label>Corregido:</label>
-                    <input type="text" id="corregido-date" class="flat-date" title="Fecha Corrección" placeholder="DD/MM/YYYY" aria-label="Fecha de corrección" aria-describedby="corregido-error" onchange="validateCorrectionAfterReturn(); saveForm();">
-                    <input type="text" id="corregido-time" class="flat-time" title="Hora Corrección" placeholder="HH:MM" aria-label="Hora de corrección" aria-describedby="corregido-error" onchange="validateCorrectionAfterReturn(); saveForm();">
-                </div>
-                <div id="corregido-error" class="error-text">La fecha/hora de corrección no puede ser anterior a la fecha/hora de devolución.</div>
-            </div>
-
-            <div class="checklist">
-                <div class="check-item" style="background-color: var(--input-bg); padding: 10px;">
-                    <input type="checkbox" id="admin-ok" onchange="checkSection('sec-sistema'); saveForm();">
-                    <label for="admin-ok"><strong>CONFIRMAR:</strong> La revisión administrativa está completa.</label>
-                </div>
-            </div>
-            
-            <div class="obs-area">
-                <label class="form-group">Observaciones / Notas Admin:</label>
-                <textarea id="obs-sistema" placeholder="Detalles administrativos adicionales..." onchange="saveForm();"></textarea>
-            </div>
-        </div>
-        
-        <div class="section" id="sec-pintura">
-            <div class="section-header">
-                <span><span class="print-hidden-icon">🖌️</span> <span class="section-index">B.</span> PINTURA</span>
-                <span class="status-indicator">PENDIENTE</span>
-            </div>
-            <div class="checklist">
-                <div class="check-item"><input type="checkbox" id="p1" onchange="checkSection('sec-pintura'); saveForm();"><label for="p1">La textura del transparente es la adecuada conforme con la originalidad del vehículo</label></div>
-                <div class="check-item"><input type="checkbox" id="p2" onchange="checkSection('sec-pintura'); saveForm();"><label for="p2">Los bordes, filos y líneas repasadas están libres de excesos de transparente o pintura</label></div>
-                <div class="check-item"><input type="checkbox" id="p3" onchange="checkSection('sec-pintura'); saveForm();"><label for="p3">Los cordones (unión de piezas) están libres de exceso de sellador</label></div>
-                <div class="check-item"><input type="checkbox" id="p4" onchange="checkSection('sec-pintura'); saveForm();"><label for="p4">El color se encuentra en tono y perlado (o metalizado) adecuado</label></div>
-                <div class="check-item"><input type="checkbox" id="p5" onchange="checkSection('sec-pintura'); saveForm();"><label for="p5">El vehículo no presenta manchas, rayas, residuos de pintura o escoria</label></div>
-            </div>
-            <div class="obs-area">
-                <label class="form-group">Observaciones Pintura:</label>
-                <textarea id="obs-pintura" placeholder="Detalles de pintura y acabados..." onchange="saveForm();"></textarea>
-            </div>
-        </div>
-        
-        <div class="section" id="sec-armado">
-            <div class="section-header">
-                <span><span class="print-hidden-icon">🔩</span> <span class="section-index">C.</span> ARMADO Y AJUSTE</span>
-                <span class="status-indicator">PENDIENTE</span>
-            </div>
-            <div class="checklist">
-                <div class="check-item"><input type="checkbox" id="a1" onchange="checkSection('sec-armado'); saveForm();"><label for="a1">Los ajustes de línea (luz y canto) son correctos</label></div>
-                <div class="check-item"><input type="checkbox" id="a2" onchange="checkSection('sec-armado'); saveForm();"><label for="a2">Las piezas no reparadas están libres de cualquier daño</label></div>
-                <div class="check-item"><input type="checkbox" id="a3" onchange="checkSection('sec-armado'); saveForm();"><label for="a3">El funcionamiento de puertas, capó y cajuela es correcto</label></div>
-                <div class="check-item"><input type="checkbox" id="a4" onchange="checkSection('sec-armado'); saveForm();"><label for="a4">Los focos, lámparas y demás partes eléctricas funcionan correctamente</label></div>
-                <div class="check-item"><input type="checkbox" id="a5" onchange="checkSection('sec-armado'); saveForm();"><label for="a5">Los testigos (luces del tablero) funcionan correctamente</label></div>
-                <div class="check-item"><input type="checkbox" id="a6" onchange="checkSection('sec-armado'); saveForm();"><label for="a6">Las molduras, parrillas, empaques, escobillas u otras piezas están limpias y sin daños</label></div>
-                <div class="check-item"><input type="checkbox" id="a7" onchange="checkSection('sec-armado'); saveForm();"><label for="a7">Los vidrios no presentan daños derivados del proceso de reparación</label></div>
-                <div class="check-item"><input type="checkbox" id="a8" onchange="checkSection('sec-armado'); saveForm();"><label for="a8">El exterior del auto está libre de suciedad producida por el proceso de reparación (polvo, cinta, residuos)</label></div>
-            </div>
-            <div class="obs-area">
-                <label class="form-group">Observaciones Armado/Ajuste:</label>
-                <textarea id="obs-armado" placeholder="Detalles de ajuste y piezas..." onchange="saveForm();"></textarea>
-            </div>
-        </div>
-        
-        <div class="section" id="sec-pulido">
-            <div class="section-header">
-                <span><span class="print-hidden-icon">✨</span> <span class="section-index">D.</span> PULIDO Y EXTERIOR</span>
-                <span class="status-indicator">PENDIENTE</span>
-            </div>
-            <div class="checklist">
-                <div class="check-item"><input type="checkbox" id="pu1" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu1">Sin rayas, manchas u opacamiento por pulido</label></div>
-                <div class="check-item"><input type="checkbox" id="pu2" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu2">Vidrios pulidos (sin manchas ni marcas de agua)</label></div>
-                <div class="check-item"><input type="checkbox" id="pu3" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu3">Partes negras acondicionadas</label></div>
-                <div class="check-item"><input type="checkbox" id="pu4" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu4">Manillas sin restos de pulimento</label></div>
-                <div class="check-item"><input type="checkbox" id="pu5" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu5">Rines y llantas limpios, sin restos de pulimento o pintura</label></div>
-            </div>
-            <div class="obs-area">
-                <label class="form-group">Observaciones Pulido/Exterior:</label>
-                <textarea id="obs-pulido" placeholder="Detalles de pulido y exterior..." onchange="saveForm();"></textarea>
-            </div>
-        </div>
-
-        <div class="section" id="sec-tapiceria">
-            <div class="section-header">
-                <span><span class="print-hidden-icon">🧼</span> <span class="section-index">E.</span> TAPICERÍA Y LAVADO</span>
-                <span class="status-indicator">PENDIENTE</span>
-            </div>
-            <div class="checklist">
-                <div class="check-item"><input type="checkbox" id="t1" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t1">Limpieza del vehículo completa</label></div>
-                <div class="check-item"><input type="checkbox" id="t2" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t2">Alfombras limpias y detalladas</label></div>
-                <div class="check-item"><input type="checkbox" id="t3" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t3">Área de piso y pedales limpia</label></div>
-                <div class="check-item"><input type="checkbox" id="t4" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t4">Panel de instrumentos detallado y limpio</label></div>
-                <div class="check-item"><input type="checkbox" id="t5" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t5">Puertas detalladas y limpias</label></div>
-                <div class="check-item"><input type="checkbox" id="t6" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t6">Techo limpio y detallado</label></div>
-                <div class="check-item"><input type="checkbox" id="t7" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t7">Cajuela limpia y detallada</label></div>
-                <div class="check-item"><input type="checkbox" id="t8" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t8">Motor limpio y detallado</label></div>
-                <div class="check-item"><input type="checkbox" id="t9" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t9">Asientos detallados y limpios</label></div>
-                <div class="check-item"><input type="checkbox" id="t10" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t10">Empaques externos limpios y detallados</label></div>
-                <div class="check-item"><input type="checkbox" id="t11" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t11">Empaques internos limpios y detallados</label></div>
-                <div class="check-item"><input type="checkbox" id="t12" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t12">Empaque del capó limpio y detallado</label></div>
-                <div class="check-item"><input type="checkbox" id="t13" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t13">Empaque de la cajuela limpio y detallado</label></div>
-                <div class="check-item"><input type="checkbox" id="t14" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t14">Pantallas y espejos limpios</label></div>
-                <div class="check-item"><input type="checkbox" id="t15" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t15">Pedales correctamente limpios y detallados</label></div>
-                <div class="check-item"><input type="checkbox" id="t16" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t16">Limpieza y pulido de vidrios laterales, trasero y delantero</label></div>
-            </div>
-            <div class="obs-area">
-                <label class="form-group">Observaciones Tapicería/Lavado:</label>
-                <textarea id="obs-tapiceria" placeholder="Detalles de tapicería y limpieza..." onchange="saveForm();"></textarea>
-            </div>
-        </div>
-
-        <div class="section" id="sec-firmas">
-            <div class="section-header">
-                <span><span class="print-hidden-icon">✍️</span> <span class="section-index">F.</span> FIRMAS DE CONFORMIDAD</span>
-            </div>
-            <div class="checklist" style="background-color: var(--container-bg); padding: 20px;">
-                <div class="form-group" style="margin-bottom: 20px;">
-                    <label for="firma-inspector" style="color: var(--text-light); font-size: 1.1em;">Firma del Inspector de Calidad:</label>
-                    <canvas id="firma-inspector" width="400" height="150"></canvas>
-                    <button type="button" class="btn-clear" onclick="clearSignature('inspector-sig');" style="width: 100px; padding: 5px; margin-top: 5px; font-size: 0.9em;">Borrar Firma</button>
-                    <input type="hidden" id="inspector-sig" value=""> 
-                    <img id="firma-inspector-img" style="display: none;" alt="Firma del Inspector">
-                </div>
-            </div>
-        </div>
-
-
-        <div class="button-group">
-            <button type="button" class="btn-submit" onclick="validarFormulario()">IMPRIMIR / FINALIZAR</button>
-            <button type="button" class="btn-clear" onclick="limpiarFormulario()">LIMPIAR</button>
-        </div>
-        
-        <div class="footer-info">
-            <p>Formulario de Inspección de Entrega - GAS Paint & Detail</p>
+        <div class="form-group">
+            <label>Marca del Vehículo:</label>
+            <input type="text" id="brand" placeholder="Ej: Toyota"> 
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script> 
+    <div class="section" id="sec-sistema">
+        <div class="section-header">
+            <span><span class="print-hidden-icon">📝</span> <span class="section-index">A.</span> ORDEN DE TRABAJO Y SISTEMA</span>
+            <span class="status-indicator">PENDIENTE</span>
+        </div>
+        
+        <div class="admin-row">
+            <span class="admin-question">1. ¿Se encuentra la Orden de Trabajo finalizada en el Sistema?</span>
+            <div class="input-cluster">
+                <select id="sys-finalizada">
+                    <option value="" selected disabled hidden>Seleccione...</option>
+                    <option value="SI">SÍ</option>
+                    <option value="NO">NO</option>
+                </select>
+                <input type="text" id="sys-finalizada-date" class="flat-date" title="Fecha" placeholder="DD/MM/YYYY" aria-label="Fecha finalización">
+                <input type="text" id="sys-finalizada-time" class="flat-time" title="Hora" placeholder="HH:MM" aria-label="Hora finalización">
+            </div>
+        </div>
+
+        <div class="admin-row">
+            <span class="admin-question">2.a. ¿Todos los servicios en la Orden verificables, se ejecutaron?</span>
+            <div class="input-cluster">
+                <select id="sys-ejecutados" onchange="saveForm()">
+                    <option value="">Seleccione...</option>
+                    <option value="SI">SÍ</option>
+                    <option value="NO">NO</option>
+                </select>
+                <input type="text" id="sys-ejecutados-date" class="flat-date" title="Fecha" placeholder="DD/MM/YYYY" aria-label="Fecha ejecución">
+                <input type="text" id="sys-ejecutados-time" class="flat-time" title="Hora" placeholder="HH:MM" aria-label="Hora ejecución">
+            </div>
+            
+            <div id="devolucion-block" class="highlight-box">
+                <span class="sub-note">2.b. En caso negativo, devolver a Operaciones el vehículo y este Formulario.</span>
+                <div class="input-cluster" style="margin-top:5px;">
+                    <label>Devuelto:</label>
+                    <input type="text" id="devuelto-date" class="flat-date" title="Fecha Devolución" placeholder="DD/MM/YYYY" aria-label="Fecha de devolución">
+                    <input type="text" id="devuelto-time" class="flat-time" title="Hora Devolución" placeholder="HH:MM" aria-label="Hora de devolución">
+                </div>
+            </div>
+
+            <div id="corregido-block" class="highlight-box">
+                <span class="sub-note">3. Revisado por Operaciones y debidamente corregidos los servicios incompletos.</span>
+                <div class="input-cluster" style="margin-top:5px;">
+                    <label>Corregido:</label>
+                    <input type="text" id="corregido-date" class="flat-date" title="Fecha Corrección" placeholder="DD/MM/YYYY" aria-label="Fecha de corrección" aria-describedby="corregido-error">
+                    <input type="text" id="corregido-time" class="flat-time" title="Hora Corrección" placeholder="HH:MM" aria-label="Hora de corrección" aria-describedby="corregido-error">
+                </div>
+                <div id="corregido-error" class="error-text">La fecha/hora de corrección no puede ser anterior a la fecha/hora de devolución.</div>
+            </div>
+        </div>
+
+        <div class="checklist">
+            <div class="check-item" style="background-color: var(--input-bg); padding: 10px;">
+                <input type="checkbox" id="admin-ok" onchange="checkSection('sec-sistema'); saveForm();">
+                <label for="admin-ok"><strong>CONFIRMAR:</strong> La revisión administrativa está completa.</label>
+            </div>
+        </div>
+        <div class="obs-area">
+            <label class="form-group">Observaciones / Notas Admin:</label>
+            <textarea id="obs-sistema" placeholder="Detalles administrativos adicionales..."></textarea>
+        </div>
+    </div>
+
+    <div class="section" id="sec-pintura">
+        <div class="section-header">
+            <span><span class="print-hidden-icon">🖌️</span> <span class="section-index">B.</span> PINTURA</span>
+            <span class="status-indicator">PENDIENTE</span>
+        </div>
+        <div class="checklist">
+            <div class="check-item"><input type="checkbox" id="p1" onchange="checkSection('sec-pintura'); saveForm();"><label for="p1">La textura del transparente es la adecuada conforme con la originalidad del vehículo</label></div>
+            <div class="check-item"><input type="checkbox" id="p2" onchange="checkSection('sec-pintura'); saveForm();"><label for="p2">Los bordes, filos y líneas repasadas están libres de excesos de transparente o pintura</label></div>
+            <div class="check-item"><input type="checkbox" id="p3" onchange="checkSection('sec-pintura'); saveForm();"><label for="p3">Las líneas de las piezas repintadas son idénticas a las originales</label></div>
+            <div class="check-item"><input type="checkbox" id="p4" onchange="checkSection('sec-pintura'); saveForm();"><label for="p4">Las superficies pintadas están libres de defectos de repintado (rayas, opacamiento, manchas)</label></div>
+            <div class="check-item"><input type="checkbox" id="p5" onchange="checkSection('sec-pintura'); saveForm();"><label for="p5">Los empaques externos están libres de residuos de pintura, pulimento, o cualquier suciedad</label></div>
+            <div class="check-item"><input type="checkbox" id="p6" onchange="checkSection('sec-pintura'); saveForm();"><label for="p6">En caso negativo, revisar contra la Recepción del Auto por daños que debieron eliminarse en el taller</label></div>
+            <div class="check-item"><input type="checkbox" id="p7" onchange="checkSection('sec-pintura'); saveForm();"><label for="p7">En caso de Corrección de Pintura Total: verificar si los servicios incompletos fueron corregidos</label></div>
+        </div>
+        <div class="obs-area">
+            <label class="form-group">Observaciones Pintura:</label>
+            <textarea id="obs-pintura" placeholder="Defectos encontrados, correcciones pendientes..."></textarea>
+        </div>
+    </div>
+
+    <div class="section" id="sec-armado">
+        <div class="section-header">
+            <span><span class="print-hidden-icon">🔩</span> <span class="section-index">B.</span> ARMADO Y AJUSTE DE PIEZAS</span>
+            <span class="status-indicator">PENDIENTE</span>
+        </div>
+        <div class="checklist">
+            <div class="check-item"><input type="checkbox" id="a1" onchange="checkSection('sec-armado'); saveForm();"><label for="a1">El interior de las piezas reparadas está libre de residuos de pulimento o suciedad</label></div>
+            <div class="check-item"><input type="checkbox" id="a2" onchange="checkSection('sec-armado'); saveForm();"><label for="a2">Las piezas reparadas y aledañas son móviles, abren y cierran con la suavidad original y sin golpes</label></div>
+            <div class="check-item"><input type="checkbox" id="a3" onchange="checkSection('sec-armado'); saveForm();"><label for="a3">Las piezas ajustan correctamente y no presentan levantamientos o desalineaciones</label></div>
+            <div class="check-item"><input type="checkbox" id="a4" onchange="checkSection('sec-armado'); saveForm();"><label for="a4">Los niveles de aceite, líquido de frenos y refrigerante son los adecuados</label></div>
+            <div class="check-item"><input type="checkbox" id="a5" onchange="checkSection('sec-armado'); saveForm();"><label for="a5">Las luces y testigos funcionan correctamente</label></div>
+            <div class="check-item"><input type="checkbox" id="a6" onchange="checkSection('sec-armado'); saveForm();"><label for="a6">Las molduras, parrillas, empaques, escobillas u otras piezas están limpias y sin daños</label></div>
+            <div class="check-item"><input type="checkbox" id="a7" onchange="checkSection('sec-armado'); saveForm();"><label for="a7">Los vidrios no presentan daños derivados del proceso de reparación</label></div>
+            <div class="check-item"><input type="checkbox" id="a8" onchange="checkSection('sec-armado'); saveForm();"><label for="a8">El exterior del auto está libre de suciedad producida por el proceso de reparación (polvo, cinta, residuos)</label></div>
+        </div>
+        <div class="obs-area">
+            <label class="form-group">Observaciones Armado/Ajuste:</label>
+            <textarea id="obs-armado" placeholder="Detalles de ajuste y piezas..."></textarea>
+        </div>
+    </div>
+
+    <div class="section" id="sec-pulido">
+        <div class="section-header">
+            <span><span class="print-hidden-icon">✨</span> <span class="section-index">C.</span> PULIDO Y EXTERIOR</span>
+            <span class="status-indicator">PENDIENTE</span>
+        </div>
+        <div class="checklist">
+            <div class="check-item"><input type="checkbox" id="pu1" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu1">Sin rayas, manchas u opacamiento por pulido</label></div>
+            <div class="check-item"><input type="checkbox" id="pu2" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu2">Vidrios pulidos (sin manchas ni marcas de agua)</label></div>
+            <div class="check-item"><input type="checkbox" id="pu3" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu3">Partes negras acondicionadas</label></div>
+            <div class="check-item"><input type="checkbox" id="pu4" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu4">Manillas de puertas limpias (interior y exterior)</label></div>
+            <div class="check-item"><input type="checkbox" id="pu5" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu5">Torpedo y escobillas detallados correctamente</label></div>
+            <div class="check-item"><input type="checkbox" id="pu6" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu6">Bordes del vehículo sin residuos (polish/cera)</label></div>
+            <div class="check-item"><input type="checkbox" id="pu7" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu7">Superficies externas sin residuos de pulimento</label></div>
+            <div class="check-item"><input type="checkbox" id="pu8" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu8">Capó, guardabarros, tapa motor, y superficies externas limpias</label></div>
+            <div class="check-item"><input type="checkbox" id="pu9" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu9">Superficies lavadas correctamente y sin suciedad posterior al proceso</label></div>
+            <div class="check-item"><input type="checkbox" id="pu10" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu10">Las superficies exteriores están libres de rayas superficiales o daños que debieron eliminarse</label></div>
+            <div class="check-item"><input type="checkbox" id="pu11" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu11">En caso negativo, finalizar en el taller y corregir antes de la entrega</label></div>
+        </div>
+        <div class="obs-area">
+            <label class="form-group">Observaciones Exterior/Pulido:</label>
+            <textarea id="obs-pulido" placeholder="Detalles de corrección..."></textarea>
+        </div>
+    </div>
+
+    <div class="section" id="sec-tapiceria">
+        <div class="section-header">
+            <span><span class="print-hidden-icon">🧼</span> <span class="section-index">D.</span> TAPICERÍA E INTERIOR</span>
+            <span class="status-indicator">PENDIENTE</span>
+        </div>
+        <div class="checklist"> 
+            <div class="check-item"><input type="checkbox" id="t1" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t1">Aspirado de piso y alfombras detallado</label></div>
+            <div class="check-item"><input type="checkbox" id="t2" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t2">Tapicería aspirada y detallada correctamente</label></div>
+            <div class="check-item"><input type="checkbox" id="t3" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t3">Rejillas de ventilación limpias y detalladas</label></div>
+            <div class="check-item"><input type="checkbox" id="t4" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t4">Dash limpio y detallado</label></div>
+            <div class="check-item"><input type="checkbox" id="t5" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t5">Guarda soles limpios y detallados</label></div>
+            <div class="check-item"><input type="checkbox" id="t6" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t6">Consola central limpia y detallada</label></div>
+            <div class="check-item"><input type="checkbox" id="t7" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t7">Guantera y compartimientos limpios</label></div>
+            <div class="check-item"><input type="checkbox" id="t8" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t8">Cielo (techo) detallado y limpio</label></div>
+            <div class="check-item"><input type="checkbox" id="t9" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t9">Asientos detallados y limpios</label></div>
+            <div class="check-item"><input type="checkbox" id="t10" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t10">Empaques externos limpios y detallados</label></div>
+            <div class="check-item"><input type="checkbox" id="t11" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t11">Empaques internos limpios y detallados</label></div>
+            <div class="check-item"><input type="checkbox" id="t12" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t12">Empaque del capó limpio y detallado</label></div>
+            <div class="check-item"><input type="checkbox" id="t13" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t13">Empaque de la cajuela limpio y detallado</label></div>
+            <div class="check-item"><input type="checkbox" id="t14" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t14">Pantallas y espejos limpios</label></div>
+            <div class="check-item"><input type="checkbox" id="t15" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t15">Pedales correctamente limpios y detallados</label></div>
+            <div class="check-item"><input type="checkbox" id="t16" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t16">Cajuela aspirada y limpia</label></div>
+            <div class="check-item"><input type="checkbox" id="t17" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t17">Habitáculo/cajuela/batea limpio y detallado (según tipo de vehículo)</label></div>
+        </div>
+        <div class="obs-area">
+            <label class="form-group">Observaciones Interior:</label>
+            <textarea id="obs-interior" placeholder="Detalles de tapicería..."></textarea>
+        </div>
+    </div>
+
+    <div class="section" id="sec-control">
+        <div class="section-header">
+            <span><span class="print-hidden-icon">⚙️</span> <span class="section-index">E.</span> CONTROL MECÁNICO BÁSICO</span>
+            <span class="status-indicator">PENDIENTE</span>
+        </div>
+        <div class="checklist">
+            <div class="check-item"><input type="checkbox" id="m1" onchange="checkSection('sec-control'); saveForm();"><label for="m1">Niveles de líquidos adecuados (aceite, frenos, refrigerante)</label></div>
+            <div class="check-item"><input type="checkbox" id="m2" onchange="checkSection('sec-control'); saveForm();"><label for="m2">Luces y testigos funcionando</label></div>
+            <div class="check-item"><input type="checkbox" id="m3" onchange="checkSection('sec-control'); saveForm();"><label for="m3">Vehículo listo para la entrega sin reportes pendientes</label></div>
+        </div>
+        <div class="obs-area">
+            <label class="form-group">Observaciones Control Mecánico:</label>
+            <textarea id="obs-control" placeholder="Notas mecánicas..."></textarea>
+        </div>
+    </div>
+
+    <div class="button-group">
+        <button class="btn-clear" onclick="limpiarFormulario()">Limpiar</button>
+        <button id="btn-print" class="btn-submit" onclick="generarReporte()">Finalizar e Imprimir Reporte</button>
+    </div>
     
-    <script>
-        const STORAGE_KEY = "gas_qc_form_data";
-        const SAVE_INDICATOR_TIMEOUT = 1000;
-        let saveTimeout;
+    <div class="signature-box">
+        <div>Nombre: __________________________</div>
+        <div>Firma: __________________________</div>
+    </div>
+
+    <div class="footer-info">
+        <span class="hover-underline" id="version-link">Versión 1.2.0 - Inspección de Calidad GAS</span>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script>
+    const STORAGE_KEY = "form-calidad-gas";
+
+    // Variables para instancias de flatpickr (se inicializan en initFlatpickr)
+    let datePickers = [];
+    let timePickers = [];
+
+    function checkSection(sectionId) {
+        const section = document.getElementById(sectionId);
+        const header = section.querySelector('.section-header');
+        const indicator = section.querySelector('.status-indicator');
+        const checkboxes = section.querySelectorAll('input[type="checkbox"]');
         
-        // ✅ NUEVO: Variable global para el objeto SignaturePad
-        let inspectorSignaturePad;
+        let allChecked = true;
         
-        // Debounce para guardar el formulario automáticamente
-        function debouncedSaveForm() {
-            if (saveTimeout) {
-                clearTimeout(saveTimeout);
+        checkboxes.forEach(box => {
+            if (!box.checked) {
+                allChecked = false;
             }
-            saveTimeout = setTimeout(() => {
-                saveForm();
-            }, 300); // Espera 300ms después de la última entrada
+        });
+
+        if (allChecked) {
+            header.classList.add('completed');
+            indicator.textContent = "✔ COMPLETADO";
+        } else {
+            header.classList.remove('completed');
+            indicator.textContent = "PENDIENTE";
         }
+    }
 
-        // ==================================================
-        // ✅ NUEVO: LÓGICA DE FIRMA (Signature Pad)
-        // ==================================================
-        function initSignaturePad() {
-            const canvas = document.getElementById('firma-inspector');
-            if (!canvas) return;
-
-            // Inicializar el pad
-            inspectorSignaturePad = new SignaturePad(canvas, {
-                backgroundColor: 'rgb(255, 255, 255)', // Fondo blanco forzado
-                penColor: 'rgb(0, 0, 0)', // Pluma negra
-                throttle: 16, // Mejora el rendimiento
-                minWidth: 1,
-                maxWidth: 3
-            });
-
-            // Hacer que el canvas sea responsivo
-            resizeCanvas(); 
-            window.addEventListener('resize', resizeCanvas);
-            
-            // Auto-guardar la firma cuando se detiene el dibujo
-            inspectorSignaturePad.addEventListener("endStroke", () => {
-                debouncedSaveForm();
-            }, { once: false });
-        }
-
-        function resizeCanvas() {
-            const canvas = document.getElementById('firma-inspector');
-            if (!canvas) return;
-
-            const ratio = Math.max(window.devicePixelRatio || 1, 1);
-            
-            // Obtener el ancho real del contenedor
-            const displayWidth = canvas.parentElement.clientWidth;
-            
-            // Multiplicar por el ratio para la calidad
-            canvas.width = displayWidth * ratio;
-            canvas.height = 150 * ratio; // Altura fija en píxeles de pantalla * ratio
-            canvas.style.width = displayWidth + "px";
-            canvas.style.height = "150px"; 
-
-            // Si ya existe la firma, re-dibujarla después de redimensionar
-            const dataUrl = document.getElementById('inspector-sig').value;
-            if (!inspectorSignaturePad.isEmpty() || dataUrl) {
-                // Si hay una firma cargada, re-dibújala. Si no, SignaturePad lo manejará.
-                if (dataUrl) {
-                    inspectorSignaturePad.fromDataURL(dataUrl);
-                }
-            } else {
-                 inspectorSignaturePad.clear(); // Limpiar el canvas si estaba vacío
-            }
-            // Importante: re-escalar la pluma después del redimensionamiento
-            inspectorSignaturePad.clear();
-        }
-        
-        function clearSignature(id) {
-            const canvas = document.getElementById(id.replace('-sig', ''));
-            const input = document.getElementById(id);
-
-            if (id === 'inspector-sig' && inspectorSignaturePad) {
-                inspectorSignaturePad.clear();
-            }
-            input.value = "";
-            saveForm();
-        }
-        // ==================================================
-        // FIN LÓGICA DE FIRMA
-        // ==================================================
-
-
-        // --- LÓGICA DE GUARDADO ---
-        function showSaveIndicator() {
-            const indicator = document.getElementById("save-indicator");
-            indicator.style.opacity = 1;
-            setTimeout(() => {
-                indicator.style.opacity = 0;
-            }, SAVE_INDICATOR_TIMEOUT);
-        }
-
-        function saveForm() {
-            const data = {};
-            // Recorre todos los campos y guarda su valor
-            document.querySelectorAll("input, select, textarea").forEach(el => {
-                if (el.type === "checkbox") {
-                    data[el.id] = el.checked;
-                } else if (el.id) {
-                    data[el.id] = el.value;
-                }
-            });
-
-            // ✅ NUEVO: Guardar la firma del inspector si existe
-            if (inspectorSignaturePad && !inspectorSignaturePad.isEmpty()) {
-                const signatureData = inspectorSignaturePad.toDataURL("image/png");
-                document.getElementById('inspector-sig').value = signatureData;
-                data['inspector-sig'] = signatureData;
-                document.getElementById('firma-inspector-img').src = signatureData; // Sincronizar para impresión
-            } else {
-                data['inspector-sig'] = "";
-                document.getElementById('firma-inspector-img').src = "";
-            }
-
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-            showSaveIndicator();
-            checkAllSections(); // Recalcula estados después de guardar
-        }
-
-        function loadForm() {
-            const raw = localStorage.getItem(STORAGE_KEY);
-            if (!raw) return;
-
-            const data = JSON.parse(raw);
-
-            for (let id in data) {
-                const el = document.getElementById(id);
-                if (!el) continue;
-
-                if (el.type === "checkbox") {
-                    el.checked = data[id];
-                } else if (el.type === "hidden" && id === "inspector-sig") {
-                     // ✅ NUEVO: Cargar dato en el input oculto
-                     el.value = data[id];
-                } else {
-                    el.value = data[id];
-                }
-            }
-
-            // Sincronizar los valores con Flatpickr (después de cargar)
-            syncFlatpickrValues();
-            
-            // ✅ NUEVO: Cargar firma al canvas (después de cargar los datos)
-            if (inspectorSignaturePad) {
-                const signatureData = document.getElementById('inspector-sig').value;
-                const imgEl = document.getElementById('firma-inspector-img');
-
-                if (signatureData) {
-                    // Cargar al pad. El pad redimensionado ya se ha inicializado.
-                    // Primero, clear para asegurar que la re-carga Base64 sea la primera cosa dibujada.
-                    inspectorSignaturePad.clear(); 
-                    inspectorSignaturePad.fromDataURL(signatureData);
-                    imgEl.src = signatureData;
-                } else {
-                    inspectorSignaturePad.clear();
-                    imgEl.src = "";
-                }
-            }
-
-
-            // Actualizar estados y visualización condicional
-            conditionalDisplay();
-            validateCorrectionAfterReturn();
-            checkAllSections();
-        }
-
-        function limpiarFormulario() {
-            if (confirm("¿Está seguro que desea limpiar TODO el formulario? Esta acción no se puede deshacer.")) {
-                localStorage.removeItem(STORAGE_KEY);
-                // Resetear los campos a sus valores iniciales
-                document.querySelectorAll("input, select, textarea").forEach(el => {
-                    if (el.type === "checkbox") {
-                        el.checked = false;
-                    } else if (el.tagName === 'SELECT') {
-                        el.selectedIndex = 0; // Seleccionar la primera opción (Seleccione...)
-                    } else {
-                        el.value = "";
-                    }
-                });
-
-                // Limpiar Flatpickr
-                syncFlatpickrValues(true); 
-
-                // ✅ NUEVO: Limpiar firma
-                if (inspectorSignaturePad) {
-                    inspectorSignaturePad.clear();
-                    document.getElementById('inspector-sig').value = "";
-                }
-
-                // Resetear estados visuales
-                conditionalDisplay();
+    // Inicializa flatpickr en los inputs con clase .flat-date y .flat-time
+    function initFlatpickr() {
+        // Fecha -> guardamos en Y-m-d (ISO) pero mostramos en d/m/Y
+        datePickers = Array.from(document.querySelectorAll(".flat-date")).map(el => flatpickr(el, {
+            dateFormat: "Y-m-d",      // valor real que se guarda en el input (facil para parsear)
+            altInput: true,
+            altFormat: "d/m/Y",       // formato visible para el usuario
+            allowInput: true,
+            clickOpens: true,
+            onChange: function(selectedDates, dateStr, instance) { 
+                saveForm(); 
                 validateCorrectionAfterReturn();
-                checkAllSections(); 
-                alert("Formulario limpio.");
             }
-        }
+        }));
 
-        // --- LÓGICA DE VALIDACIÓN Y VISUALIZACIÓN ---
-        function conditionalDisplay() {
-            const executed = document.getElementById('sys-ejecutados').value;
-            const devolutionBlock = document.getElementById('devolucion-block');
-            const correctionBlock = document.getElementById('corregido-block');
-            const devueltoDate = document.getElementById('devuelto-date').value.trim();
-
-            if (executed === 'NO') {
-                devolucionBlock.style.display = 'block';
-                if (devueltoDate) {
-                    correctionBlock.style.display = 'block';
-                } else {
-                    correctionBlock.style.display = 'none';
-                }
-            } else {
-                devolucionBlock.style.display = 'none';
-                correctionBlock.style.display = 'none';
+        // Hora -> usamos formato 24h, guardamos "H:i" y también mostramos "H:i"
+        timePickers = Array.from(document.querySelectorAll(".flat-time")).map(el => flatpickr(el, {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",    // valor real guardado en el input
+            altInput: true,
+            altFormat: "H:i",
+            time_24hr: true,
+            allowInput: true,
+            clickOpens: true,
+            onChange: function(selectedDates, dateStr, instance) {
+                saveForm();
+                validateCorrectionAfterReturn();
             }
-            // Vuelve a validar para actualizar errores visuales
-            validateCorrectionAfterReturn();
-        }
+        }));
+    }
 
-        function validateCorrectionAfterReturn() {
-            const correctionError = document.getElementById('corregido-error');
-            const correctedDateEl = document.getElementById('corregido-date');
-            const correctedTimeEl = document.getElementById('corregido-time');
-            const devueltoDateEl = document.getElementById('devuelto-date');
-            const devueltoTimeEl = document.getElementById('devuelto-time');
-            
-            // Ocultar error si el bloque no está visible
-            if (document.getElementById('corregido-block').style.display === 'none') {
-                 correctionError.classList.remove('visible');
-                 correctedDateEl.classList.remove('input-invalid');
-                 correctedTimeEl.classList.remove('input-invalid');
-                 return;
-            }
+    // Helper: devuelve un objeto Date combinado desde inputs de fecha (Y-m-d) y hora (H:i).
+    // Si falta fecha, retorna null. Si falta hora, se asume 00:00.
+    function getDateTimeFromInputs(dateId, timeId) {
+        const dateEl = document.getElementById(dateId);
+        if (!dateEl || !dateEl.value) return null; // fecha obligatoria para construir
+        const timeEl = document.getElementById(timeId);
+        const dateStr = dateEl.value; // YYYY-MM-DD (flatpickr dateFormat)
+        const timeStr = (timeEl && timeEl.value) ? timeEl.value : "00:00"; // HH:MM
 
-            const dtDevuelto = getDateTimeFromInputs('devuelto-date', 'devuelto-time');
-            const dtCorregido = getDateTimeFromInputs('corregido-date', 'corregido-time');
+        // Construir ISO string: YYYY-MM-DDTHH:MM:00
+        const iso = dateStr + "T" + timeStr + ":00";
+        const dt = new Date(iso);
+        if (isNaN(dt.getTime())) return null;
+        return dt;
+    }
 
-            // 1. Validar que la corrección no sea anterior a la devolución
-            if (dtCorregido && dtDevuelto && dtCorregido < dtDevuelto) {
-                correctionError.classList.add('visible');
-                correctedDateEl.classList.add('input-invalid');
-                correctedTimeEl.classList.add('input-invalid');
-                return false;
-            } 
-            
-            // 2. Validar que si hay corrección, la devolución tenga fecha (debería ser cubierta por conditionalDisplay, pero como backup)
-            if (dtCorregido && !dtDevuelto) {
-                correctionError.innerText = "Debe registrar la fecha/hora de devolución antes de la corrección.";
-                correctionError.classList.add('visible');
-                devueltoDateEl.classList.add('input-invalid');
-                devueltoTimeEl.classList.add('input-invalid');
-                correctedDateEl.classList.remove('input-invalid');
-                correctedTimeEl.classList.remove('input-invalid');
-                return false;
-            }
+    // Valida que la fecha/hora de corrección no sea anterior a la de devolución.
+    // Muestra mensaje y marca inputs si hay un problema; también deshabilita el botón de imprimir.
+    function validateCorrectionAfterReturn() {
+        const devuelto = getDateTimeFromInputs("devuelto-date", "devuelto-time");
+        const corregido = getDateTimeFromInputs("corregido-date", "corregido-time");
+        const errorEl = document.getElementById("corregido-error");
+        const corregidoDateEl = document.getElementById("corregido-date");
+        const corregidoTimeEl = document.getElementById("corregido-time");
+        const btnPrint = document.getElementById("btn-print");
 
-            // Si pasa todas las validaciones
-            correctionError.classList.remove('visible');
-            correctedDateEl.classList.remove('input-invalid');
-            correctedTimeEl.classList.remove('input-invalid');
-            devueltoDateEl.classList.remove('input-invalid');
-            devueltoTimeEl.classList.remove('input-invalid');
+        // Si no hay fecha de devolución, no aplicamos validación
+        if (!devuelto || !corregido) {
+            // limpiar estados
+            if (errorEl) errorEl.classList.remove("visible");
+            if (corregidoDateEl) corregidoDateEl.classList.remove("input-invalid");
+            if (corregidoTimeEl) corregidoTimeEl.classList.remove("input-invalid");
+            if (btnPrint) btnPrint.removeAttribute("disabled");
             return true;
         }
 
-        // --- LÓGICA DE ESTADO DE SECCIONES ---
-        function checkSection(sectionId) {
+        if (corregido < devuelto) {
+            // invalid
+            if (errorEl) errorEl.classList.add("visible");
+            if (corregidoDateEl) corregidoDateEl.classList.add("input-invalid");
+            if (corregidoTimeEl) corregidoTimeEl.classList.add("input-invalid");
+            if (btnPrint) btnPrint.setAttribute("disabled", "true");
+            return false;
+        } else {
+            // valid
+            if (errorEl) errorEl.classList.remove("visible");
+            if (corregidoDateEl) corregidoDateEl.classList.remove("input-invalid");
+            if (corregidoTimeEl) corregidoTimeEl.classList.remove("input-invalid");
+            if (btnPrint) btnPrint.removeAttribute("disabled");
+            return true;
+        }
+    }
+
+    // 👉 Guarda todos los campos en localStorage
+    function saveForm() {
+        const data = {};
+
+        document.querySelectorAll("input, select, textarea").forEach(el => {
+            if (!el.id) return; 
+
+            if (el.type === "checkbox") {
+                data[el.id] = el.checked;
+            } else {
+                data[el.id] = el.value;
+            }
+        });
+
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        
+        // MOSTRAR INDICADOR DE GUARDADO
+        const indicator = document.getElementById('save-indicator');
+        indicator.style.opacity = 1;
+        setTimeout(() => {
+            indicator.style.opacity = 0;
+        }, 900); // Ocultar después de 0.9 segundos
+    }
+
+    // 👉 Carga los datos desde localStorage
+    function loadForm() {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+
+        const data = JSON.parse(raw);
+
+        for (let id in data) {
+            const el = document.getElementById(id);
+            if (!el) continue;
+
+            if (el.type === "checkbox") {
+                el.checked = data[id];
+            } else {
+                el.value = data[id];
+            }
+        }
+
+        // Si hay pickers inicializados, sincronizarlos con los valores cargados
+        if (datePickers && datePickers.length) {
+            datePickers.forEach(inst => {
+                try {
+                    if (inst.input && inst.input.value) {
+                        // inst.setDate acepta el valor real (Y-m-d)
+                        inst.setDate(inst.input.value, false, "Y-m-d");
+                    }
+                } catch (e) { /* ignore invalid dates */ }
+            });
+        }
+        if (timePickers && timePickers.length) {
+            timePickers.forEach(inst => {
+                try {
+                    if (inst.input && inst.input.value) {
+                        inst.setDate(inst.input.value, false, "H:i");
+                    }
+                } catch (e) { /* ignore invalid times */ }
+            });
+        }
+
+        // Actualizar estados de secciones después de cargar
+        ["sec-sistema", "sec-pintura", "sec-armado", "sec-pulido", "sec-tapiceria", "sec-control"].forEach(id => {
+            if (document.getElementById(id)) {
+                checkSection(id);
+            }
+        });
+
+        // Ejecutar validaciones iniciales
+        validateCorrectionAfterReturn();
+    }
+
+    // 👉 Limpia todo: pantalla + almacenamiento local
+    function limpiarFormulario() {
+        if (confirm("¿Está seguro que desea limpiar todo el formulario? Se perderán todos los datos guardados.")) {
+            localStorage.removeItem(STORAGE_KEY);
+            window.location.reload();
+        }
+    }
+
+    function generarReporte() {
+        // Re-ejecutar validación antes de imprimir
+        const valid = validateCorrectionAfterReturn();
+        if (!valid) {
+            alert("Hay un error en las fechas: la fecha/hora de corrección no puede ser anterior a la de devolución. Corrija antes de imprimir.");
+            return;
+        }
+
+        const placa = document.getElementById('plate').value;
+
+        if (placa.length < 1) {
+            alert("Por favor ingrese al menos la PLACA del vehículo.");
+            return;
+        }
+
+        // --- LÓGICA CONDICIONAL SÓLO PARA IMPRESIÓN ---
+
+        // 1. Bloques Administrativos (Devolución/Corrección)
+        const ejecutadosSelect = document.getElementById('sys-ejecutados').value;
+        const devolucion = document.getElementById('devolucion-block');
+        const corregido = document.getElementById('corregido-block');
+        
+        if (ejecutadosSelect === 'SI') {
+            devolucion.classList.add('ocultar-admin-print');
+            corregido.classList.add('ocultar-admin-print');
+        } else {
+            devolucion.classList.remove('ocultar-admin-print');
+            corregido.classList.remove('ocultar-admin-print');
+        }
+        
+        // 2. LÓGICA CONDICIONAL PARA SECCIÓN A. SISTEMA (QUITAR SECCIÓN VACÍA)
+        const secSistema = document.getElementById('sec-sistema');
+        const adminOkChecked = document.getElementById('admin-ok').checked;
+        const obsSistemaVacia = document.getElementById('obs-sistema').value.trim() === '';
+        const sysFinalizadaVacia = document.getElementById('sys-finalizada').value === '';
+        const sysEjecutadosVacia = document.getElementById('sys-ejecutados').value === '';
+        
+        if (!adminOkChecked && obsSistemaVacia && sysFinalizadaVacia && sysEjecutadosVacia) {
+            secSistema.classList.add('empty-print');
+        } else {
+            secSistema.classList.remove('empty-print');
+        }
+
+        // 3. Checklist (Solo mostrar marcados)
+        document.querySelectorAll('.check-item').forEach(item => {
+            const checkbox = item.querySelector('input[type="checkbox"]');
+            if (checkbox && checkbox.checked) {
+                item.classList.add('is-checked-print');
+            } else {
+                item.classList.remove('is-checked-print');
+            }
+        });
+        
+        // 4. Observaciones (Ocultar si están vacías)
+        document.querySelectorAll('.obs-area').forEach(obsArea => {
+            const textarea = obsArea.querySelector('textarea');
+            if (textarea && textarea.value.trim() === '') {
+                obsArea.classList.add('empty-print');
+            } else {
+                obsArea.classList.remove('empty-print');
+            }
+        });
+
+        // 4.b Ocultar secciones enteras si no tienen items marcados (las secciones que quieres ocultar en la impresión)
+        const sectionsToEvaluate = ["sec-pintura","sec-armado","sec-pulido","sec-tapiceria","sec-control"];
+        sectionsToEvaluate.forEach(secId => {
+            const sec = document.getElementById(secId);
+            if (!sec) return;
+            // buscar checkboxes dentro de la sección
+            const checkboxes = Array.from(sec.querySelectorAll('input[type="checkbox"]'));
+            // si no hay checkboxes marcados y no hay observaciones visibles -> ocultar sección en impresión
+            const anyChecked = checkboxes.some(cb => cb.checked);
+            const obs = sec.querySelector('.obs-area');
+            const obsHasText = obs && obs.querySelector('textarea') && obs.querySelector('textarea').value.trim() !== '';
+            if (!anyChecked && !obsHasText) {
+                sec.classList.add('empty-print');
+            } else {
+                sec.classList.remove('empty-print');
+            }
+        });
+
+        // 5. Imprimir
+        window.print();
+        
+        // 6. Restaurar la vista del formulario después de imprimir (QUITAR TODAS LAS CLASES TEMPORALES)
+        setTimeout(() => {
+            document.querySelectorAll('.check-item').forEach(item => {
+                item.classList.remove('is-checked-print');
+            });
+            document.querySelectorAll('.obs-area').forEach(obsArea => {
+                obsArea.classList.remove('empty-print');
+            });
+            devolucion.classList.remove('ocultar-admin-print');
+            corregido.classList.remove('ocultar-admin-print');
+            secSistema.classList.remove('empty-print'); // Restaurar la sección A
+
+            // Restaurar las secciones evaluadas
+            sectionsToEvaluate.forEach(secId => {
+                const sec = document.getElementById(secId);
+                if (sec) sec.classList.remove('empty-print');
+            });
+        }, 1000);
+    }
+    
+    // Configura los listeners para el resaltado de sección
+    function setupFocusListeners() {
+        const sectionIds = ["sec-sistema", "sec-pintura", "sec-armado", "sec-pulido", "sec-tapiceria", "sec-control"];
+
+        sectionIds.forEach(sectionId => {
             const section = document.getElementById(sectionId);
             if (!section) return;
 
-            const checkboxes = section.querySelectorAll('.checklist input[type="checkbox"]');
-            const total = checkboxes.length;
-            let checkedCount = 0;
+            section.querySelectorAll('input, select, textarea').forEach(input => {
+                input.addEventListener('focus', () => {
+                    section.classList.add('active-section');
+                });
 
-            checkboxes.forEach(cb => {
-                if (cb.checked) {
-                    checkedCount++;
-                    // Agregar clase para impresión (si está marcado)
-                    cb.closest('.check-item').classList.add('is-checked-print');
-                } else {
-                    // Quitar clase para impresión (si no está marcado)
-                    cb.closest('.check-item').classList.remove('is-checked-print');
-                }
-            });
-
-            const header = section.querySelector('.section-header');
-            const indicator = section.querySelector('.status-indicator');
-
-            if (total > 0 && checkedCount === total) {
-                header.classList.add('completed');
-                indicator.textContent = 'COMPLETO';
-                section.classList.remove('active-section');
-            } else if (checkedCount > 0) {
-                header.classList.remove('completed');
-                indicator.textContent = 'EN PROGRESO';
-                section.classList.add('active-section');
-            } else {
-                header.classList.remove('completed');
-                indicator.textContent = 'PENDIENTE';
-                section.classList.remove('active-section');
-            }
-        }
-        
-        function checkAllSections() {
-            ["sec-sistema", "sec-pintura", "sec-armado", "sec-pulido", "sec-tapiceria"].forEach(checkSection);
-            prepareForPrint(); // Prepara el documento para la impresión
-        }
-
-        // --- LÓGICA DE IMPRESIÓN ---
-        function prepareForPrint() {
-            // 1. Marcar items seleccionados para impresión (esto se hace en checkSection)
-            
-            // 2. Ocultar área de observaciones si está vacía
-            document.querySelectorAll('.obs-area').forEach(obsArea => {
-                const textarea = obsArea.querySelector('textarea');
-                if (textarea && textarea.value.trim() === '') {
-                    obsArea.classList.add('empty-print');
-                } else {
-                    obsArea.classList.remove('empty-print');
-                }
-            });
-
-            // 3. Ocultar secciones enteras si no tienen items marcados Y no tienen observaciones
-            const sectionsToEvaluate = ["sec-pintura","sec-armado","sec-pulido","sec-tapiceria"];
-            sectionsToEvaluate.forEach(secId => {
-                const sec = document.getElementById(secId);
-                if (!sec) return;
-                
-                const checkboxes = Array.from(sec.querySelectorAll('input[type="checkbox"]')).filter(cb => cb.checked).length > 0;
-                const hasObs = !sec.querySelector('.obs-area').classList.contains('empty-print');
-
-                if (!checkboxes && !hasObs) {
-                    sec.classList.add('empty-print');
-                } else {
-                    sec.classList.remove('empty-print');
-                }
-            });
-            
-            // 4. Sincronizar el contenido del canvas con la imagen de impresión
-             const sigInput = document.getElementById('inspector-sig');
-             const sigImg = document.getElementById('firma-inspector-img');
-             if (sigInput.value && sigImg) {
-                 sigImg.src = sigInput.value;
-             } else if (sigImg) {
-                 sigImg.src = "";
-             }
-        }
-        
-        function validarFormulario() {
-            if (!validateCorrectionAfterReturn()) {
-                alert("ERROR: La fecha/hora de corrección no puede ser anterior a la de devolución. Por favor, corrija el error en la Sección A.");
-                return;
-            }
-            // Podrías agregar más validaciones aquí (ej: OT, Placa, Inspector no vacíos)
-
-            prepareForPrint(); // Asegura la última preparación
-            window.print();
-        }
-
-        // --- LÓGICA DE FLATPICKR Y FECHAS ---
-        let datePickers = [];
-        let timePickers = [];
-        
-        function initFlatpickr() {
-            // Establecer idioma español por defecto
-            flatpickr.setDefaults({ locale: 'es' });
-
-            // Date Pickers: Formato YYYY-MM-DD para guardar, DD/MM/YYYY para mostrar.
-            datePickers = Array.from(document.querySelectorAll(".flat-date")).map(el => flatpickr(el, {
-                dateFormat: "Y-m-d", // valor real guardado en el input (ej: 2023-11-25)
-                altInput: true,
-                altFormat: "d/m/Y", // formato mostrado al usuario (ej: 25/11/2023)
-                allowInput: true,
-                onChange: function(selectedDates, dateStr, instance) {
-                    debouncedSaveForm(); 
-                    validateCorrectionAfterReturn();
-                }
-            }));
-            
-            // Time Pickers: Formato H:i (24h)
-            timePickers = Array.from(document.querySelectorAll(".flat-time")).map(el => flatpickr(el, {
-                enableTime: true,
-                noCalendar: true,
-                dateFormat: "H:i", // valor real guardado en el input
-                altInput: true,
-                altFormat: "H:i",
-                time_24hr: true,
-                allowInput: true,
-                clickOpens: true,
-                onChange: function(selectedDates, dateStr, instance) {
-                    debouncedSaveForm(); 
-                    validateCorrectionAfterReturn();
-                }
-            }));
-        }
-
-        // Sincroniza los valores cargados desde localStorage con los objetos Flatpickr
-        function syncFlatpickrValues(clear = false) {
-             // 1. Sincronizar fechas
-            if (datePickers && datePickers.length) {
-                datePickers.forEach(inst => {
-                    try {
-                        if (clear || (inst.input && inst.input.value)) {
-                            // inst.setDate acepta el valor real (Y-m-d)
-                            inst.setDate(clear ? null : inst.input.value, false, "Y-m-d");
+                input.addEventListener('blur', () => {
+                    setTimeout(() => {
+                        if (!section.contains(document.activeElement)) {
+                            section.classList.remove('active-section');
                         }
-                    } catch (e) { /* ignore invalid dates */ }
-                });
-            }
-            // 2. Sincronizar horas
-            if (timePickers && timePickers.length) {
-                timePickers.forEach(inst => {
-                    try {
-                        if (clear || (inst.input && inst.input.value)) {
-                            // inst.setDate acepta el valor real (H:i)
-                            inst.setDate(clear ? null : inst.input.value, false, "H:i");
-                        }
-                    } catch (e) { /* ignore invalid times */ }
-                });
-            }
-        }
-
-        // Helper: devuelve un objeto Date combinado desde inputs de fecha (Y-m-d) y hora (H:i).
-        function getDateTimeFromInputs(dateId, timeId) {
-            const dateEl = document.getElementById(dateId);
-            if (!dateEl || !dateEl.value) return null; // fecha obligatoria para construir
-
-            const timeEl = document.getElementById(timeId);
-            const dateStr = dateEl.value; // YYYY-MM-DD (flatpickr dateFormat)
-            const timeStr = (timeEl && timeEl.value) ? timeEl.value : "00:00"; // HH:MM
-            
-            // Construir ISO string: YYYY-MM-DDTHH:MM:00
-            const iso = dateStr + "T" + timeStr + ":00";
-            const dt = new Date(iso);
-            
-            if (isNaN(dt.getTime())) return null;
-            return dt;
-        }
-
-
-        // 👉 Inicialización: Al cargar la página
-        window.addEventListener("DOMContentLoaded", () => {
-            // 1) Inicializa flatpickr en los inputs (antes de cargar valores)
-            initFlatpickr();
-            
-            // ✅ NUEVO: Inicializar Signature Pad
-            initSignaturePad();
-
-            // 2) Carga valores guardados en localStorage y sincroniza con los pickers
-            loadForm();
-
-            // 3) Resto de listeners y comportamiento
-            // Usar 'debouncedSaveForm' en lugar de 'saveForm' para reducir escrituras en localStorage
-            document.querySelectorAll("input:not([type='checkbox']), select, textarea").forEach(el => {
-                el.addEventListener("input", debouncedSaveForm);
-                el.addEventListener("change", debouncedSaveForm);
-            });
-            
-            // Checkboxes llaman a saveForm directamente (para actualizar el estado de la sección inmediatamente)
-            document.querySelectorAll("input[type='checkbox']").forEach(el => {
-                // Reemplaza el onchange en el HTML para usar debouncedSaveForm
-                el.onchange = () => { checkSection(el.closest('.section').id); debouncedSaveForm(); };
-            });
-
-            // Los campos con validación específica también llaman a la validación en blur
-            ["devuelto-date","devuelto-time","corregido-date","corregido-time"].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) {
-                    el.addEventListener("blur", validateCorrectionAfterReturn);
-                }
-            });
-
-            // Forzar mayúsculas en campos específicos
-            document.querySelectorAll('.uppercase-input').forEach(input => {
-                input.addEventListener('input', (e) => {
-                    const start = input.selectionStart;
-                    const end = input.selectionEnd;
-                    input.value = input.value.toUpperCase();
-                    input.setSelectionRange(start, end);
+                    }, 100); 
                 });
             });
-            
-            // Listener de cambio para el select de Ejecutados para visualización condicional
-             document.getElementById('sys-ejecutados').onchange = () => { 
-                conditionalDisplay(); 
-                debouncedSaveForm(); 
-            };
         });
-    </script>
+    }
+
+
+    // 👉 Al cargar la página: inicializar pickers, cargar datos y activar autosave
+    window.addEventListener("DOMContentLoaded", () => {
+        // 1) Inicializa flatpickr en los inputs (antes de cargar valores)
+        initFlatpickr();
+
+        // 2) Carga valores guardados en localStorage y sincroniza con los pickers
+        loadForm();
+
+        // 3) Resto de listeners y comportamiento
+        setupFocusListeners(); 
+
+        document.querySelectorAll("input, select, textarea").forEach(el => {
+            el.addEventListener("input", saveForm);
+            el.addEventListener("change", saveForm);
+        });
+
+        // Ejecutar validación cada vez que los campos de devolución/corrección cambian (cuando no hay picker events por alguna razón)
+        ["devuelto-date","devuelto-time","corregido-date","corregido-time"].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.addEventListener("blur", validateCorrectionAfterReturn);
+            }
+        });
+
+        document.querySelectorAll('.uppercase-input').forEach(input => {
+            input.addEventListener('input', (e) => {
+                const start = input.selectionStart;
+                const end = input.selectionEnd;
+                input.value = input.value.toUpperCase();
+                input.setSelectionRange(start, end);
+            });
+        });
+    });
+</script>
+
 </body>
 </html>
