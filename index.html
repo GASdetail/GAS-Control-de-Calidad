@@ -486,6 +486,18 @@
                 font-weight: bold;
                 color: #000 !important;
             }
+
+            /* Fecha de impresión: elemento dinámico que se coloca en la esquina superior derecha */
+            .print-date {
+                display: block;
+                position: fixed;
+                top: 6mm; /* dentro de la página */
+                right: 6mm;
+                font-size: 10pt;
+                color: #000;
+                font-weight: bold;
+                z-index: 9999;
+            }
         }
     </style>
 </head>
@@ -510,7 +522,7 @@
         </div>
         <div class="form-group">
             <label>Marca del Vehículo:</label>
-            <input type="text" id="brand" maxlength="40" placeholder="Ej: Toyota"> 
+            <input type="text" id="brand" placeholder="Ej: Toyota"> 
         </div>
     </div>
 
@@ -902,6 +914,33 @@
         }
     }
 
+    // --- FUNCIONES PARA INSERTAR / REMOVER FECHA EN LA ESQUINA SUPERIOR DERECHA AL IMPRIMIR ---
+    function formatDateForPrint(d = new Date()) {
+        // Formato dd/mm/yyyy
+        const dd = String(d.getDate()).padStart(2, '0');
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const yyyy = d.getFullYear();
+        return `${dd}/${mm}/${yyyy}`;
+    }
+
+    function addPrintDate() {
+        // Si ya existe, actualizarla
+        let el = document.querySelector('.print-date');
+        if (!el) {
+            el = document.createElement('div');
+            el.className = 'print-date';
+            el.setAttribute('aria-hidden', 'true');
+            document.body.appendChild(el);
+        }
+        el.textContent = 'Fecha: ' + formatDateForPrint(new Date());
+    }
+
+    function removePrintDate() {
+        const el = document.querySelector('.print-date');
+        if (el && el.parentNode) el.parentNode.removeChild(el);
+    }
+
+    // Integrar con generarReporte: insertamos la fecha justo antes de imprimir y la removemos después.
     function generarReporte() {
         // Re-ejecutar validación antes de imprimir
         const valid = validateCorrectionAfterReturn();
@@ -983,6 +1022,9 @@
             }
         });
 
+        // Insertar fecha antes de imprimir (dinámico)
+        addPrintDate();
+
         // 5. Imprimir
         window.print();
         
@@ -1003,9 +1045,26 @@
                 const sec = document.getElementById(secId);
                 if (sec) sec.classList.remove('empty-print');
             });
+
+            // Remover la fecha por seguridad (en caso afterprint no se dispare)
+            removePrintDate();
         }, 1000);
     }
     
+    // Registrar eventos beforeprint/afterprint y matchMedia para compatibilidad
+    if (window.matchMedia) {
+        const mql = window.matchMedia('print');
+        mql.addListener((m) => {
+            if (m.matches) {
+                addPrintDate();
+            } else {
+                removePrintDate();
+            }
+        });
+    }
+    window.addEventListener('beforeprint', addPrintDate);
+    window.addEventListener('afterprint', removePrintDate);
+
     // Configura los listeners para el resaltado de sección
     function setupFocusListeners() {
         const sectionIds = ["sec-sistema", "sec-pintura", "sec-armado", "sec-pulido", "sec-tapiceria", "sec-control"];
@@ -1068,6 +1127,3 @@
 
 </body>
 </html>
-
-
-
