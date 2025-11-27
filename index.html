@@ -577,20 +577,48 @@
         </div>
     </div>
 
+    <!-- PINTURA (se mantiene como sección existente, se agregan las preguntas solicitadas) -->
     <div class="section" id="sec-pintura">
         <div class="section-header">
             <span><span class="print-hidden-icon">🖌️</span> <span class="section-index">B.</span> PINTURA</span>
             <span class="status-indicator">PENDIENTE</span>
         </div>
         <div class="checklist">
-            <div class="check-item">
-                <input type="checkbox" id="p1" onchange="checkSection('sec-pintura'); saveForm();">
-                <label for="p1">Textura del transparente correcta (conforme a originalidad)</label>
-            </div>
+            <!-- Añadí las nuevas preguntas solicitadas como check-items. IDs p1..p7 -->
+            <div class="check-item"><input type="checkbox" id="p1" onchange="checkSection('sec-pintura'); saveForm();"><label for="p1">La textura del transparente es la adecuada conforme con la originalidad del vehículo</label></div>
+            <div class="check-item"><input type="checkbox" id="p2" onchange="checkSection('sec-pintura'); saveForm();"><label for="p2">Los bordes, filos y líneas repasadas están libres de excesos de transparente o pintura</label></div>
+            <div class="check-item"><input type="checkbox" id="p3" onchange="checkSection('sec-pintura'); saveForm();"><label for="p3">Las líneas de las piezas repintadas son idénticas a las originales</label></div>
+            <div class="check-item"><input type="checkbox" id="p4" onchange="checkSection('sec-pintura'); saveForm();"><label for="p4">Las superficies pintadas están libres de defectos de repintado (rayas, opacamiento, manchas)</label></div>
+            <div class="check-item"><input type="checkbox" id="p5" onchange="checkSection('sec-pintura'); saveForm();"><label for="p5">Los empaques externos están libres de residuos de pintura, pulimento, o cualquier suciedad</label></div>
+            <div class="check-item"><input type="checkbox" id="p6" onchange="checkSection('sec-pintura'); saveForm();"><label for="p6">En caso negativo, revisar contra la Recepción del Auto por daños que debieron eliminarse en el taller</label></div>
+            <div class="check-item"><input type="checkbox" id="p7" onchange="checkSection('sec-pintura'); saveForm();"><label for="p7">En caso de Corrección de Pintura Total: verificar si los servicios incompletos fueron corregidos</label></div>
         </div>
         <div class="obs-area">
             <label class="form-group">Observaciones Pintura:</label>
             <textarea id="obs-pintura" placeholder="Defectos encontrados, correcciones pendientes..."></textarea>
+        </div>
+    </div>
+
+    <!-- NUEVA SECCIÓN: ARMADO Y AJUSTE DE PIEZAS -->
+    <div class="section" id="sec-armado">
+        <div class="section-header">
+            <span><span class="print-hidden-icon">🔩</span> <span class="section-index">B.</span> ARMADO Y AJUSTE DE PIEZAS</span>
+            <span class="status-indicator">PENDIENTE</span>
+        </div>
+        <div class="checklist">
+            <!-- IDs a1..a8 -->
+            <div class="check-item"><input type="checkbox" id="a1" onchange="checkSection('sec-armado'); saveForm();"><label for="a1">El interior de las piezas reparadas está libre de residuos de pulimento o suciedad</label></div>
+            <div class="check-item"><input type="checkbox" id="a2" onchange="checkSection('sec-armado'); saveForm();"><label for="a2">Las piezas reparadas y aledañas son móviles, abren y cierran con la suavidad original y sin golpes</label></div>
+            <div class="check-item"><input type="checkbox" id="a3" onchange="checkSection('sec-armado'); saveForm();"><label for="a3">Las piezas ajustan correctamente y no presentan levantamientos o desalineaciones</label></div>
+            <div class="check-item"><input type="checkbox" id="a4" onchange="checkSection('sec-armado'); saveForm();"><label for="a4">Los niveles de aceite, líquido de frenos y refrigerante son los adecuados</label></div>
+            <div class="check-item"><input type="checkbox" id="a5" onchange="checkSection('sec-armado'); saveForm();"><label for="a5">Las luces y testigos funcionan correctamente</label></div>
+            <div class="check-item"><input type="checkbox" id="a6" onchange="checkSection('sec-armado'); saveForm();"><label for="a6">Las molduras, parrillas, empaques, escobillas u otras piezas están limpias y sin daños</label></div>
+            <div class="check-item"><input type="checkbox" id="a7" onchange="checkSection('sec-armado'); saveForm();"><label for="a7">Los vidrios no presentan daños derivados del proceso de reparación</label></div>
+            <div class="check-item"><input type="checkbox" id="a8" onchange="checkSection('sec-armado'); saveForm();"><label for="a8">El exterior del auto está libre de suciedad producida por el proceso de reparación (polvo, cinta, residuos)</label></div>
+        </div>
+        <div class="obs-area">
+            <label class="form-group">Observaciones Armado/Ajuste:</label>
+            <textarea id="obs-armado" placeholder="Detalles de ajuste y piezas..."></textarea>
         </div>
     </div>
 
@@ -600,12 +628,18 @@
             <span class="status-indicator">PENDIENTE</span>
         </div>
         <div class="checklist">
+            <!-- Mantengo los existentes y agrego los nuevos: pu1..pu10 -->
             <div class="check-item"><input type="checkbox" id="pu1" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu1">Sin rayas, manchas u opacamiento por pulido</label></div>
             <div class="check-item"><input type="checkbox" id="pu2" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu2">Vidrios pulidos (sin manchas ni marcas de agua)</label></div>
             <div class="check-item"><input type="checkbox" id="pu3" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu3">Partes negras acondicionadas</label></div>
             <div class="check-item"><input type="checkbox" id="pu4" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu4">Manillas de puertas limpias (interior y exterior)</label></div>
             <div class="check-item"><input type="checkbox" id="pu5" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu5">Torpedo y escobillas detallados correctamente</label></div>
             <div class="check-item"><input type="checkbox" id="pu6" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu6">Bordes del vehículo sin residuos (polish/cera)</label></div>
+            <div class="check-item"><input type="checkbox" id="pu7" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu7">Superficies externas sin residuos de pulimento</label></div>
+            <div class="check-item"><input type="checkbox" id="pu8" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu8">Capó, guardabarros, tapa motor, y superficies externas limpias</label></div>
+            <div class="check-item"><input type="checkbox" id="pu9" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu9">Superficies lavadas correctamente y sin suciedad posterior al proceso</label></div>
+            <div class="check-item"><input type="checkbox" id="pu10" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu10">Las superficies exteriores están libres de rayas superficiales o daños que debieron eliminarse</label></div>
+            <div class="check-item"><input type="checkbox" id="pu11" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu11">En caso negativo, finalizar en el taller y corregir antes de la entrega</label></div>
         </div>
         <div class="obs-area">
             <label class="form-group">Observaciones Exterior/Pulido:</label>
@@ -619,6 +653,7 @@
             <span class="status-indicator">PENDIENTE</span>
         </div>
         <div class="checklist">
+            <!-- Conservé los t1..t16 existentes y añadí t17 -->
             <div class="check-item"><input type="checkbox" id="t1" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t1">Aspirado de piso y alfombras detallado</label></div>
             <div class="check-item"><input type="checkbox" id="t2" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t2">Tapicería aspirada y detallada correctamente</label></div>
             <div class="check-item"><input type="checkbox" id="t3" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t3">Rejillas de ventilación limpias y detalladas</label></div>
@@ -635,10 +670,28 @@
             <div class="check-item"><input type="checkbox" id="t14" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t14">Pantallas y espejos limpios</label></div>
             <div class="check-item"><input type="checkbox" id="t15" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t15">Pedales correctamente limpios y detallados</label></div>
             <div class="check-item"><input type="checkbox" id="t16" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t16">Cajuela aspirada y limpia</label></div>
+            <div class="check-item"><input type="checkbox" id="t17" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t17">Habitáculo/cajuela/batea limpio y detallado (según tipo de vehículo)</label></div>
         </div>
         <div class="obs-area">
             <label class="form-group">Observaciones Interior:</label>
             <textarea id="obs-interior" placeholder="Detalles de tapicería..."></textarea>
+        </div>
+    </div>
+
+    <!-- Opcional: CONTROL MECÁNICO BÁSICO -->
+    <div class="section" id="sec-control">
+        <div class="section-header">
+            <span><span class="print-hidden-icon">⚙️</span> <span class="section-index">E.</span> CONTROL MECÁNICO BÁSICO</span>
+            <span class="status-indicator">PENDIENTE</span>
+        </div>
+        <div class="checklist">
+            <div class="check-item"><input type="checkbox" id="m1" onchange="checkSection('sec-control'); saveForm();"><label for="m1">Niveles de líquidos adecuados (aceite, frenos, refrigerante)</label></div>
+            <div class="check-item"><input type="checkbox" id="m2" onchange="checkSection('sec-control'); saveForm();"><label for="m2">Luces y testigos funcionando</label></div>
+            <div class="check-item"><input type="checkbox" id="m3" onchange="checkSection('sec-control'); saveForm();"><label for="m3">Vehículo listo para la entrega sin reportes pendientes</label></div>
+        </div>
+        <div class="obs-area">
+            <label class="form-group">Observaciones Control Mecánico:</label>
+            <textarea id="obs-control" placeholder="Notas mecánicas..."></textarea>
         </div>
     </div>
 
@@ -834,7 +887,7 @@
         }
 
         // Actualizar estados de secciones después de cargar
-        ["sec-sistema", "sec-pintura", "sec-pulido", "sec-tapiceria"].forEach(id => {
+        ["sec-sistema", "sec-pintura", "sec-armado", "sec-pulido", "sec-tapiceria", "sec-control"].forEach(id => {
             if (document.getElementById(id)) {
                 checkSection(id);
             }
@@ -934,7 +987,7 @@
     
     // Configura los listeners para el resaltado de sección
     function setupFocusListeners() {
-        const sectionIds = ["sec-sistema", "sec-pintura", "sec-pulido", "sec-tapiceria"];
+        const sectionIds = ["sec-sistema", "sec-pintura", "sec-armado", "sec-pulido", "sec-tapiceria", "sec-control"];
 
         sectionIds.forEach(sectionId => {
             const section = document.getElementById(sectionId);
@@ -994,4 +1047,3 @@
 
 </body>
 </html>
-
