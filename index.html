@@ -5,16 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario de Inspección de Entrega - GAS Paint & Detail</title>
     <style>
-        /* --- VARIABLES DE COLOR (Ajustadas para Dark Mode) --- */
+        /* --- VARIABLES DE COLOR (Ajustadas para Dark Mode en Pantalla) --- */
         :root {
-            --primary-dark: #202D3F; /* Fondo principal (Body) */
-            --container-bg: #2c3e50; /* Fondo del Contenedor (Formulario) */
-            --primary-blue: #007bff; /* Azul vibrante para énfasis */
-            --text-light: #ecf0f1;   /* Texto principal (blanco/gris claro) */
-            --text-muted: #bdc3c7;   /* Texto secundario/subtítulos */
-            --success: #27ae60;      /* Verde para completado */
-            --border-dark: #495a6b;  /* Borde/divisor sutil */
-            --input-bg: #34495e;     /* Fondo de inputs */
+            --primary-dark: #202D3F; 
+            --container-bg: #2c3e50; 
+            --primary-blue: #007bff; 
+            --text-light: #ecf0f1; 
+            --text-muted: #bdc3c7; 
+            --success: #27ae60; 
+            --border-dark: #495a6b; 
+            --input-bg: #34495e; 
         }
         
         body {
@@ -22,12 +22,13 @@
             background-color: var(--primary-dark);
             margin: 0;
             padding: 20px;
-            color: var(--text-light); /* Color de texto predeterminado */
+            color: var(--text-light);
+            animation: fadePageIn 0.6s ease-out forwards;
         }
         .container {
             max-width: 850px;
             margin: 0 auto;
-            background: var(--container-bg); /* Fondo del formulario oscuro */
+            background: var(--container-bg);
             padding: 30px;
             border-radius: 8px;
             box-shadow: 0 8px 15px rgba(0,0,0,0.4);
@@ -56,26 +57,26 @@
         .form-group { display: flex; flex-direction: column; margin-bottom: 10px; }
         .form-group label { font-weight: bold; margin-bottom: 5px; font-size: 0.9em; color: var(--text-muted); }
 
-        input[type="text"], input[type="number"], select, input[type="date"], input[type="time"] {
+        input[type="text"], input[type="number"], select, input[type="date"], input[type="time"], textarea {
             padding: 10px; 
             border: 1px solid var(--border-dark);
             border-radius: 4px; 
             font-size: 14px;
-            background-color: var(--input-bg); /* Fondo de inputs oscuro */
-            color: var(--text-light); /* Texto de inputs claro */
-        }
-        /* Corregir el color de las opciones de select en algunos navegadores */
-        select option {
-            background: var(--input-bg);
+            background-color: var(--input-bg);
             color: var(--text-light);
+            font-family: inherit;
         }
+        
+        .uppercase-input { text-transform: uppercase; } 
+        textarea { resize: vertical; min-height: 60px; } 
+        select option { background: var(--input-bg); color: var(--text-light); }
 
         .header-info {
             display: grid; 
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
             gap: 15px; 
             margin-bottom: 20px;
-            background: var(--input-bg); /* Fondo de la sección de info del vehículo */
+            background: var(--input-bg);
             padding: 15px; 
             border-radius: 5px;
             border: 1px solid var(--border-dark);
@@ -85,15 +86,19 @@
             border-radius: 6px; 
             margin-bottom: 20px; 
             overflow: hidden;
-            background: var(--input-bg); /* Fondo de sección oscuro */
-            transition: box-shadow 0.3s ease; /* Animación de sombra */
+            background: var(--input-bg);
+            transition: box-shadow 0.3s ease, border-color 0.3s ease;
         }
-        .section:hover {
-            box-shadow: 0 0 15px rgba(0, 123, 255, 0.2); /* Sombra azul sutil al pasar el mouse */
+        .section:hover { box-shadow: 0 0 15px rgba(0, 123, 255, 0.2); }
+        
+        /* Resaltado de la sección activa */
+        .section.active-section {
+            box-shadow: 0 0 15px 3px rgba(0, 123, 255, 0.6); 
+            border-color: var(--primary-blue);
         }
 
         .section-header {
-            background-color: var(--primary-dark); /* Fondo del encabezado más oscuro que el contenedor */
+            background-color: var(--primary-dark);
             color: var(--text-light); 
             padding: 15px; 
             font-weight: bold; 
@@ -104,7 +109,7 @@
             transition: background-color 0.3s;
         }
         .status-indicator {
-            background: var(--border-dark); /* Gris oscuro para pendiente */
+            background: var(--border-dark);
             color: white; 
             padding: 5px 15px; 
             border-radius: 20px; 
@@ -142,125 +147,307 @@
             border: 1px solid; 
         }
         
-        /* Colores de las cajas de resaltado (Ajustados para Dark Mode) */
-        #devolucion-block { 
-            background-color: #5d4037; /* Marrón oscuro para advertencia */
-            border-color: #8d6e63;   
-            color: var(--text-light);
-        }
-        #corregido-block { 
-            background-color: #004d40; /* Verde oscuro para corrección */
-            border-color: #26a69a;   
-            color: var(--text-light);
-        }
+        #devolucion-block { background-color: #5d4037; border-color: #8d6e63; color: var(--text-light); }
+        #corregido-block { background-color: #004d40; border-color: #26a69a; color: var(--text-light); }
         #devolucion-block .sub-note, #corregido-block .sub-note { color: var(--text-light); }
 
-        .checklist { padding: 15px; }
-        .check-item { 
-            display: flex; 
-            align-items: center; 
-            padding: 8px 0; 
-            border-bottom: 1px solid var(--border-dark); 
-        }
-        .check-item input[type="checkbox"] { transform: scale(1.5); margin-right: 15px; cursor: pointer; }
-        .check-item label { cursor: pointer; width: 100%; }
-        .check-item:last-child { border-bottom: none; } /* Quitar borde del último ítem */
-
-        /* Estilos de botones con Animación */
-        .button-group {
-            display: flex;
-            gap: 10px; 
-            margin-top: 30px;
-        }
-        .btn-submit, .btn-clear {
-            flex-grow: 1; 
+        /* Área de observaciones dentro de secciones */
+        .obs-area {
             padding: 15px;
-            border: none;
+            border-top: 1px dashed var(--border-dark);
+            background-color: rgba(0,0,0,0.1);
+            display: flex; 
+            flex-direction: column; 
+        }
+        .obs-area textarea {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+
+        /* CHECKLIST - Pantalla */
+        .checklist { padding: 18px; }
+        .check-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-dark); 
+            transition: 0.25s ease;
+        }
+        .check-item:last-child { border-bottom: none; }
+        .check-item:hover { transform: translateX(5px); background: rgba(255, 255, 255, 0.05); color: var(--text-light); }
+        .check-item:hover label { color: var(--text-light); }
+
+
+        .check-item input[type="checkbox"] {
+            width: 22px; height: 22px; border: 2px solid var(--border-dark); border-radius: 5px; margin-right: 12px;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.25s;
+            background-color: var(--input-bg);
+            appearance: none; -webkit-appearance: none;
+        }
+        .check-item input[type="checkbox"]:checked {
+            background: var(--success); border-color: var(--success); box-shadow: 0 0 10px rgba(46,204,113,0.5); animation: pulseCheck .25s ease-in-out;
+        }
+        .check-item input[type="checkbox"]:checked::after { content: "✔"; color: white; font-size: 14px; font-weight: bold; }
+
+        /* Botones */
+        .button-group { display: flex; gap: 10px; margin-top: 30px; }
+        .btn-submit, .btn-clear { flex-grow: 1; padding: 15px; border: none; border-radius: 5px; font-size: 1.2em; cursor: pointer; color: white; transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s; }
+        .btn-submit { background-color: var(--primary-blue); }
+        .btn-clear { background-color: #e74c3c; }
+        .btn-submit:hover { background-color: #0056b3; transform: scale(1.02); box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4); }
+        .btn-clear:hover { background-color: #c0392b; transform: scale(1.02); box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4); }
+
+        /* INDICADOR DE GUARDADO */
+        #save-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--success);
+            color: white;
+            padding: 8px 15px;
             border-radius: 5px;
-            font-size: 1.2em;
-            cursor: pointer;
-            color: white; 
-            /* Animación */
-            transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
-        }
-        .btn-submit {
-            background-color: var(--primary-blue); 
-        }
-        .btn-clear {
-            background-color: #e74c3c; 
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            z-index: 1000;
         }
         
-        /* Animación de Hover para Botones */
-        .btn-submit:hover {
-            background-color: #0056b3; 
-            transform: scale(1.02); /* Escala ligeramente */
-            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4); /* Sombra azul */
-        }
-        .btn-clear:hover {
-            background-color: #c0392b;
-            transform: scale(1.02);
-            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4); /* Sombra roja */
+        /* Estilos del Pie de Página */
+        .footer-info {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-dark);
+            font-size: 0.85em;
+            color: var(--text-muted);
         }
 
-        /* --- REGLAS DE IMPRESIÓN --- */
+        /* ESTILOS DEL SUBRAYADO DE TEXTO ADAPTADO */
+        .hover-underline {
+            font-size: 1em; 
+            color: var(--text-muted);
+            position: relative;
+            display: inline-block;
+            cursor: default;
+        }
+
+        .hover-underline::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(to right, var(--primary-blue), var(--success)); 
+            bottom: -3px; 
+            left: 0;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s ease-out;
+        }
+
+        .hover-underline:hover {
+            color: var(--text-light);
+        }
+
+        .hover-underline:hover::after {
+            transform: scaleX(1);
+        }
+        /* FIN ESTILOS SUBRAYADO DE TEXTO ADAPTADO */
+
+
+        /* ==========================================================================
+           ✅ REGLAS DE IMPRESIÓN 
+           ========================================================================== */
         @media print {
-            @page { margin: 0.5cm; }
-            body { background-color: white; padding: 0; color: #000; }
-            .container { box-shadow: none; border: none; padding: 0; width: 100%; max-width: 100%; background: white; }
-            .button-group { display: none !important; } 
+            @page { 
+                margin: 1cm; 
+                size: auto; 
+            }
             
-            /* Asegurar que los elementos oscuros se impriman en blanco o gris claro */
-            .section-header, .status-indicator, .section, .admin-row, .header-info, input, select {
-                background-color: #f0f0f0 !important; 
-                color: #000 !important;
-                border: 1px solid #ccc !important;
+            /* Ocultar elementos no deseados */
+            .print-hidden-icon, #save-indicator, .footer-info { 
+                display: none !important; 
             }
-            .section-header.completed {
-                background-color: #d5f5e3 !important; 
+            
+            /* 👉 OCULTAR LETRA DE ÍNDICE (A., B., C.) */
+            .section-index {
+                display: none !important;
             }
+            
+            /* FUERZA TODO A ALTO CONTRASTE */
+            body, .container, .section, .header-info, input, select, textarea, label, span, div, p {
+                background-color: #ffffff !important;
+                color: #000000 !important; 
+                box-shadow: none !important;
+                text-shadow: none !important;
+            }
+            * { 
+                -webkit-print-color-adjust: exact !important; 
+                print-color-adjust: exact !important; 
+            }
+
+            body {
+                padding: 0;
+                font-size: 11pt; 
+                font-family: Arial, Helvetica, Helvetica, sans-serif; 
+            }
+
+            .container { max-width: 100%; width: 100%; margin: 0; padding: 0; border: none; }
+            
+            /* Encabezado y botones */
+            .button-group, h1 { display: none !important; }
+            .logo-container { 
+                text-align: left; margin-bottom: 15px; padding: 0 0 10px 0; border-bottom: 2px solid #000;
+            }
+            .logo-container img { display: none; }
+            .logo-container::after { 
+                content: "REPORTE DE INSPECCIÓN DE CALIDAD - GAS PAINT"; 
+                font-size: 14pt; font-weight: bold; display: block;
+            }
+
+            /* INPUTS */
+            input[type="text"], input[type="date"], input[type="time"], input[type="number"], select, textarea {
+                border: 1px solid #000 !important; 
+                border-radius: 0 !important; 
+                font-weight: bold; 
+                padding: 3px; 
+                background: white !important;
+                color: black !important;
+                appearance: none; -webkit-appearance: none;
+                margin-top: 2px;
+                height: auto !important;
+            }
+            
+            /* Cabecera de Datos del Vehículo */
+            .header-info {
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 5px;
+                border: 1px solid #000;
+                padding: 8px;
+                margin-bottom: 15px;
+            }
+            .header-info label { color: #000 !important; font-weight: normal; font-size: 10pt; }
+
+            /* Secciones */
+            .section {
+                border: 1px solid #000;
+                margin-bottom: 12px;
+                page-break-inside: avoid; 
+                background: white !important;
+            }
+            .section-header {
+                border-bottom: 1px solid #000;
+                padding: 8px 10px;
+                background-color: #e0e0e0 !important; 
+                font-size: 12pt;
+                font-weight: bold;
+            }
+            .section-header.completed { 
+                background-color: #aaddaa !important; 
+                border-bottom-color: #000 !important; 
+            }
+            .status-indicator { display: none; } 
+
+            /* Preguntas Admin */
+            .admin-row { border-bottom: 1px solid #ccc; padding: 8px 10px; background: white !important; }
+            .admin-question { margin-bottom: 2px; font-weight: bold; color: #000 !important; font-size: 10pt; }
+            
+            /* Bloques de advertencia condicional (devolución/corregido) */
             #devolucion-block, #corregido-block {
-                background-color: #fff !important; 
-                border-color: #ccc !important;
+                border: 1px solid #000 !important;
+                background: #fff !important;
+                padding: 5px;
+                margin-top: 5px;
             }
-            .form-group label, .admin-question, .sub-note {
-                color: #000 !important;
+            /* Clase para ocultar condicionalmente */
+            .ocultar-admin-print { display: none !important; }
+
+            /* CHECKLIST: OCULTAR NO MARCADOS */
+            .checklist { padding: 10px 10px 5px 10px; }
+            .check-item { 
+                display: none !important; 
+                padding: 4px 0; 
+                border-bottom: 1px dotted #ccc; 
+                font-size: 10pt;
+                font-weight: normal; 
             }
-            .logo-container img { max-width: 200px; }
-            .ocultar-admin-print, .section.ocultar-impresion { display: none !important; }
-            .check-item { display: none !important; } 
-            .check-item.checked-print { display: flex !important; border-bottom: 1px dashed #ccc; padding: 5px 0; }
-            .check-item.checked-print input[type="checkbox"] { display: none !important; }
-            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            
+            /* Solo mostramos los items que fueron marcados */
+            .check-item.is-checked-print {
+                display: block !important; 
+            }
+            
+            .check-item:last-child { border-bottom: none; }
+
+            /* Ocultar checkbox real */
+            .check-item input[type="checkbox"] { display: none; }
+            .check-item label { color: #000 !important; display: inline; } 
+
+            /* Símbolo de check **Marcado** siempre a la izquierda del texto */
+            .check-item.is-checked-print label {
+                font-weight: bold; 
+            }
+            .check-item.is-checked-print label::before {
+                font-family: Arial, sans-serif;
+                font-size: 12pt;
+                margin-right: 5px;
+                font-weight: bold;
+                content: "☑ "; 
+            }
+
+
+            /* Áreas de Observaciones */
+            .obs-area {
+                border-top: 1px solid #000;
+                background: #fff !important;
+                padding: 10px;
+            }
+            .obs-area label { font-size: 10pt; color: #000 !important; }
+            textarea { 
+                border: 1px solid #000 !important; 
+                min-height: 40px; 
+                padding: 5px; 
+                font-size: 10pt;
+                resize: none !important; 
+            }
+
+            /* OCULTAR EL ÁREA COMPLETA SI NO HAY TEXTO */
+            .obs-area.empty-print, .section.empty-print {
+                display: none !important;
+            }
+            
         }
     </style>
 </head>
 <body>
+    <div id="save-indicator">💾 Guardado</div>
 
 <div class="container">
     
     <div class="logo-container">
-        <img src="assets/logo.jpeg" alt="GAS Paint & Detail Logo">
+        <img src="assets/logo.jpeg" alt="GAS Paint & Detail Logo" onerror="this.style.display='none'">
     </div>
     <h1>Inspección de Entrega - GAS Paint</h1>
 
     <div class="header-info">
         <div class="form-group">
             <label>Nº Orden de Trabajo:</label>
-            <input type="text" id="orderNum" placeholder="Ej: OT-1234">
+            <input type="text" id="orderNum" class="uppercase-input" placeholder="Ej: OT-1234">
         </div>
         <div class="form-group">
             <label>Placa (9 Dígitos):</label>
-            <input type="text" id="plate" maxlength="9" placeholder="Ej: 123456789">
+            <input type="text" id="plate" class="uppercase-input" maxlength="9" placeholder="Ej: 123456789">
         </div>
         <div class="form-group">
             <label>Marca del Vehículo:</label>
-            <input type="text" id="brand" placeholder="Ej: Toyota">
+            <input type="text" id="brand" placeholder="Ej: Toyota"> 
         </div>
     </div>
 
     <div class="section" id="sec-sistema">
         <div class="section-header">
-            <span>A. ORDEN DE TRABAJO Y SISTEMA</span>
+            <span><span class="print-hidden-icon">📝</span> <span class="section-index">A.</span> ORDEN DE TRABAJO Y SISTEMA</span>
             <span class="status-indicator">PENDIENTE</span>
         </div>
         
@@ -314,11 +501,15 @@
                 <label for="admin-ok"><strong>CONFIRMAR:</strong> La revisión administrativa está completa.</label>
             </div>
         </div>
+        <div class="obs-area">
+            <label class="form-group">Observaciones / Notas Admin:</label>
+            <textarea id="obs-sistema" placeholder="Detalles administrativos adicionales..."></textarea>
+        </div>
     </div>
 
     <div class="section" id="sec-pintura">
         <div class="section-header">
-            <span>B. PINTURA</span>
+            <span><span class="print-hidden-icon">🖌️</span> <span class="section-index">B.</span> PINTURA</span>
             <span class="status-indicator">PENDIENTE</span>
         </div>
         <div class="checklist">
@@ -327,117 +518,67 @@
                 <label for="p1">Textura del transparente correcta (conforme a originalidad)</label>
             </div>
         </div>
+        <div class="obs-area">
+            <label class="form-group">Observaciones Pintura:</label>
+            <textarea id="obs-pintura" placeholder="Defectos encontrados, correcciones pendientes..."></textarea>
+        </div>
     </div>
 
     <div class="section" id="sec-pulido">
         <div class="section-header">
-            <span>C. PULIDO Y EXTERIOR</span>
+            <span><span class="print-hidden-icon">✨</span> <span class="section-index">C.</span> PULIDO Y EXTERIOR</span>
             <span class="status-indicator">PENDIENTE</span>
         </div>
         <div class="checklist">
-            <div class="check-item">
-                <input type="checkbox" id="pu1" onchange="checkSection('sec-pulido'); saveForm();">
-                <label for="pu1">Sin rayas, manchas u opacamiento por pulido</label>
-            </div>
-            <div class="check-item">
-                <input type="checkbox" id="pu2" onchange="checkSection('sec-pulido'); saveForm();">
-                <label for="pu2">Vidrios pulidos (sin manchas ni marcas de agua)</label>
-            </div>
-            <div class="check-item">
-                <input type="checkbox" id="pu3" onchange="checkSection('sec-pulido'); saveForm();">
-                <label for="pu3">Partes negras acondicionadas</label>
-            </div>
-            <div class="check-item">
-                <input type="checkbox" id="pu4" onchange="checkSection('sec-pulido'); saveForm();">
-                <label for="pu4">Manillas de puertas limpias (interior y exterior)</label>
-            </div>
-            <div class="check-item">
-                <input type="checkbox" id="pu5" onchange="checkSection('sec-pulido'); saveForm();">
-                <label for="pu5">Torpedo y escobillas detallados correctamente</label>
-            </div>
-            <div class="check-item">
-                <input type="checkbox" id="pu6" onchange="checkSection('sec-pulido'); saveForm();">
-                <label for="pu6">Bordes del vehículo sin residuos (polish/cera)</label>
-            </div>
+            <div class="check-item"><input type="checkbox" id="pu1" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu1">Sin rayas, manchas u opacamiento por pulido</label></div>
+            <div class="check-item"><input type="checkbox" id="pu2" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu2">Vidrios pulidos (sin manchas ni marcas de agua)</label></div>
+            <div class="check-item"><input type="checkbox" id="pu3" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu3">Partes negras acondicionadas</label></div>
+            <div class="check-item"><input type="checkbox" id="pu4" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu4">Manillas de puertas limpias (interior y exterior)</label></div>
+            <div class="check-item"><input type="checkbox" id="pu5" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu5">Torpedo y escobillas detallados correctamente</label></div>
+            <div class="check-item"><input type="checkbox" id="pu6" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu6">Bordes del vehículo sin residuos (polish/cera)</label></div>
+        </div>
+        <div class="obs-area">
+            <label class="form-group">Observaciones Exterior/Pulido:</label>
+            <textarea id="obs-pulido" placeholder="Detalles de corrección..."></textarea>
         </div>
     </div>
 
     <div class="section" id="sec-tapiceria">
         <div class="section-header">
-            <span>D. TAPICERÍA E INTERIOR</span>
+            <span><span class="print-hidden-icon">🧼</span> <span class="section-index">D.</span> TAPICERÍA E INTERIOR</span>
             <span class="status-indicator">PENDIENTE</span>
         </div>
         <div class="checklist">
-            <div class="check-item">
-                <input type="checkbox" id="t1" onchange="checkSection('sec-tapiceria'); saveForm();">
-                <label for="t1">Aspirado de piso y alfombras detallado</label>
-            </div>
-            <div class="check-item">
-                <input type="checkbox" id="t2" onchange="checkSection('sec-tapiceria'); saveForm();">
-                <label for="t2">Tapicería aspirada y detallada correctamente</label>
-            </div>
-            <div class="check-item">
-                <input type="checkbox" id="t3" onchange="checkSection('sec-tapiceria'); saveForm();">
-                <label for="t3">Rejillas de ventilación limpias y detalladas</label>
-            </div>
-            <div class="check-item">
-                <input type="checkbox" id="t4" onchange="checkSection('sec-tapiceria'); saveForm();">
-                <label for="t4">Dash limpio y detallado</label>
-            </div>
-            <div class="check-item">
-                <input type="checkbox" id="t5" onchange="checkSection('sec-tapiceria'); saveForm();">
-                <label for="t5">Guarda soles limpios y detallados</label>
-            </div>
-            <div class="check-item">
-                <input type="checkbox" id="t6" onchange="checkSection('sec-tapiceria'); saveForm();">
-                <label for="t6">Consola central limpia y detallada</label>
-            </div>
-            <div class="check-item">
-                <input type="checkbox" id="t7" onchange="checkSection('sec-tapiceria'); saveForm();">
-                <label for="t7">Guantera y compartimientos limpios</label>
-            </div>
-            <div class="check-item">
-                <input type="checkbox" id="t8" onchange="checkSection('sec-tapiceria'); saveForm();">
-                <label for="t8">Cielo (techo) detallado y limpio</label>
-            </div>
-            <div class="check-item">
-                <input type="checkbox" id="t9" onchange="checkSection('sec-tapiceria'); saveForm();">
-                <label for="t9">Asientos detallados y limpios</label>
-            </div>
-            <div class="check-item">
-                <input type="checkbox" id="t10" onchange="checkSection('sec-tapiceria'); saveForm();">
-                <label for="t10">Empaques externos limpios y detallados</label>
-            </div>
-            <div class="check-item">
-                <input type="checkbox" id="t11" onchange="checkSection('sec-tapiceria'); saveForm();">
-                <label for="t11">Empaques internos limpios y detallados</label>
-            </div>
-            <div class="check-item">
-                <input type="checkbox" id="t12" onchange="checkSection('sec-tapiceria'); saveForm();">
-                <label for="t12">Empaque del capó limpio y detallado</label>
-            </div>
-            <div class="check-item">
-                <input type="checkbox" id="t13" onchange="checkSection('sec-tapiceria'); saveForm();">
-                <label for="t13">Empaque de la cajuela limpio y detallado</label>
-            </div>
-            <div class="check-item">
-                <input type="checkbox" id="t14" onchange="checkSection('sec-tapiceria'); saveForm();">
-                <label for="t14">Pantallas y espejos limpios</label>
-            </div>
-            <div class="check-item">
-                <input type="checkbox" id="t15" onchange="checkSection('sec-tapiceria'); saveForm();">
-                <label for="t15">Pedales correctamente limpios y detallados</label>
-            </div>
-            <div class="check-item">
-                <input type="checkbox" id="t16" onchange="checkSection('sec-tapiceria'); saveForm();">
-                <label for="t16">Cajuela aspirada y limpia</label>
-            </div>
+            <div class="check-item"><input type="checkbox" id="t1" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t1">Aspirado de piso y alfombras detallado</label></div>
+            <div class="check-item"><input type="checkbox" id="t2" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t2">Tapicería aspirada y detallada correctamente</label></div>
+            <div class="check-item"><input type="checkbox" id="t3" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t3">Rejillas de ventilación limpias y detalladas</label></div>
+            <div class="check-item"><input type="checkbox" id="t4" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t4">Dash limpio y detallado</label></div>
+            <div class="check-item"><input type="checkbox" id="t5" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t5">Guarda soles limpios y detallados</label></div>
+            <div class="check-item"><input type="checkbox" id="t6" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t6">Consola central limpia y detallada</label></div>
+            <div class="check-item"><input type="checkbox" id="t7" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t7">Guantera y compartimientos limpios</label></div>
+            <div class="check-item"><input type="checkbox" id="t8" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t8">Cielo (techo) detallado y limpio</label></div>
+            <div class="check-item"><input type="checkbox" id="t9" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t9">Asientos detallados y limpios</label></div>
+            <div class="check-item"><input type="checkbox" id="t10" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t10">Empaques externos limpios y detallados</label></div>
+            <div class="check-item"><input type="checkbox" id="t11" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t11">Empaques internos limpios y detallados</label></div>
+            <div class="check-item"><input type="checkbox" id="t12" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t12">Empaque del capó limpio y detallado</label></div>
+            <div class="check-item"><input type="checkbox" id="t13" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t13">Empaque de la cajuela limpio y detallado</label></div>
+            <div class="check-item"><input type="checkbox" id="t14" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t14">Pantallas y espejos limpios</label></div>
+            <div class="check-item"><input type="checkbox" id="t15" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t15">Pedales correctamente limpios y detallados</label></div>
+            <div class="check-item"><input type="checkbox" id="t16" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t16">Cajuela aspirada y limpia</label></div>
+        </div>
+        <div class="obs-area">
+            <label class="form-group">Observaciones Interior:</label>
+            <textarea id="obs-interior" placeholder="Detalles de tapicería..."></textarea>
         </div>
     </div>
 
     <div class="button-group">
         <button class="btn-clear" onclick="limpiarFormulario()">Limpiar</button>
         <button class="btn-submit" onclick="generarReporte()">Finalizar e Imprimir Reporte</button>
+    </div>
+    
+    <div class="footer-info">
+        <span class="hover-underline" id="version-link">Versión 1.2.0 - Inspección de Calidad GAS</span>
     </div>
 </div>
 
@@ -482,6 +623,13 @@
         });
 
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        
+        // MOSTRAR INDICADOR DE GUARDADO
+        const indicator = document.getElementById('save-indicator');
+        indicator.style.opacity = 1;
+        setTimeout(() => {
+            indicator.style.opacity = 0;
+        }, 1500); // Ocultar después de 1.5 segundos
     }
 
     // 👉 Carga los datos desde localStorage
@@ -526,90 +674,117 @@
             return;
         }
 
-        // --- LÓGICA CONDICIONAL SÓLO PARA IMPRESIÓN (Bloques Admin) ---
+        // --- LÓGICA CONDICIONAL SÓLO PARA IMPRESIÓN ---
+
+        // 1. Bloques Administrativos (Devolución/Corrección)
         const ejecutadosSelect = document.getElementById('sys-ejecutados').value;
         const devolucion = document.getElementById('devolucion-block');
         const corregido = document.getElementById('corregido-block');
         
-        // Si SÍ se ejecutaron, preparamos los bloques para ser ocultados en la impresión
         if (ejecutadosSelect === 'SI') {
             devolucion.classList.add('ocultar-admin-print');
             corregido.classList.add('ocultar-admin-print');
         } else {
-            // Aseguramos que se muestren si no se seleccionó SI
             devolucion.classList.remove('ocultar-admin-print');
             corregido.classList.remove('ocultar-admin-print');
         }
-        // -----------------------------------------------------------------
+        
+        // 2. 👉 LÓGICA CONDICIONAL PARA SECCIÓN A. SISTEMA (QUITAR SECCIÓN VACÍA)
+        const secSistema = document.getElementById('sec-sistema');
+        const adminOkChecked = document.getElementById('admin-ok').checked;
+        const obsSistemaVacia = document.getElementById('obs-sistema').value.trim() === '';
+        const sysFinalizadaVacia = document.getElementById('sys-finalizada').value === '';
+        const sysEjecutadosVacia = document.getElementById('sys-ejecutados').value === '';
+        
+        if (!adminOkChecked && obsSistemaVacia && sysFinalizadaVacia && sysEjecutadosVacia) {
+            secSistema.classList.add('empty-print');
+        } else {
+            secSistema.classList.remove('empty-print');
+        }
 
-        const sections = document.querySelectorAll('.section');
-        const allCheckItems = document.querySelectorAll('.check-item');
-        let contadorCompletados = 0;
-
-        // 1. Lógica para secciones COMPLETAS (ocultar secciones grises)
-        sections.forEach(sec => {
-            const header = sec.querySelector('.section-header');
-            
-            if (!header.classList.contains('completed')) {
-                sec.classList.add('ocultar-impresion');
+        // 3. Checklist (Solo mostrar marcados)
+        document.querySelectorAll('.check-item').forEach(item => {
+            const checkbox = item.querySelector('input[type="checkbox"]');
+            if (checkbox && checkbox.checked) {
+                item.classList.add('is-checked-print');
             } else {
-                sec.classList.remove('ocultar-impresion');
-                contadorCompletados++;
+                item.classList.remove('is-checked-print');
             }
         });
         
-        // 2. Lógica para ítems INDIVIDUALES (ocultar checks no marcados)
-        allCheckItems.forEach(item => {
-            const checkbox = item.querySelector('input[type="checkbox"]');
-            
-            if (checkbox && checkbox.checked) {
-                item.classList.add('checked-print');
+        // 4. Observaciones (Ocultar si están vacías)
+        document.querySelectorAll('.obs-area').forEach(obsArea => {
+            const textarea = obsArea.querySelector('textarea');
+            if (textarea && textarea.value.trim() === '') {
+                obsArea.classList.add('empty-print');
             } else {
-                item.classList.remove('checked-print');
+                obsArea.classList.remove('empty-print');
             }
         });
 
 
-        if (contadorCompletados === 0) {
-            if (!confirm("No ha completado ninguna sección completa (en verde). El reporte saldrá casi vacío. ¿Desea continuar?")) {
-                // Si el usuario cancela, revertimos todas las clases de impresión temporales
-                sections.forEach(sec => sec.classList.remove('ocultar-impresion'));
-                allCheckItems.forEach(item => item.classList.remove('checked-print'));
-                devolucion.classList.remove('ocultar-admin-print');
-                corregido.classList.remove('ocultar-admin-print');
-                return;
-            }
-        }
-
-        // 3. Imprimir
+        // 5. Imprimir
         window.print();
         
-        // 4. Restaurar la vista del formulario después de imprimir (QUITAR TODAS LAS CLASES TEMPORALES)
+        // 6. Restaurar la vista del formulario después de imprimir (QUITAR TODAS LAS CLASES TEMPORALES)
         setTimeout(() => {
-            sections.forEach(sec => {
-                sec.classList.remove('ocultar-impresion');
+            document.querySelectorAll('.check-item').forEach(item => {
+                item.classList.remove('is-checked-print');
             });
-            allCheckItems.forEach(item => {
-                item.classList.remove('checked-print');
+            document.querySelectorAll('.obs-area').forEach(obsArea => {
+                obsArea.classList.remove('empty-print');
             });
             devolucion.classList.remove('ocultar-admin-print');
             corregido.classList.remove('ocultar-admin-print');
+            secSistema.classList.remove('empty-print'); // 👉 Restaurar la sección A
         }, 1000);
     }
+    
+    // Configura los listeners para el resaltado de sección
+    function setupFocusListeners() {
+        const sectionIds = ["sec-sistema", "sec-pintura", "sec-pulido", "sec-tapiceria"];
+
+        sectionIds.forEach(sectionId => {
+            const section = document.getElementById(sectionId);
+            if (!section) return;
+
+            section.querySelectorAll('input, select, textarea').forEach(input => {
+                input.addEventListener('focus', () => {
+                    section.classList.add('active-section');
+                });
+
+                input.addEventListener('blur', () => {
+                    setTimeout(() => {
+                        if (!section.contains(document.activeElement)) {
+                            section.classList.remove('active-section');
+                        }
+                    }, 100); 
+                });
+            });
+        });
+    }
+
 
     // 👉 Al cargar la página: cargar datos y activar autosave
     window.addEventListener("DOMContentLoaded", () => {
         loadForm();
+        setupFocusListeners(); 
 
-        // Escucha cambios en todos los elementos relevantes para guardar automáticamente
         document.querySelectorAll("input, select, textarea").forEach(el => {
             el.addEventListener("input", saveForm);
             el.addEventListener("change", saveForm);
+        });
+
+        document.querySelectorAll('.uppercase-input').forEach(input => {
+            input.addEventListener('input', (e) => {
+                const start = input.selectionStart;
+                const end = input.selectionEnd;
+                input.value = input.value.toUpperCase();
+                input.setSelectionRange(start, end);
+            });
         });
     });
 </script>
 
 </body>
 </html>
-
-
