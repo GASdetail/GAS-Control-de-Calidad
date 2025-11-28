@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulario de Inspección de Entrega - GAS Paint & Detail</title>
-
-    <link rel="icon" type="image/jpeg" href="assets/logo2.JPG"> 
+    <title>Formulario de Control de Calidad - GAS Paint & Detail</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <style>
@@ -369,9 +367,14 @@
                 height: auto !important;
                 display: inline-block !important; 
                 margin-right: 15px !important; 
+
+                /* 1. Fuerza el uso de la ruta LOCAL 'logo.jpeg' */
+                content: url('logo.jpeg') !important;
+                 /* 2. Asegura que el logo con fondo transparente no interfiera */
+                src: url('logo.jpeg') !important;
             }
             .logo-container::after { 
-                content: "REPORTE DE INSPECCIÓN DE CALIDAD - GAS PAINT"; 
+                content: "REPORTE CONTROL DE CALIDAD - GAS PAINT"; 
                 font-size: 14pt; font-weight: bold; display: block;
                 flex-grow: 1; 
                 text-align: left; 
@@ -506,6 +509,18 @@
                 font-weight: bold;
                 color: #000 !important;
             }
+
+            /* Fecha de impresión: elemento dinámico que se coloca en la esquina superior derecha */
+            .print-date {
+                display: block;
+                position: fixed;
+                top: 6mm; /* dentro de la página */
+                right: 6mm;
+                font-size: 10pt;
+                color: #000;
+                font-weight: bold;
+                z-index: 9999;
+            }
         }
     </style>
 </head>
@@ -518,7 +533,7 @@
         <img src="assets/logo.png" alt="GAS Paint & Detail Logo" onerror="this.style.display='none'">
         <div id="print-date-display"></div>
     </div>
-    <h1>Inspección de Entrega - GAS Paint</h1>
+    <h1>Control de Calidad - GAS Paint</h1>
 
     <div class="header-info">
         <div class="form-group">
@@ -558,7 +573,7 @@
             <span class="admin-question">2.a. ¿Todos los servicios en la Orden verificables, se ejecutaron?</span>
             <div class="input-cluster">
                 <select id="sys-ejecutados" onchange="saveForm()">
-                    <option value="" selected disabled hidden>Seleccione...</option>
+                    <option value="">Seleccione...</option>
                     <option value="SI">SÍ</option>
                     <option value="NO">NO</option>
                 </select>
@@ -593,7 +608,7 @@
             </div>
         </div>
         <div class="obs-area">
-            <label class="form-group">Observaciones / Notas Admin:</label>
+            <label class="form-group">Observaciones:</label>
             <textarea id="obs-sistema" placeholder="Detalles administrativos adicionales..."></textarea>
         </div>
     </div>
@@ -720,7 +735,7 @@
     </div>
 
     <div class="footer-info">
-        <span class="hover-underline" id="version-link">Versión 1.2.0 - Inspección de Calidad GAS</span>
+        <span class="hover-underline" id="version-link">Versión 1.1.9 - Control de Calidad GAS</span>
     </div>
 </div>
 
@@ -923,6 +938,33 @@
         }
     }
 
+    // --- FUNCIONES PARA INSERTAR / REMOVER FECHA EN LA ESQUINA SUPERIOR DERECHA AL IMPRIMIR ---
+    function formatDateForPrint(d = new Date()) {
+        // Formato dd/mm/yyyy
+        const dd = String(d.getDate()).padStart(2, '0');
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const yyyy = d.getFullYear();
+        return `${dd}/${mm}/${yyyy}`;
+    }
+
+    function addPrintDate() {
+        // Si ya existe, actualizarla
+        let el = document.querySelector('.print-date');
+        if (!el) {
+            el = document.createElement('div');
+            el.className = 'print-date';
+            el.setAttribute('aria-hidden', 'true');
+            document.body.appendChild(el);
+        }
+        el.textContent = 'Fecha: ' + formatDateForPrint(new Date());
+    }
+
+    function removePrintDate() {
+        const el = document.querySelector('.print-date');
+        if (el && el.parentNode) el.parentNode.removeChild(el);
+    }
+
+    // Integrar con generarReporte: insertamos la fecha justo antes de imprimir y la removemos después.
     function generarReporte() {
         // --- CÓDIGO NUEVO: INSERTAR SOLO FECHA (SIN HORA, SIN TITULO) ---
         const today = new Date();
@@ -1013,6 +1055,9 @@
             }
         });
 
+        // Insertar fecha antes de imprimir (dinámico)
+        addPrintDate();
+
         // 5. Imprimir
         window.print();
         
@@ -1033,9 +1078,26 @@
                 const sec = document.getElementById(secId);
                 if (sec) sec.classList.remove('empty-print');
             });
+
+            // Remover la fecha por seguridad (en caso afterprint no se dispare)
+            removePrintDate();
         }, 1000);
     }
     
+    // Registrar eventos beforeprint/afterprint y matchMedia para compatibilidad
+    if (window.matchMedia) {
+        const mql = window.matchMedia('print');
+        mql.addListener((m) => {
+            if (m.matches) {
+                addPrintDate();
+            } else {
+                removePrintDate();
+            }
+        });
+    }
+    window.addEventListener('beforeprint', addPrintDate);
+    window.addEventListener('afterprint', removePrintDate);
+
     // Configura los listeners para el resaltado de sección
     function setupFocusListeners() {
         const sectionIds = ["sec-sistema", "sec-pintura", "sec-armado", "sec-pulido", "sec-tapiceria", "sec-control"];
