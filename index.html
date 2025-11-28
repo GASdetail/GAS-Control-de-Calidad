@@ -9,7 +9,7 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <style>
-        /* --- VARIABLES DE COLOR (Ajustadas para Dark Mode en Pantalla) --- */
+        /* --- VARIABLES DE COLOR --- */
         :root {
             --primary-dark: #202D3F; 
             --container-bg: #2c3e50; 
@@ -43,16 +43,18 @@
             text-align: center;
             margin-bottom: 20px;
         }
+
+        /* --- CONFIGURACIÓN DE LOGOS (NORMAL/PANTALLA) --- */
         
-        /* --- CONFIGURACIÓN DE LOGOS (PANTALLA) --- */
-        /* Por defecto en pantalla se ve el PNG */
+        /* 1. Logo de Pantalla (PNG) -> VISIBLE POR DEFECTO */
         .logo-screen {
             max-width: 250px;
             height: auto;
             display: block;
             margin: 0 auto;
         }
-        /* El JPEG de impresión está oculto en pantalla */
+
+        /* 2. Logo de Impresión (JPEG) -> OCULTO EN PANTALLA */
         .logo-print {
             display: none;
         }
@@ -364,7 +366,7 @@
             /* Encabezado y botones */
             .button-group, h1 { display: none !important; }
             
-            /* --- CONFIGURACIÓN DE LOGOS (IMPRESIÓN) --- */
+            /* --- CONFIGURACIÓN DE LOGOS (SOLO PARA IMPRESIÓN) --- */
             .logo-container { 
                 text-align: left; margin-bottom: 15px; padding: 0 0 10px 0; border-bottom: 2px solid #000;
                 display: flex; 
@@ -372,12 +374,12 @@
                 position: relative; 
             }
             
-            /* Ocultamos el PNG de pantalla */
+            /* 1. OCULTAMOS EL LOGO PNG (DE PANTALLA) */
             .logo-screen {
                 display: none !important; 
             }
             
-            /* Mostramos el JPEG de impresión */
+            /* 2. MOSTRAMOS EL LOGO JPEG (DE IMPRESIÓN) */
             .logo-print {
                 display: inline-block !important; 
                 max-width: 150px !important; 
@@ -392,7 +394,7 @@
                 text-align: left; 
             }
             
-            /* Estilo Fecha Impresión */
+            /* FECHA DE IMPRESIÓN */
             #print-date-display {
                 display: block !important;
                 position: absolute;
