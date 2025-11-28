@@ -44,19 +44,20 @@
             margin-bottom: 20px;
         }
         
-        /* ESTILOS DE LOGO PARA PANTALLA (Por defecto) */
+        /* --- CONFIGURACIÓN DE LOGOS (PANTALLA) --- */
+        /* Por defecto en pantalla se ve el PNG */
         .logo-screen {
             max-width: 250px;
             height: auto;
             display: block;
             margin: 0 auto;
         }
-        /* Ocultar el logo de impresión en la pantalla */
+        /* El JPEG de impresión está oculto en pantalla */
         .logo-print {
             display: none;
         }
 
-        /* --- NUEVO: Ocultar fecha en pantalla --- */
+        /* Ocultar fecha en pantalla */
         #print-date-display { display: none; }
 
         h1 {
@@ -363,20 +364,22 @@
             /* Encabezado y botones */
             .button-group, h1 { display: none !important; }
             
-            /* --- MODIFICADO: LOGO CONTAINER PARA FECHA --- */
+            /* --- CONFIGURACIÓN DE LOGOS (IMPRESIÓN) --- */
             .logo-container { 
                 text-align: left; margin-bottom: 15px; padding: 0 0 10px 0; border-bottom: 2px solid #000;
                 display: flex; 
                 align-items: center; 
-                position: relative; /* Importante para posicionar la fecha */
+                position: relative; 
             }
             
-            /* CONTROL DE VISIBILIDAD DE LOGOS EN IMPRESIÓN */
+            /* Ocultamos el PNG de pantalla */
             .logo-screen {
-                display: none !important; /* Oculta logo.png */
+                display: none !important; 
             }
+            
+            /* Mostramos el JPEG de impresión */
             .logo-print {
-                display: inline-block !important; /* Muestra logo.jpeg */
+                display: inline-block !important; 
                 max-width: 150px !important; 
                 height: auto !important;
                 margin-right: 15px !important; 
@@ -389,7 +392,7 @@
                 text-align: left; 
             }
             
-            /* --- NUEVO: ESTILO FECHA IMPRESIÓN --- */
+            /* Estilo Fecha Impresión */
             #print-date-display {
                 display: block !important;
                 position: absolute;
