@@ -9,7 +9,7 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <style>
-        /* --- VARIABLES DE COLOR --- */
+        /* --- VARIABLES DE COLOR (Ajustadas para Dark Mode en Pantalla) --- */
         :root {
             --primary-dark: #202D3F; 
             --container-bg: #2c3e50; 
@@ -43,18 +43,16 @@
             text-align: center;
             margin-bottom: 20px;
         }
-
-        /* --- CONFIGURACIÓN DE LOGOS (NORMAL/PANTALLA) --- */
         
-        /* 1. Logo de Pantalla (PNG) -> VISIBLE POR DEFECTO */
+        /* --- CONFIGURACIÓN DE LOGOS (PANTALLA) --- */
+        /* Por defecto en pantalla se ve el PNG */
         .logo-screen {
             max-width: 250px;
             height: auto;
             display: block;
             margin: 0 auto;
         }
-
-        /* 2. Logo de Impresión (JPEG) -> OCULTO EN PANTALLA */
+        /* El JPEG de impresión está oculto en pantalla */
         .logo-print {
             display: none;
         }
@@ -366,7 +364,7 @@
             /* Encabezado y botones */
             .button-group, h1 { display: none !important; }
             
-            /* --- CONFIGURACIÓN DE LOGOS (SOLO PARA IMPRESIÓN) --- */
+            /* --- CONFIGURACIÓN DE LOGOS (IMPRESIÓN) --- */
             .logo-container { 
                 text-align: left; margin-bottom: 15px; padding: 0 0 10px 0; border-bottom: 2px solid #000;
                 display: flex; 
@@ -374,17 +372,20 @@
                 position: relative; 
             }
             
-            /* 1. OCULTAMOS EL LOGO PNG (DE PANTALLA) */
+            /* Ocultamos el PNG de pantalla ESTRICTAMENTE */
             .logo-screen {
-                display: none !important; 
+                display: none !important;
+                width: 0 !important;
+                height: 0 !important;
             }
             
-            /* 2. MOSTRAMOS EL LOGO JPEG (DE IMPRESIÓN) */
+            /* Mostramos el JPEG de impresión ESTRICTAMENTE */
             .logo-print {
                 display: inline-block !important; 
                 max-width: 150px !important; 
                 height: auto !important;
                 margin-right: 15px !important; 
+                visibility: visible !important;
             }
 
             .logo-container::after { 
@@ -394,7 +395,7 @@
                 text-align: left; 
             }
             
-            /* FECHA DE IMPRESIÓN */
+            /* Estilo Fecha Impresión */
             #print-date-display {
                 display: block !important;
                 position: absolute;
@@ -534,7 +535,7 @@
     <div class="logo-container">
         <img src="assets/logo.png" class="logo-screen" alt="GAS Paint & Detail Logo" onerror="this.style.display='none'">
         
-        <img src="assets/logo.jpeg" class="logo-print" alt="GAS Paint & Detail Logo Print" onerror="this.style.display='none'">
+        <img src="assets/logo.jpeg" class="logo-print" alt="GAS Paint & Detail Logo Print">
         
         <div id="print-date-display"></div>
     </div>
