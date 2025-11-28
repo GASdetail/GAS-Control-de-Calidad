@@ -44,20 +44,19 @@
             margin-bottom: 20px;
         }
         
-        /* --- CONFIGURACIÓN DE LOGOS (PANTALLA) --- */
-        /* Por defecto en pantalla se ve el PNG */
+        /* ESTILOS DE LOGO PARA PANTALLA (Por defecto) */
         .logo-screen {
             max-width: 250px;
             height: auto;
             display: block;
             margin: 0 auto;
         }
-        /* El JPEG de impresión está oculto en pantalla */
+        /* Ocultar el logo de impresión en la pantalla */
         .logo-print {
             display: none;
         }
 
-        /* Ocultar fecha en pantalla */
+        /* --- NUEVO: Ocultar fecha en pantalla --- */
         #print-date-display { display: none; }
 
         h1 {
@@ -364,29 +363,23 @@
             /* Encabezado y botones */
             .button-group, h1 { display: none !important; }
             
-            /* --- CONFIGURACIÓN DE LOGOS (IMPRESIÓN) --- */
+            /* --- MODIFICADO: LOGO CONTAINER PARA FECHA --- */
             .logo-container { 
                 text-align: left; margin-bottom: 15px; padding: 0 0 10px 0; border-bottom: 2px solid #000;
                 display: flex; 
                 align-items: center; 
-                position: relative; 
+                position: relative; /* Importante para posicionar la fecha */
             }
             
-            /* Ocultamos el PNG de pantalla ESTRICTAMENTE */
+            /* CONTROL DE VISIBILIDAD DE LOGOS EN IMPRESIÓN */
             .logo-screen {
-                display: none !important;
-                width: 0 !important;
-                height: 0 !important;
-                visibility: hidden !important; /* <--- MODIFICACIÓN AÑADIDA */
+                display: none !important; /* Oculta logo.png */
             }
-            
-            /* Mostramos el JPEG de impresión ESTRICTAMENTE */
             .logo-print {
-                display: inline-block !important; 
+                display: inline-block !important; /* Muestra logo.jpeg */
                 max-width: 150px !important; 
                 height: auto !important;
                 margin-right: 15px !important; 
-                visibility: visible !important;
             }
 
             .logo-container::after { 
@@ -396,7 +389,7 @@
                 text-align: left; 
             }
             
-            /* Estilo Fecha Impresión */
+            /* --- NUEVO: ESTILO FECHA IMPRESIÓN --- */
             #print-date-display {
                 display: block !important;
                 position: absolute;
@@ -536,7 +529,7 @@
     <div class="logo-container">
         <img src="assets/logo.png" class="logo-screen" alt="GAS Paint & Detail Logo" onerror="this.style.display='none'">
         
-        <img src="assets/logo.jpeg" class="logo-print" alt="GAS Paint & Detail Logo Print">
+        <img src="assets/logo.jpeg" class="logo-print" alt="GAS Paint & Detail Logo Print" onerror="this.style.display='none'">
         
         <div id="print-date-display"></div>
     </div>
