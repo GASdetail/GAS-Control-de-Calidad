@@ -883,6 +883,37 @@
         font-weight: bold;
         color: #000 !important;
     }
+    /* Indicadores para Flatpickr en móvil */
+.flatpickr-input.mobile[data-enable-time="false"]::before {
+    content: "Seleccionar fecha";
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #aaa;
+    pointer-events: none;
+    font-size: 14px;
+}
+
+.flatpickr-input.mobile[data-enable-time="true"]::before {
+    content: "Seleccionar hora";
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #aaa;
+    pointer-events: none;
+    font-size: 14px;
+}
+
+/* Cuando el input tiene valor, ocultamos el pseudo-texto */
+.flatpickr-input.mobile:not([value=""])::before {
+    content: "";
+}
+.flatpickr-input.mobile {
+    position: relative;
+}
+
 
 }
 
