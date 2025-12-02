@@ -21,10 +21,7 @@
             --input-bg: #34495e; 
             --error: #e74c3c;
         }
-                /* --- NUEVO: Regla para ocultar el logo de impresión en pantalla --- */
-        #logo-print {
-        display: none; 
-    }       
+        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--primary-dark);
@@ -794,13 +791,12 @@
 
 <div class="container">
     
-<div class="logo-container">
-    <img src="assets/logo.png" alt="Logo de GAS Paint & Detail" id="logo-screen"> 
-    
-    <img src="assets/logo.jpeg" alt="Logo de GAS Paint & Detail (Impresión)" id="logo-print"> 
-    
-    <div id="print-date-display" class="print-date"></div> 
-</div>
+     <div class="logo-container">
+        <img src="assets/logo.png" class="logo-screen" alt="GAS Paint & Detail Logo" onerror="this.style.display='none'">
+        
+        
+        <div id="print-date-display"></div>
+    </div>
     
     <h1>Control de Calidad - GAS Paint</h1>
 
