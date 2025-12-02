@@ -883,37 +883,7 @@
         font-weight: bold;
         color: #000 !important;
     }
-    /* Indicadores para Flatpickr en móvil */
-.flatpickr-input.mobile[data-enable-time="false"]::before {
-    content: "Seleccionar fecha";
-    position: absolute;
-    left: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #aaa;
-    pointer-events: none;
-    font-size: 14px;
-}
-
-.flatpickr-input.mobile[data-enable-time="true"]::before {
-    content: "Seleccionar hora";
-    position: absolute;
-    left: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #aaa;
-    pointer-events: none;
-    font-size: 14px;
-}
-
-/* Cuando el input tiene valor, ocultamos el pseudo-texto */
-.flatpickr-input.mobile:not([value=""])::before {
-    content: "";
-}
-.flatpickr-input.mobile {
-    position: relative;
-}
-
+    
 
 }
 
@@ -963,8 +933,8 @@
                     <option value="SI">SÍ</option>
                     <option value="NO">NO</option>
                 </select>
-                <input type="text" id="sys-finalizada-date" class="flat-date" title="Fecha" placeholder="DD/MM/YYYY" aria-label="Fecha finalización" data-disable-mobile="false">>
-                <input type="text" id="sys-finalizada-time" class="flat-time" title="Hora" placeholder="HH:MM" aria-label="Hora finalización data-disable-mobile="false">">
+                <input type="text" id="sys-finalizada-date" class="flat-date" title="Fecha" placeholder="DD/MM/YYYY" aria-label="Fecha finalización">
+                <input type="text" id="sys-finalizada-time" class="flat-time" title="Hora" placeholder="HH:MM" aria-label="Hora finalización">
             </div>
         </div>
 
@@ -1172,37 +1142,13 @@
         }
     }
 
-    // Inicializa flatpickr en los inputs con clase .flat-date y .flat-time
-    function initFlatpickr() {
-        // Fecha -> guardamos en Y-m-d (ISO) pero mostramos en d/m/Y
-        datePickers = Array.from(document.querySelectorAll(".flat-date")).map(el => flatpickr(el, {
-            dateFormat: "Y-m-d",      // valor real que se guarda en el input (facil para parsear)
-            altInput: true,
-            altFormat: "d/m/Y",       // formato visible para el usuario
-            allowInput: true,
-            clickOpens: true,
-            onChange: function(selectedDates, dateStr, instance) { 
-                saveForm(); 
-                validateCorrectionAfterReturn();
-            }
-        }));
+function initFlatpickr() { function ensureAltPlaceholder(instance, fallback) { try { const src = instance.input; const ph = src.getAttribute('data-placeholder') || src.getAttribute('placeholder') || src.getAttribute('aria-label') || (fallback || ''); if (instance.altInput) { instance.altInput.setAttribute('placeholder', ph); if (!instance.altInput.getAttribute('aria-label')) { instance.altInput.setAttribute('aria-label', src.getAttribute('aria-label') || ph); } if (!instance.altInput.getAttribute('title')) { instance.altInput.setAttribute('title', src.getAttribute('title') || ph); } } } catch (e) {} }
 
-        // Hora -> usamos formato 12h con AM/PM, guardamos en H:i (24h internamente) pero mostramos h:i K (12h)
-        timePickers = Array.from(document.querySelectorAll(".flat-time")).map(el => flatpickr(el, {
-            enableTime: true,
-            noCalendar: true,
-            dateFormat: "H:i",    // valor real guardado en el input (formato 24h)
-            altInput: true,
-            altFormat: "h:i K",   // formato mostrado: 12h con AM/PM
-            time_24hr: false,     // modo 12 horas
-            allowInput: true,
-            clickOpens: true,
-            minuteIncrement: 1,
-            onChange: function(selectedDates, dateStr, instance) {
-                saveForm();
-                validateCorrectionAfterReturn();
-            }
-        }));
+// Fecha -> guardamos en Y-m-d (ISO) pero mostramos en d/m/Y datePickers = Array.from(document.querySelectorAll(".flat-date")).map(el => flatpickr(el, { dateFormat: "Y-m-d", // valor real que se guarda en el input (fácil de parsear) altInput: true, altFormat: "d/m/Y", // formato visible para el usuario allowInput: true, clickOpens: true, onReady: function(selectedDates, dateStr, instance) { ensureAltPlaceholder(instance, "DD/MM/YYYY"); }, onChange: function(selectedDates, dateStr, instance) { ensureAltPlaceholder(instance, "DD/MM/YYYY"); saveForm(); validateCorrectionAfterReturn(); } }));
+
+// Hora -> usamos formato 12h con AM/PM, guardamos en H:i (24h internamente) pero mostramos h:i K (12h) timePickers = Array.from(document.querySelectorAll(".flat-time")).map(el => flatpickr(el, { enableTime: true, noCalendar: true, dateFormat: "H:i", // valor real guardado en el input (formato 24h) altInput: true, altFormat: "h:i K", // formato mostrado: 12h con AM/PM time_24hr: false, // modo 12 horas allowInput: true, clickOpens: true, minuteIncrement: 1, onReady: function(selectedDates, dateStr, instance) { ensureAltPlaceholder(instance, "HH:MM"); }, onChange: function(selectedDates, dateStr, instance) { ensureAltPlaceholder(instance, "HH:MM"); saveForm(); validateCorrectionAfterReturn(); } })); }
+            
+        
     }
 
     // Helper: devuelve un objeto Date combinado desde inputs de fecha (Y-m-d) y hora (H:i).
