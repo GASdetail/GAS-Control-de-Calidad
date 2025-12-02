@@ -472,7 +472,46 @@
                 font-size: 1.1em;
             }
         }
+/* --- CORRECCIÓN VISUAL PARA FECHAS Y HORAS (MÓVIL) --- */
 
+/* 1. Añadir iconos de fondo SVG (Calendario y Reloj) en color gris claro */
+.flat-date, .flat-date + input {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23bdc3c7' viewBox='0 0 24 24'%3E%3Cpath d='M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm-8 4H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 10px center !important; /* Icono a la derecha */
+    background-size: 20px !important;
+    padding-right: 35px !important; /* Espacio para que el texto no tape el icono */
+}
+
+.flat-time, .flat-time + input {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23bdc3c7' viewBox='0 0 24 24'%3E%3Cpath d='M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 10px center !important;
+    background-size: 20px !important;
+    padding-right: 35px !important;
+}
+
+/* 2. Hacer el texto de ayuda (placeholder) mucho más visible */
+::placeholder {
+    color: #bdc3c7 !important; /* Color gris claro */
+    opacity: 1 !important;     /* Opacidad al 100% */
+    font-weight: normal;
+}
+
+/* 3. Ajuste específico para móviles: Que los campos no sean tan pequeños */
+@media (max-width: 600px) {
+    .input-cluster {
+        flex-direction: row; /* Mantener en fila */
+        flex-wrap: wrap;     /* Permitir que bajen si no caben */
+    }
+    
+    .input-cluster input.flat-date,
+    .input-cluster input.flat-time,
+    .input-cluster .flatpickr-input {
+        min-width: 130px !important; /* Ancho mínimo para leer DD/MM/YYYY */
+        flex-grow: 1;                /* Que ocupen el espacio disponible */
+    }
+}
         /* INDICADOR DE GUARDADO */
         #save-indicator {
             position: fixed;
@@ -883,7 +922,6 @@
         font-weight: bold;
         color: #000 !important;
     }
-    
 
 }
 
@@ -1142,13 +1180,37 @@
         }
     }
 
-function initFlatpickr() { function ensureAltPlaceholder(instance, fallback) { try { const src = instance.input; const ph = src.getAttribute('data-placeholder') || src.getAttribute('placeholder') || src.getAttribute('aria-label') || (fallback || ''); if (instance.altInput) { instance.altInput.setAttribute('placeholder', ph); if (!instance.altInput.getAttribute('aria-label')) { instance.altInput.setAttribute('aria-label', src.getAttribute('aria-label') || ph); } if (!instance.altInput.getAttribute('title')) { instance.altInput.setAttribute('title', src.getAttribute('title') || ph); } } } catch (e) {} }
+    // Inicializa flatpickr en los inputs con clase .flat-date y .flat-time
+    function initFlatpickr() {
+        // Fecha -> guardamos en Y-m-d (ISO) pero mostramos en d/m/Y
+        datePickers = Array.from(document.querySelectorAll(".flat-date")).map(el => flatpickr(el, {
+            dateFormat: "Y-m-d",      // valor real que se guarda en el input (facil para parsear)
+            altInput: true,
+            altFormat: "d/m/Y",       // formato visible para el usuario
+            allowInput: true,
+            clickOpens: true,
+            onChange: function(selectedDates, dateStr, instance) { 
+                saveForm(); 
+                validateCorrectionAfterReturn();
+            }
+        }));
 
-// Fecha -> guardamos en Y-m-d (ISO) pero mostramos en d/m/Y datePickers = Array.from(document.querySelectorAll(".flat-date")).map(el => flatpickr(el, { dateFormat: "Y-m-d", // valor real que se guarda en el input (fácil de parsear) altInput: true, altFormat: "d/m/Y", // formato visible para el usuario allowInput: true, clickOpens: true, onReady: function(selectedDates, dateStr, instance) { ensureAltPlaceholder(instance, "DD/MM/YYYY"); }, onChange: function(selectedDates, dateStr, instance) { ensureAltPlaceholder(instance, "DD/MM/YYYY"); saveForm(); validateCorrectionAfterReturn(); } }));
-
-// Hora -> usamos formato 12h con AM/PM, guardamos en H:i (24h internamente) pero mostramos h:i K (12h) timePickers = Array.from(document.querySelectorAll(".flat-time")).map(el => flatpickr(el, { enableTime: true, noCalendar: true, dateFormat: "H:i", // valor real guardado en el input (formato 24h) altInput: true, altFormat: "h:i K", // formato mostrado: 12h con AM/PM time_24hr: false, // modo 12 horas allowInput: true, clickOpens: true, minuteIncrement: 1, onReady: function(selectedDates, dateStr, instance) { ensureAltPlaceholder(instance, "HH:MM"); }, onChange: function(selectedDates, dateStr, instance) { ensureAltPlaceholder(instance, "HH:MM"); saveForm(); validateCorrectionAfterReturn(); } })); }
-            
-        
+        // Hora -> usamos formato 12h con AM/PM, guardamos en H:i (24h internamente) pero mostramos h:i K (12h)
+        timePickers = Array.from(document.querySelectorAll(".flat-time")).map(el => flatpickr(el, {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",    // valor real guardado en el input (formato 24h)
+            altInput: true,
+            altFormat: "h:i K",   // formato mostrado: 12h con AM/PM
+            time_24hr: false,     // modo 12 horas
+            allowInput: true,
+            clickOpens: true,
+            minuteIncrement: 1,
+            onChange: function(selectedDates, dateStr, instance) {
+                saveForm();
+                validateCorrectionAfterReturn();
+            }
+        }));
     }
 
     // Helper: devuelve un objeto Date combinado desde inputs de fecha (Y-m-d) y hora (H:i).
