@@ -1929,27 +1929,7 @@
         // 5. Imprimir
         window.print();
         
-        // 6. Restaurar la vista del formulario después de imprimir (QUITAR TODAS LAS CLASES TEMPORALES)
-        setTimeout(() => {
-            document.querySelectorAll('.check-item').forEach(item => {
-                item.classList.remove('is-checked-print');
-            });
-            document.querySelectorAll('.obs-area').forEach(obsArea => {
-                obsArea.classList.remove('empty-print');
-            });
-            devolucion.classList.remove('ocultar-admin-print');
-            corregido.classList.remove('ocultar-admin-print');
-            secSistema.classList.remove('empty-print'); // Restaurar la sección A
-
-            // Restaurar las secciones evaluadas
-            sectionsToEvaluate.forEach(secId => {
-                const sec = document.getElementById(secId);
-                if (sec) sec.classList.remove('empty-print');
-            });
-
-            // Remover la fecha por seguridad (en caso afterprint no se dispare)
-            removePrintDate();
-        }, 1000);
+     
     }
     
     // Registrar eventos beforeprint/afterprint y matchMedia para compatibilidad
@@ -1964,7 +1944,7 @@
         });
     }
     window.addEventListener('beforeprint', addPrintDate);
-    window.addEventListener('afterprint', removePrintDate);
+   
 
     // Configura los listeners para el resaltado de sección
     function setupFocusListeners() {
@@ -2064,7 +2044,46 @@
                 el.addEventListener("blur", validateCorrectionAfterReturn);
             }
         });
+// --- CÓDIGO NUEVO Y CORRECTO: Restablece el formulario después de imprimir o CANCELAR ---
 
+window.onafterprint = function() {
+    // 1. RE-HABILITAR EL BOTÓN (Se asegura de que el botón vuelva a funcionar)
+    const btnPrint = document.getElementById("btn-print");
+    if (btnPrint) {
+        btnPrint.removeAttribute("disabled"); 
+    }
+
+    // 2. RESTAURAR LA VISTA (Toda la lógica de limpieza que quitamos del 'setTimeout')
+    
+    // Restaurar el checklist (quitar todas las clases temporales)
+    document.querySelectorAll('.check-item').forEach(item => {
+        item.classList.remove('is-checked-print');
+    });
+    
+    // Restaurar observaciones
+    document.querySelectorAll('.obs-area').forEach(obsArea => {
+        obsArea.classList.remove('empty-print');
+    });
+
+    // Restaurar bloques administrativos y sección A
+    const devolucion = document.getElementById('devolucion-block');
+    const corregido = document.getElementById('corregido-block');
+    const secSistema = document.getElementById('sec-sistema');
+
+    if (devolucion) devolucion.classList.remove('ocultar-admin-print');
+    if (corregido) corregido.classList.remove('ocultar-admin-print');
+    if (secSistema) secSistema.classList.remove('empty-print');
+
+    // Restaurar las secciones evaluadas
+    const sectionsToEvaluate = ["sec-pintura","sec-armado","sec-pulido","sec-tapiceria","sec-control"];
+    sectionsToEvaluate.forEach(secId => {
+        const sec = document.getElementById(secId);
+        if (sec) sec.classList.remove('empty-print');
+    });
+
+    // Remover la fecha de impresión
+    removePrintDate();
+};
         document.querySelectorAll('.uppercase-input').forEach(input => {
             input.addEventListener('input', (e) => {
                 const start = input.selectionStart;
