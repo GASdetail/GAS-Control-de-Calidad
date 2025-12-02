@@ -61,6 +61,10 @@
             margin-top: 20px;
         }
         
+        /* --- NUEVO: Regla para ocultar el logo de impresión en pantalla --- */
+        #logo-print {
+        display: none; 
+    }       
         /* Estilos Generales y Secciones */
         .form-group { display: flex; flex-direction: column; margin-bottom: 10px; }
         .form-group label { font-weight: bold; margin-bottom: 5px; font-size: 0.9em; color: var(--text-muted); }
@@ -610,6 +614,14 @@
                 print-color-adjust: exact !important; 
             }
 
+            /* SOLUCIÓN AL BUG: Alternar logos al imprimir */
+            #logo-screen {
+                display: none !important; /* Oculta el logo PNG (pantalla) */
+            }
+
+            #logo-print {
+                display: inline-block !important; /* Muestra el logo JPEG (impresión) */
+            }
             body {
                 padding: 0;
                 font-size: 11pt; 
@@ -791,13 +803,13 @@
 
 <div class="container">
     
-     <div class="logo-container">
-        <img src="assets/logo.png" class="logo-screen" alt="GAS Paint & Detail Logo" onerror="this.style.display='none'">
-        
-        
-        <div id="print-date-display"></div>
-    </div>
+<div class="logo-container">
+    <img src="assets/logo.png" alt="Logo de GAS Paint & Detail" id="logo-screen"> 
     
+    <img src="assets/logo.jpeg" alt="Logo de GAS Paint & Detail (Impresión)" id="logo-print"> 
+    
+    <div id="print-date-display" class="print-date"></div> 
+</div>
     <h1>Control de Calidad - GAS Paint</h1>
 
     <div class="header-info">
