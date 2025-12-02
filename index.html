@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario de Control de Calidad - GAS Paint & Detail</title>
 
+    <link rel="icon" type="image/jpeg" href="assets/logo2.JPG">
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <style>
         /* --- VARIABLES DE COLOR (Ajustadas para Dark Mode en Pantalla) --- */
@@ -71,6 +73,16 @@
             background-color: var(--input-bg);
             color: var(--text-light);
             font-family: inherit;
+            line-height: 1.5;
+        }
+        /* Touch-friendly tap targets on mobile */
+        @media (max-width: 900px), (max-height: 700px) {
+            input[type="text"], input[type="number"], select, input[type="date"], input[type="time"], textarea {
+                min-height: 44px;
+                padding: 12px;
+                font-size: 16px;
+                line-height: 1.6;
+            }
         }
         
         .uppercase-input { text-transform: uppercase; } 
@@ -87,15 +99,40 @@
             border-radius: 5px;
             border: 1px solid var(--border-dark);
         }
+        .header-info label {
+            color: var(--text-light) !important;
+            font-weight: 600;
+        }
         .section {
             border: 1px solid var(--border-dark); 
-            border-radius: 6px; 
-            margin-bottom: 20px; 
+            border-radius: 8px; 
+            margin-bottom: 25px; 
             overflow: hidden;
             background: var(--input-bg);
-            transition: box-shadow 0.3s ease, border-color 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
         }
-        .section:hover { box-shadow: 0 0 15px rgba(0, 123, 255, 0.2); }
+        .section::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--border-dark);
+            transition: background 0.3s ease;
+        }
+        .section:hover { 
+            box-shadow: 0 8px 24px rgba(0, 123, 255, 0.2);
+            border-color: var(--primary-blue);
+            transform: translateY(-2px);
+        }
+        .section:hover::before {
+            background: var(--primary-blue);
+        }
+        .section.active-section::before {
+            background: var(--success);
+        }
         
         /* Resaltado de la sección activa */
         .section.active-section {
@@ -103,16 +140,48 @@
             border-color: var(--primary-blue);
         }
 
+        /* Indicador de progreso */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-blue) 0%, var(--success) 100%);
+            z-index: 9999;
+            transition: width 0.3s ease;
+        }
+
+        /* Barra de progreso individual por sección */
+        .section-progress-bar {
+            height: 3px;
+            background: linear-gradient(90deg, var(--border-dark) 0%, var(--border-dark) 100%);
+            margin-top: 10px;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .section-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-blue) 0%, var(--success) 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
         .section-header {
-            background-color: var(--primary-dark);
+            background: linear-gradient(90deg, var(--primary-dark) 0%, rgba(0, 123, 255, 0.05) 100%);
             color: var(--text-light); 
-            padding: 15px; 
-            font-weight: bold; 
+            padding: 16px 15px; 
+            font-weight: 700; 
             display: flex;
             justify-content: space-between; 
             align-items: center; 
             font-size: 1.1em;
-            transition: background-color 0.3s;
+            transition: all 0.3s ease;
+            letter-spacing: 0.3px;
+        }
+        .section:hover .section-header {
+            background: linear-gradient(90deg, var(--primary-dark) 0%, rgba(0, 123, 255, 0.1) 100%);
         }
         .status-indicator {
             background: var(--border-dark);
@@ -201,6 +270,107 @@
             color: var(--text-light) !important;
         }
 
+        /* Dark theme para flatpickr calendar */
+        .flatpickr-calendar {
+            background: var(--input-bg) !important;
+            border: 1px solid var(--border-dark) !important;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5) !important;
+        }
+        .flatpickr-calendar.open {
+            background: var(--input-bg) !important;
+        }
+        .flatpickr-months {
+            background: var(--primary-dark) !important;
+        }
+        .flatpickr-months .flatpickr-month {
+            background: var(--primary-dark) !important;
+            color: var(--text-light) !important;
+        }
+        .flatpickr-months .flatpickr-prev-month,
+        .flatpickr-months .flatpickr-next-month {
+            color: var(--primary-blue) !important;
+            fill: var(--primary-blue) !important;
+        }
+        .flatpickr-months .flatpickr-prev-month:hover,
+        .flatpickr-months .flatpickr-next-month:hover {
+            color: var(--text-light) !important;
+            fill: var(--text-light) !important;
+        }
+        .flatpickr-weekdays {
+            background: var(--primary-dark) !important;
+        }
+        .flatpickr-weekday {
+            background: var(--primary-dark) !important;
+            color: var(--text-muted) !important;
+            font-weight: 600;
+        }
+        .flatpickr-days {
+            background: var(--input-bg) !important;
+        }
+        .flatpickr-day {
+            color: var(--text-light) !important;
+            background: transparent;
+            border: 1px solid transparent;
+        }
+        .flatpickr-day:hover,
+        .flatpickr-day.prevMonthDay:hover,
+        .flatpickr-day.nextMonthDay:hover,
+        .flatpickr-day.disabled:hover,
+        .flatpickr-day.disabled.prevMonthDay:hover,
+        .flatpickr-day.disabled.nextMonthDay:hover {
+            background: var(--primary-blue) !important;
+            color: white !important;
+            border-color: var(--primary-blue) !important;
+        }
+        .flatpickr-day.today {
+            border-color: var(--success) !important;
+            color: var(--success) !important;
+            background: transparent !important;
+        }
+        .flatpickr-day.today:hover {
+            border-color: var(--success) !important;
+            background: var(--success) !important;
+            color: white !important;
+        }
+        .flatpickr-day.selected,
+        .flatpickr-day.startRange,
+        .flatpickr-day.endRange,
+        .flatpickr-day.selected.inRange {
+            background: var(--primary-blue) !important;
+            border-color: var(--primary-blue) !important;
+            color: white !important;
+        }
+        .flatpickr-day.inRange {
+            background: rgba(0, 123, 255, 0.25) !important;
+            border-color: rgba(0, 123, 255, 0.25) !important;
+            color: var(--text-light) !important;
+        }
+        .flatpickr-day.prevMonthDay,
+        .flatpickr-day.nextMonthDay {
+            color: var(--text-muted) !important;
+            background: rgba(0,0,0,0.1) !important;
+        }
+        .flatpickr-day.disabled {
+            color: var(--text-muted) !important;
+            background: rgba(0,0,0,0.2) !important;
+            cursor: not-allowed;
+        }
+        /* Time picker styling */
+        .flatpickr-time {
+            border-top: 1px solid var(--border-dark) !important;
+            background: var(--primary-dark) !important;
+        }
+        .flatpickr-time input,
+        .flatpickr-time .flatpickr-am-pm {
+            background: var(--input-bg) !important;
+            color: var(--text-light) !important;
+        }
+        .flatpickr-time .flatpickr-am-pm:hover,
+        .flatpickr-time .numInputWrapper span:hover {
+            background: var(--primary-blue) !important;
+            color: white !important;
+        }
+
         /* Área de observaciones dentro de secciones */
         .obs-area {
             padding: 15px;
@@ -230,28 +400,45 @@
 
 
         .check-item input[type="checkbox"] {
-            width: 22px; height: 22px; border: 2px solid var(--border-dark); border-radius: 5px; margin-right: 12px;
-            cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.25s;
+            width: 22px; height: 22px; border: 2px solid var(--border-dark); border-radius: 6px; margin-right: 12px;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             background-color: var(--input-bg);
             appearance: none; -webkit-appearance: none;
         }
+        .check-item input[type="checkbox"]:hover {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+        }
         .check-item input[type="checkbox"]:checked {
-            background: var(--success); border-color: var(--success); box-shadow: 0 0 10px rgba(46,204,113,0.5); animation: pulseCheck .25s ease-in-out;
+            background: linear-gradient(135deg, var(--success) 0%, #1e8449 100%); border-color: var(--success); box-shadow: 0 0 12px rgba(39, 174, 96, 0.6); animation: pulseCheck .3s ease-out;
         }
         .check-item input[type="checkbox"]:checked::after { content: "✔"; color: white; font-size: 14px; font-weight: bold; }
 
-        /* Botones */
+        /* Botones mejorados con iconos */
         .button-group { display: flex; gap: 10px; margin-top: 30px; }
-        .btn-submit, .btn-clear { flex-grow: 1; padding: 15px; border: none; border-radius: 5px; font-size: 1.2em; cursor: pointer; color: white; transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s; }
-        .btn-submit { background-color: var(--primary-blue); }
-        .btn-clear { background-color: #e74c3c; }
-        .btn-submit:hover { background-color: #0056b3; transform: scale(1.02); box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4); }
-        .btn-clear:hover { background-color: #c0392b; transform: scale(1.02); box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4); }
+        .btn-submit, .btn-clear { flex-grow: 1; padding: 15px; border: none; border-radius: 6px; font-size: 1.1em; font-weight: 600; cursor: pointer; color: white; transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); display: flex; align-items: center; justify-content: center; gap: 8px; letter-spacing: 0.5px; }
+        .btn-submit { background: linear-gradient(135deg, var(--primary-blue) 0%, #0056b3 100%); box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3); }
+        .btn-clear { background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3); }
+        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0, 123, 255, 0.5); }
+        .btn-clear:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(231, 76, 60, 0.5); }
+        .btn-submit:active, .btn-clear:active { transform: translateY(0); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); }
+        .btn-submit:focus, .btn-clear:focus { outline: 2px solid var(--success); outline-offset: 2px; }
+        .btn-submit::before { content: '🖨️'; font-size: 1.2em; }
+        .btn-clear::before { content: '🗑️'; font-size: 1.2em; }
 
         .btn-submit[disabled] {
             opacity: 0.6;
             cursor: not-allowed;
             box-shadow: none;
+        }
+
+        /* Touch-friendly button sizing */
+        @media (max-width: 900px), (max-height: 700px) {
+            .btn-submit, .btn-clear {
+                min-height: 48px;
+                padding: 12px;
+                font-size: 1.1em;
+            }
         }
 
         /* INDICADOR DE GUARDADO */
@@ -283,8 +470,9 @@
                 .toast .close { background: transparent; border: none; color: inherit; font-size: 16px; cursor: pointer; margin-left: 8px; padding: 4px; border-radius: 6px; }
                 .toast:focus { outline: none; box-shadow: 0 0 0 4px rgba(52,152,219,0.12); }
 
-                @keyframes toastIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-                @keyframes toastOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(10px); } }
+                @keyframes toastIn { from { opacity: 0; transform: translateY(15px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+                @keyframes toastOut { from { opacity: 1; transform: translateX(0) translateY(0) scale(1); } to { opacity: 0; transform: translateX(120%) translateY(-5px) scale(0.95); } }
+                @keyframes toastPulse { 0% { transform: scale(1); } 50% { transform: scale(1.04); } 100% { transform: scale(1); } }
 
                 /* Responsive: in small screens move container to top-center and full width minus margin */
                 @media (max-width: 900px), (max-height: 700px) {
@@ -298,7 +486,8 @@
 
                 /* Confirmation modal (clean form) */
                 .modal-overlay { position: fixed; inset: 0; background: rgba(2,6,23,0.6); display: flex; align-items: center; justify-content: center; z-index: 20000; }
-                .confirm-dialog { background: var(--container-bg); color: var(--text-light); padding: 20px; border-radius: 10px; width: 92%; max-width: 520px; box-shadow: 0 12px 30px rgba(0,0,0,0.6); border: 1px solid var(--border-dark); }
+                .confirm-dialog { background: var(--container-bg); color: var(--text-light); padding: 20px; border-radius: 10px; width: 92%; max-width: 520px; box-shadow: 0 12px 30px rgba(0,0,0,0.6); border: 1px solid var(--border-dark); animation: modalIn .22s cubic-bezier(.2,.9,.2,1) both; }
+                .confirm-dialog.animate-out { animation: modalOut .18s ease both; }
                 .confirm-dialog .cd-title { font-size: 1.05rem; font-weight: 800; margin-bottom: 8px; }
                 .confirm-dialog .cd-message { color: var(--text-muted); margin-bottom: 16px; }
                 .confirm-dialog .cd-actions { display: flex; gap: 10px; justify-content: flex-end; }
@@ -306,6 +495,27 @@
                 .confirm-dialog .btn-confirm { background: var(--error); color: white; border: none; padding: 10px 14px; border-radius: 6px; cursor: pointer; }
                 .confirm-dialog .btn-confirm:hover { background: #c0392b; }
                 .confirm-dialog .btn-cancel:hover { background: rgba(255,255,255,0.02); }
+
+                @keyframes modalIn { from { opacity: 0; transform: translateY(8px) scale(.995); } to { opacity: 1; transform: translateY(0) scale(1); } }
+                @keyframes modalOut { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(8px) scale(.995); } }
+
+                /* Toast action buttons */
+                .toast-actions { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+                .toast-action-btn { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: #fff; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; cursor: pointer; }
+                .toast-action-btn:hover { background: rgba(255,255,255,0.25); }
+                .toast-action-btn:focus { outline: 1px solid #fff; }
+
+                /* History modal */
+                .history-modal { background: var(--container-bg); color: var(--text-light); padding: 20px; border-radius: 10px; width: 92%; max-width: 520px; box-shadow: 0 12px 30px rgba(0,0,0,0.6); border: 1px solid var(--border-dark); animation: modalIn .22s cubic-bezier(.2,.9,.2,1) both; }
+                .history-modal.animate-out { animation: modalOut .18s ease both; }
+                .history-modal .hm-title { font-size: 1.05rem; font-weight: 800; margin-bottom: 16px; }
+                .history-modal .hm-list { list-style: none; padding: 0; margin: 0; max-height: 300px; overflow-y: auto; }
+                .history-modal .hm-list li { padding: 10px; margin-bottom: 8px; background: rgba(0,0,0,0.2); border-radius: 6px; display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; }
+                .history-modal .hm-restore { background: var(--success); color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.85rem; }
+                .history-modal .hm-restore:hover { background: #1e8449; }
+                .history-modal .hm-close { text-align: center; margin-top: 16px; }
+                .history-modal .btn-close-history { background: transparent; border: 1px solid var(--border-dark); color: var(--text-light); padding: 10px 14px; border-radius: 6px; cursor: pointer; }
+                .history-modal .btn-close-history:hover { background: rgba(255,255,255,0.02); }
 
                 /* Responsive: en pantallas pequeñas colocamos el toast arriba y centrado */
                 @media (max-width: 900px), (max-height: 700px) {
@@ -318,16 +528,22 @@
                         top: 20px !important;
                         font-size: 0.95rem;
                     }
+                    body { line-height: 1.6; }
+                    textarea { line-height: 1.6; }
+                    .check-item label { line-height: 1.6; }
+                    .admin-question { line-height: 1.6; }
                 }
         
         /* Estilos del Pie de Página */
         .footer-info {
             text-align: center;
-            margin-top: 30px;
-            padding-top: 15px;
-            border-top: 1px solid var(--border-dark);
+            margin-top: 40px;
+            padding: 20px 15px;
+            border-top: 2px solid var(--border-dark);
             font-size: 0.85em;
             color: var(--text-muted);
+            background: linear-gradient(180deg, transparent 0%, rgba(0, 123, 255, 0.03) 100%);
+            border-radius: 8px;
         }
 
         /* ESTILOS DEL SUBRAYADO DE TEXTO ADAPTADO */
@@ -575,20 +791,23 @@
 
 <div class="container">
     
-    <div class="logo-container">
-        <img src="assets/logo.png" alt="GAS Paint & Detail Logo" onerror="this.style.display='none'">
+     <div class="logo-container">
+        <img src="assets/logo.png" class="logo-screen" alt="GAS Paint & Detail Logo" onerror="this.style.display='none'">
+        
+        
         <div id="print-date-display"></div>
     </div>
+    
     <h1>Control de Calidad - GAS Paint</h1>
 
     <div class="header-info">
         <div class="form-group">
             <label>Nº Orden de Trabajo:</label>
-            <input type="text" id="orderNum" class="uppercase-input" placeholder="Ej: OT-1234">
+            <input type="text" id="orderNum" class="uppercase-input" placeholder="Ej: OT-2025-001">
         </div>
         <div class="form-group">
             <label>Placa:</label>
-            <input type="text" id="plate" class="uppercase-input" maxlength="9" placeholder="Ej: 123456789">
+            <input type="text" id="plate" class="uppercase-input" maxlength="9" placeholder="Ej: ABC-1234">
         </div>
         <div class="form-group">
             <label>Marca del Vehículo:</label>
@@ -789,6 +1008,8 @@
 
 <script>
     const STORAGE_KEY = "form-calidad-gas";
+    const HISTORY_KEY = "form-calidad-history";
+    const MAX_HISTORY = 5;
 
     // Variables para instancias de flatpickr (se inicializan en initFlatpickr)
     let datePickers = [];
@@ -832,16 +1053,17 @@
             }
         }));
 
-        // Hora -> usamos formato 24h, guardamos "H:i" y también mostramos "H:i"
+        // Hora -> usamos formato 12h con AM/PM, guardamos en H:i (24h internamente) pero mostramos h:i K (12h)
         timePickers = Array.from(document.querySelectorAll(".flat-time")).map(el => flatpickr(el, {
             enableTime: true,
             noCalendar: true,
-            dateFormat: "H:i",    // valor real guardado en el input
+            dateFormat: "H:i",    // valor real guardado en el input (formato 24h)
             altInput: true,
-            altFormat: "H:i",
-            time_24hr: true,
+            altFormat: "h:i K",   // formato mostrado: 12h con AM/PM
+            time_24hr: false,     // modo 12 horas
             allowInput: true,
             clickOpens: true,
+            minuteIncrement: 1,
             onChange: function(selectedDates, dateStr, instance) {
                 saveForm();
                 validateCorrectionAfterReturn();
@@ -976,6 +1198,99 @@
         validateCorrectionAfterReturn();
     }
 
+    // --- Funciones de Historial Local ---
+    function saveToHistory() {
+        const current = localStorage.getItem(STORAGE_KEY);
+        if (!current) return;
+        let history = [];
+        try {
+            const stored = localStorage.getItem(HISTORY_KEY);
+            history = stored ? JSON.parse(stored) : [];
+        } catch (e) {}
+        history.push({ data: current, timestamp: new Date().toLocaleString('es-ES') });
+        if (history.length > MAX_HISTORY) history.shift();
+        localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+    }
+
+    function getHistory() {
+        try {
+            const stored = localStorage.getItem(HISTORY_KEY);
+            return stored ? JSON.parse(stored) : [];
+        } catch (e) {
+            return [];
+        }
+    }
+
+    function restoreFromHistory(index) {
+        const history = getHistory();
+        if (index >= 0 && index < history.length) {
+            localStorage.setItem(STORAGE_KEY, history[index].data);
+            window.location.reload();
+        }
+    }
+
+    function showHistoryModal() {
+        const history = getHistory();
+        if (!history || !history.length) {
+            showRichToast('', 'No hay historial guardado', 'info', 3000);
+            return;
+        }
+
+        const overlay = document.createElement('div');
+        overlay.className = 'modal-overlay';
+        overlay.tabIndex = -1;
+
+        const dialog = document.createElement('div');
+        dialog.className = 'history-modal';
+        dialog.setAttribute('role', 'dialog');
+        dialog.setAttribute('aria-modal', 'true');
+
+        const title = document.createElement('div');
+        title.className = 'hm-title';
+        title.textContent = 'Historial de Cambios';
+
+        const list = document.createElement('ul');
+        list.className = 'hm-list';
+
+        history.forEach((entry, idx) => {
+            const li = document.createElement('li');
+            const label = document.createElement('span');
+            label.textContent = entry.timestamp;
+            const btn = document.createElement('button');
+            btn.className = 'hm-restore';
+            btn.textContent = 'Restaurar';
+            btn.addEventListener('click', () => restoreFromHistory(idx));
+            li.appendChild(label);
+            li.appendChild(btn);
+            list.appendChild(li);
+        });
+
+        const closeDiv = document.createElement('div');
+        closeDiv.className = 'hm-close';
+        const closeBtn = document.createElement('button');
+        closeBtn.className = 'btn-close-history';
+        closeBtn.textContent = 'Cerrar';
+        closeDiv.appendChild(closeBtn);
+
+        dialog.appendChild(title);
+        dialog.appendChild(list);
+        dialog.appendChild(closeDiv);
+        overlay.appendChild(dialog);
+        document.body.appendChild(overlay);
+
+        function closeModal() {
+            try { dialog.classList.add('animate-out'); } catch (e) {}
+            setTimeout(() => {
+                if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
+            }, 180);
+        }
+
+        closeBtn.addEventListener('click', closeModal);
+        overlay.addEventListener('click', (ev) => {
+            if (ev.target === overlay) closeModal();
+        });
+    }
+
     // --- Diálogo de confirmación visual (reemplaza confirm()) ---
     function showConfirm(options) {
         // options: { title, message, confirmText, cancelText, onConfirm, onCancel }
@@ -1018,7 +1333,8 @@
         btnCancel.textContent = cancelText;
 
         const btnConfirm = document.createElement('button');
-        btnConfirm.className = 'btn-confirm';
+        // Use existing btn-clear class for consistency (red destructive button)
+        btnConfirm.className = 'btn-confirm btn-clear';
         btnConfirm.textContent = confirmText;
 
         actions.appendChild(btnCancel);
@@ -1037,9 +1353,13 @@
         btnCancel.focus();
 
         function closeDialog(result) {
-            if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
-            try { if (previousActive) previousActive.focus(); } catch (e) {}
-            if (result) onConfirm(); else onCancel();
+            // play exit animation then remove
+            try { dialog.classList.add('animate-out'); } catch (e) {}
+            setTimeout(() => {
+                if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
+                try { if (previousActive) previousActive.focus(); } catch (e) {}
+                if (result) onConfirm(); else onCancel();
+            }, 180);
         }
 
         btnCancel.addEventListener('click', () => closeDialog(false));
@@ -1092,14 +1412,65 @@
 
     // 👉 Limpia todo: pantalla + almacenamiento local (usa diálogo visual)
     function limpiarFormulario() {
+        // Check if there's any data to clear
+        const hasData = localStorage.getItem(STORAGE_KEY) !== null;
+        
+        if (!hasData) {
+            showRichToast(
+                'Formulario vacío',
+                'No hay datos para limpiar.',
+                'info',
+                3000
+            );
+            return;
+        }
+
         showConfirm({
             title: 'Limpiar formulario',
             message: '¿Está seguro que desea limpiar todo el formulario? Se perderán todos los datos guardados.',
             confirmText: 'Limpiar',
             cancelText: 'Cancelar',
             onConfirm: () => {
+                // Save current state to history before clearing
+                saveToHistory();
                 localStorage.removeItem(STORAGE_KEY);
-                window.location.reload();
+                
+                                // Limpiar todos los inputs, selects y textareas inmediatamente
+                                document.querySelectorAll('input[type="text"], input[type="date"], input[type="time"], input[type="number"], select, textarea').forEach(el => {
+                                    el.value = '';
+                                });
+                
+                                // Limpiar y desmarcar todos los checkboxes
+                                document.querySelectorAll('input[type="checkbox"]').forEach(el => {
+                                    el.checked = false;
+                                });
+                
+                                // Actualizar estado de secciones y progreso
+                                ["sec-sistema", "sec-pintura", "sec-armado", "sec-pulido", "sec-tapiceria", "sec-control"].forEach(id => {
+                                    checkSection(id);
+                                    updateSectionProgress(id);
+                                });
+                
+                // Show undo toast with action
+                showRichToast(
+                    'Formulario limpiado',
+                    'Los datos han sido borrados. Tienes 30 segundos para deshacer.',
+                    'info',
+                    30000,
+                    [{
+                        label: 'Deshacer',
+                        className: '',
+                        onClick: () => {
+                            const history = getHistory();
+                            if (history.length > 0) {
+                                restoreFromHistory(history.length - 1);
+                            }
+                        }
+                    }]
+                );
+                
+                // Reload after delay
+                setTimeout(() => { window.location.reload(); }, 32000);
             },
             onCancel: () => {
                 // no-op
@@ -1125,7 +1496,7 @@
             el.setAttribute('aria-hidden', 'true');
             document.body.appendChild(el);
         }
-        el.textContent = 'Fecha: ' + formatDateForPrint(new Date());
+   
     }
 
     function removePrintDate() {
@@ -1139,8 +1510,8 @@
         showRichToast('', message, kind, duration);
     }
 
-    // Rich toast: title + message + kind + duration. Adds accessible attributes, pause-on-hover, close button, and swipe-to-dismiss.
-    function showRichToast(title, message, kind = 'success', duration = 3000) {
+    // Rich toast: title + message + kind + duration. Adds accessible attributes, pause-on-hover, close button, swipe-to-dismiss, and action buttons.
+    function showRichToast(title, message, kind = 'success', duration = 3000, actions = []) {
         // Ensure container exists
         let container = document.querySelector('.toast-container');
         if (!container) {
@@ -1149,9 +1520,47 @@
             container.setAttribute('aria-live', 'polite');
             container.setAttribute('role', 'status');
             document.body.appendChild(container);
+
+                
+        }
+
+        // Normalize inputs when building a dedupe key so small differences
+        // (extra spaces, newlines) don't produce different keys.
+        const normalize = s => (s || '').toString().replace(/\s+/g, ' ').trim();
+        const keyRaw = (kind || '') + '|' + normalize(title) + '|' + normalize(message);
+        const key = encodeURIComponent(keyRaw);
+
+        // Ensure we have a global set of active toast keys to prevent race-created duplicates
+        if (!window.__activeToastKeys) window.__activeToastKeys = new Set();
+
+        // If a toast with this key is already being displayed/created, pulse it and return
+        const existingToasts = Array.from(container.querySelectorAll('.toast'));
+        const matching = existingToasts.find(ex => ex.dataset && ex.dataset.toastKey === key);
+        if (matching || window.__activeToastKeys.has(key)) {
+            // If we have DOM element, pulse visually (but don't restart timer)
+            if (matching) {
+                // Temporarily lock the toast so mouseleave/focusout don't restart the timer during pulse
+                matching.__pulseActive = true;
+                try { matching.style.animation = 'toastPulse .28s ease'; } catch (e) {}
+                setTimeout(() => { 
+                    try { matching.style.animation = ''; } catch (e) {} 
+                    matching.__pulseActive = false;
+                }, 300);
+            }
+            return matching || null;
+        }
+
+        // Reserve the key immediately to avoid concurrent creators from both inserting
+        window.__activeToastKeys.add(key);
+
+        // Otherwise remove/animate other toasts before showing new one
+        if (existingToasts.length) {
+            existingToasts.forEach((ex) => { try { ex.style.animation = 'toastOut 0.35s cubic-bezier(0.4, 0, 1, 1) forwards'; } catch (e) {} });
+            setTimeout(() => { existingToasts.forEach((ex) => { try { if (ex && ex.parentNode) ex.parentNode.removeChild(ex); } catch (e) {} }); }, 360);
         }
 
         const t = document.createElement('div');
+        t.dataset.toastKey = key;
         t.className = 'toast ' + (kind || 'success');
         t.setAttribute('tabindex', '0');
 
@@ -1184,9 +1593,29 @@
         closeBtn.setAttribute('aria-label', 'Cerrar aviso');
         closeBtn.innerHTML = '✕';
 
+        // Actions container (optional buttons like 'Deshacer' or 'Ir al campo')
+        let actionsContainer = null;
+        if (Array.isArray(actions) && actions.length) {
+            actionsContainer = document.createElement('div');
+            actionsContainer.className = 'toast-actions';
+            actions.forEach(act => {
+                const b = document.createElement('button');
+                b.className = 'toast-action-btn ' + (act.className || '');
+                b.textContent = act.label || 'Acción';
+                b.addEventListener('click', (ev) => {
+                    ev.stopPropagation();
+                    try { if (typeof act.onClick === 'function') act.onClick(ev, t); } catch (e) { console.error(e); }
+                    // remove toast after action
+                    removeToast(true);
+                });
+                actionsContainer.appendChild(b);
+            });
+        }
+
         // Append children
         t.appendChild(iconEl);
         t.appendChild(content);
+        if (actionsContainer) t.appendChild(actionsContainer);
         t.appendChild(closeBtn);
 
         // Insert at top for newest on top
@@ -1199,6 +1628,8 @@
         let removed = false;
         let timeoutId = null;
         const startTimer = (ms) => {
+            // Don't restart timer if a pulse animation is active
+            if (t.__pulseActive) return;
             clearTimer();
             timeoutId = setTimeout(() => removeToast(true), ms);
         };
@@ -1208,8 +1639,10 @@
             if (removed) return;
             removed = true;
             clearTimer();
-            t.style.animation = 'toastOut .28s forwards';
+            t.style.animation = 'toastOut 0.4s cubic-bezier(0.4, 0, 1, 1) forwards';
             setTimeout(() => { if (t && t.parentNode) t.parentNode.removeChild(t); }, 300);
+            // free reserved key so future toasts can be created
+            try { if (t && t.dataset && t.dataset.toastKey) window.__activeToastKeys && window.__activeToastKeys.delete(t.dataset.toastKey); } catch (e) {}
         }
 
         // Pause on hover/focus
@@ -1220,6 +1653,13 @@
 
         // Close button
         closeBtn.addEventListener('click', (e) => { e.stopPropagation(); removeToast(true); });
+
+        // Ensure action buttons are keyboard accessible
+        if (actionsContainer) {
+            actionsContainer.querySelectorAll('button').forEach(btn => {
+                btn.setAttribute('tabindex','0');
+            });
+        }
 
         // Touch: basic swipe-to-dismiss (horizontal)
         let startX = null;
@@ -1265,7 +1705,7 @@
     }
 
     // Keep existing API name so callers don't need changes.
-    function showCustomAlert(title, message, listItems = [], type = 'warning', duration = null) {
+    function showCustomAlert(title, message, listItems = [], type = 'warning', duration = null, actions = []) {
         // type: 'error' | 'warning' | 'info' | 'success'
         const kind = (type === 'error') ? 'error' : (type === 'warning' ? 'warning' : (type === 'info' ? 'info' : 'success'));
 
@@ -1290,7 +1730,9 @@
         if (message) composedMessage.push(message);
         if (Array.isArray(listItems) && listItems.length) composedMessage.push(listItems.map(i => '• ' + i).join('\n'));
 
-        showRichToast(composedTitle, composedMessage.join('\n\n'), kind, finalDuration);
+        // If actions provided, map them to toast actions; otherwise default behavior
+        const toastActions = Array.isArray(actions) && actions.length ? actions : [];
+        showRichToast(composedTitle, composedMessage.join('\n\n'), kind, finalDuration, toastActions);
     }
 
     function closeCustomAlert(event) {
@@ -1307,6 +1749,15 @@
         });
         // Modificado: Solo asignamos dateStr (Ej: "28/11/2025")
         document.getElementById('print-date-display').textContent = dateStr;
+
+        // Defensive UI: briefly disable the print button to avoid rapid repeated clicks
+        const btnPrint = document.getElementById('btn-print');
+        if (btnPrint) {
+            try {
+                btnPrint.setAttribute('disabled', 'true');
+                setTimeout(() => { try { btnPrint.removeAttribute('disabled'); } catch (e) {} }, 900);
+            } catch (e) {}
+        }
         // --------------------------------------------------
 
         // Re-ejecutar validación antes de imprimir
@@ -1329,23 +1780,45 @@
         ];
 
         const criticalMissing = [];
+        const criticalMissingIds = [];
         const optionalMissing = [];
 
         requiredFields.forEach(f => {
             const el = document.getElementById(f.id);
             const val = el ? (el.value || '').toString().trim() : '';
             if (!val) {
-                if (f.critical) criticalMissing.push(f.name);
+                if (f.critical) {
+                    criticalMissing.push(f.name);
+                    criticalMissingIds.push(f.id);
+                }
                 else optionalMissing.push(f.name);
             }
         });
 
         if (criticalMissing.length > 0) {
+            const firstMissingId = criticalMissingIds.length > 0 ? criticalMissingIds[0] : null;
+            const goAction = [];
+            if (firstMissingId) {
+                goAction.push({
+                    label: 'Ir al campo',
+                    className: '',
+                    onClick: () => {
+                        const el = document.getElementById(firstMissingId);
+                        if (el) {
+                            el.focus();
+                            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    }
+                });
+            }
+
             showCustomAlert(
                 'Faltan campos obligatorios',
                 'Por favor complete los siguientes campos antes de imprimir:',
                 criticalMissing,
-                'error'
+                'error',
+                null,
+                goAction
             );
             return;
         }
@@ -1505,6 +1978,49 @@
         });
     }
 
+    // Función para actualizar la barra de progreso por sección
+    function updateSectionProgress(sectionId) {
+        const section = document.getElementById(sectionId);
+        if (!section) return;
+
+        // Obtener todos los checkboxes de la sección (excluyendo el de confirmación final)
+        const checkboxes = Array.from(section.querySelectorAll('input[type="checkbox"]'))
+            .filter(cb => !cb.id.includes('-ok')); // Excluir el checkbox de confirmación
+        
+        if (checkboxes.length === 0) return;
+
+        const checkedCount = checkboxes.filter(cb => cb.checked).length;
+        const progress = (checkedCount / checkboxes.length) * 100;
+
+        // Crear o actualizar barra de progreso
+        let progressBar = section.querySelector('.section-progress-bar');
+        if (!progressBar) {
+            progressBar = document.createElement('div');
+            progressBar.className = 'section-progress-bar';
+            const obs = section.querySelector('.obs-area');
+            if (obs) {
+                obs.insertAdjacentElement('beforebegin', progressBar);
+            } else {
+                section.appendChild(progressBar);
+            }
+        }
+
+        const fill = progressBar.querySelector('.section-progress-fill');
+        if (fill) {
+            fill.style.width = progress + '%';
+        } else {
+            const fillEl = document.createElement('div');
+            fillEl.className = 'section-progress-fill';
+            fillEl.style.width = progress + '%';
+            progressBar.appendChild(fillEl);
+        }
+    }
+
+    // Función para actualizar todas las barras de progreso
+    function updateAllSectionProgress() {
+        const sectionIds = ["sec-sistema", "sec-pintura", "sec-armado", "sec-pulido", "sec-tapiceria", "sec-control"];
+        sectionIds.forEach(id => updateSectionProgress(id));
+    }
 
     // 👉 Al cargar la página: inicializar pickers, cargar datos y activar autosave
     window.addEventListener("DOMContentLoaded", () => {
@@ -1516,10 +2032,17 @@
 
         // 3) Resto de listeners y comportamiento
         setupFocusListeners(); 
+        updateAllSectionProgress(); // Inicializar barras de progreso
 
         document.querySelectorAll("input, select, textarea").forEach(el => {
-            el.addEventListener("input", saveForm);
-            el.addEventListener("change", saveForm);
+            el.addEventListener("input", (e) => {
+                saveForm();
+                updateAllSectionProgress(); // Actualizar progreso al cambiar
+            });
+            el.addEventListener("change", (e) => {
+                saveForm();
+                updateAllSectionProgress();
+            });
         });
 
         // Ejecutar validación cada vez que los campos de devolución/corrección cambian (cuando no hay picker events por alguna razón)
