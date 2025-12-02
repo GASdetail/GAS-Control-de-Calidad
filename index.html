@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     
     <style>
-        /* --- VARIABLES DE COLOR (Dark Mode) --- */
+        /* --- VARIABLES DE COLOR (Dark Mode para Pantalla) --- */
         :root {
             --primary-dark: #202D3F; 
             --container-bg: #2c3e50; 
@@ -40,9 +40,9 @@
         }
 
         /* --- LOGOS --- */
-        .logo-container { text-align: center; margin-bottom: 20px; }
+        .logo-container { text-align: center; margin-bottom: 20px; position: relative; }
         .logo-screen { max-width: 250px; height: auto; display: block; margin: 0 auto; }
-        .logo-print { display: none !important; }
+        .logo-print { display: none !important; } /* Oculto en pantalla */
         #print-date-display { display: none; }
 
         h1 {
@@ -68,6 +68,7 @@
         textarea { resize: vertical; min-height: 60px; } 
         select option { background: var(--input-bg); color: var(--text-light); }
 
+        /* Header Info (Grid Adaptable en Pantalla) */
         .header-info {
             display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
             gap: 15px; margin-bottom: 20px; background: var(--input-bg);
@@ -179,46 +180,107 @@
         .toast { background: rgba(0,0,0,0.9); color: white; padding: 12px 16px; border-radius: 8px; border-left: 5px solid; max-width: 350px; }
         .toast.error { border-color: var(--error); } .toast.info { border-color: var(--primary-blue); }
 
-        /* --- ESTILOS DE IMPRESIÓN --- */
+        /* ========================================= */
+        /* ESTILOS BLINDADOS DE IMPRESIÓN       */
+        /* ========================================= */
         @media print {
             @page { margin: 1cm; size: auto; }
-            body { background: white !important; color: black !important; font-family: Arial, sans-serif; font-size: 11pt; padding: 0; }
-            .container { box-shadow: none; border: none; padding: 0; max-width: 100%; }
-            
-            /* Ocultar elementos */
-            .button-group, .print-hidden-icon, .footer-info, h1, #save-indicator, .toast-container { display: none !important; }
-            .section-index { display: none; } /* Ocultar A, B, C... */
-            .logo-screen { display: none; } .logo-print { display: block !important; width: 150px; float: left; margin-right: 15px; }
-            #print-date-display { display: block !important; position: absolute; right: 0; top: 0; font-weight: bold; }
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
 
-            /* Estructura Header */
-            .logo-container { border-bottom: 2px solid black; padding-bottom: 10px; margin-bottom: 15px; overflow: hidden; display: block; }
-            .logo-container::after { content: "REPORTE Control de Calidad"; font-size: 16pt; font-weight: bold; display: block; padding-top: 15px; }
-            .header-info { background: white !important; border: 1px solid black; color: black !important; grid-template-columns: 1fr 1fr 1fr; }
-            .header-info label { color: black !important; }
-            input, select, textarea { border: 1px solid #ccc; background: white !important; color: black !important; }
+            body { background: white !important; color: black !important; font-family: Arial, sans-serif; font-size: 11pt; padding: 0; margin: 0; }
+            .container { box-shadow: none; border: none; padding: 0; margin: 0; max-width: 100%; width: 100%; background: white !important; }
+            
+            /* Ocultar elementos de interfaz */
+            .button-group, .print-hidden-icon, .footer-info, h1, #save-indicator, .toast-container, .logo-screen { display: none !important; }
+            .section-index { display: none; }
+            .section-progress-bar { display: none !important; }
+
+            /* Encabezado */
+            .logo-container { 
+                border-bottom: 2px solid black; padding-bottom: 10px; margin-bottom: 15px; 
+                display: flex; align-items: center; justify-content: space-between;
+            }
+            .logo-print { display: block !important; max-width: 160px; height: auto; }
+            .logo-container::after { 
+                content: "REPORTE Control de Calidad"; 
+                font-size: 16pt; font-weight: bold; color: black;
+                margin-left: 15px; flex-grow: 1; text-align: right;
+            }
+            #print-date-display { 
+                display: block !important; position: absolute; right: 0; top: -15px; font-size: 9pt; 
+            }
+
+            /* Info Header: FORZAR GRID DE 3 COLUMNAS (Evita que se deforme) */
+            .header-info { 
+                display: grid !important; 
+                grid-template-columns: 1fr 1fr 1fr !important; /* Estricto 3 columnas */
+                gap: 10px; border: 1px solid black; background: white !important; color: black !important; 
+                margin-bottom: 15px; padding: 10px;
+            }
+            .header-info .form-group { margin-bottom: 0; }
+            .header-info label { color: black !important; font-size: 10pt; }
+            .header-info input { 
+                border: 1px solid #ccc; background: white !important; color: black !important; 
+                font-weight: bold; font-size: 11pt; padding: 5px; height: auto;
+            }
 
             /* Secciones */
-            .section { border: 1px solid black !important; page-break-inside: avoid; margin-bottom: 10px; background: white !important; }
-            .section-header { background: #eee !important; color: black !important; border-bottom: 1px solid black; padding: 8px; }
+            .section { 
+                border: 1px solid black !important; page-break-inside: avoid; margin-bottom: 10px; 
+                background: white !important; box-shadow: none !important;
+            }
+            .section-header { 
+                background: #e0e0e0 !important; color: black !important; border-bottom: 1px solid black; 
+                padding: 8px 10px; font-size: 12pt;
+            }
             .status-indicator { display: none; }
+
+            /* Checklist: Resetear Flexbox para que parezca lista de papel */
+            .checklist { padding: 5px 10px; }
             
-            /* Checklist Impresión */
-            .checklist { padding: 5px; }
-            .check-item { display: none; border-bottom: 1px dotted #ccc; padding: 2px 0; font-size: 10pt; }
-            .check-item.is-checked-print { display: block !important; } /* Solo mostrar marcados */
-            .check-item input { display: none; }
-            .check-item label::before { content: "☑ "; font-weight: bold; font-size: 12pt; }
-            .check-item label { color: black !important; font-weight: 500; }
+            /* Ocultar items no marcados */
+            .check-item { display: none !important; }
+            
+            /* Mostrar SOLO marcados y resetear estilo */
+            .check-item.is-checked-print { 
+                display: block !important; /* Volver a bloque simple, no flex */
+                border-bottom: 1px dotted #ccc; 
+                padding: 4px 0; margin: 0;
+            }
+            .check-item input { display: none !important; } /* Ocultar el cuadro */
+            
+            /* Simular el check con texto */
+            .check-item label { 
+                color: black !important; font-weight: 500; font-size: 10pt; 
+                display: block; width: 100%;
+            }
+            .check-item label::before { 
+                content: "☑ "; font-size: 12pt; margin-right: 5px; font-weight: bold; 
+            }
 
             /* Admin y Obs */
-            .admin-row { background: white !important; border-bottom: 1px solid #ccc; }
-            .admin-question { color: black !important; }
-            .obs-area { border-top: 1px solid black; background: white !important; color: black; }
+            .admin-row { background: white !important; border-bottom: 1px solid #ccc; padding: 8px; }
+            .admin-question { color: black !important; font-size: 10pt; }
+            .obs-area { 
+                border-top: 1px solid black; background: white !important; color: black; padding: 8px;
+            }
+            .obs-area textarea { border: 1px solid #999; color: black; font-size: 10pt; min-height: 40px; }
+            
+            /* Ocultar vacíos */
             .obs-area.empty-print, .section.empty-print { display: none !important; }
 
             /* Firma */
-            .signature-box { display: flex !important; justify-content: space-between; margin-top: 40px; padding: 0 20px; page-break-inside: avoid; font-weight: bold; color: black; }
+            .signature-box { 
+                display: flex !important; justify-content: space-between; margin-top: 40px; margin-bottom: 20px;
+                padding: 0 30px; page-break-inside: avoid; font-weight: bold; color: black; font-size: 12pt;
+            }
+            
+            /* Inputs de fecha/admin en impresión */
+            .input-cluster select, .input-cluster input { 
+                border: none; border-bottom: 1px dotted black; padding: 0; margin-left: 5px; 
+                font-weight: bold; background: transparent !important;
+            }
+            .sub-note { color: #333 !important; }
         }
     </style>
 </head>
@@ -378,12 +440,12 @@
             <div>Firma: __________________________</div>
         </div>
 
-        <div class="footer-info">Versión 2.0.0 (Optimized) - Control de Calidad GAS</div>
+        <div class="footer-info">Versión 2.0.1 (Print Fix) - Control de Calidad GAS</div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
-        // --- 1. CONFIGURACIÓN DINÁMICA DE PREGUNTAS (AQUÍ ESTÁ LA MAGIA) ---
+        // --- 1. CONFIGURACIÓN DINÁMICA DE PREGUNTAS ---
         const CHECKLIST_CONFIG = {
             pintura: [
                 {id: "p1", text: "La textura del transparente es la adecuada conforme con la originalidad"},
@@ -445,7 +507,7 @@
 
         const STORAGE_KEY = "form-calidad-gas";
 
-        // --- 2. RENDERIZADO DEL HTML (Inyecta los checkbox) ---
+        // --- 2. RENDERIZADO DEL HTML ---
         function renderChecklists() {
             document.querySelectorAll('.section[data-config-key]').forEach(section => {
                 const key = section.dataset.configKey;
@@ -473,20 +535,15 @@
             const section = document.getElementById(sectionId);
             if(!section) return;
             const allChecks = Array.from(section.querySelectorAll('input[type="checkbox"]'));
-            // Excluir el checkbox de confirmación de sistema si existe
             const contentChecks = allChecks.filter(c => !c.id.includes('admin-ok')); 
             
-            // Lógica de progreso
             const total = contentChecks.length;
             const checked = contentChecks.filter(c => c.checked).length;
             const percent = total === 0 ? 0 : (checked / total) * 100;
 
-            // Actualizar barra visual
             const bar = section.querySelector('.section-progress-fill');
             if(bar) bar.style.width = percent + '%';
 
-            // Actualizar estado completado (solo si TODOS están marcados)
-            // Nota: Para la sección admin (sistema) dependemos del admin-ok
             let isComplete = false;
             if(sectionId === 'sec-sistema') {
                 const adminOk = document.getElementById('admin-ok');
@@ -567,7 +624,7 @@
                 const el = document.getElementById(id);
                 if (el) {
                     if (el.type === "checkbox") el.checked = data[id];
-                    else if (el._flatpickr) el._flatpickr.setDate(data[id]); // Actualizar picker
+                    else if (el._flatpickr) el._flatpickr.setDate(data[id]);
                     else el.value = data[id];
                 }
             }
@@ -619,31 +676,25 @@
 
         // --- 6. INICIALIZACIÓN ---
         document.addEventListener("DOMContentLoaded", () => {
-            renderChecklists(); // Paso 1: Generar HTML
-            initFlatpickr();    // Paso 2: Activar calendarios
-            loadForm();         // Paso 3: Cargar datos
+            renderChecklists(); 
+            initFlatpickr();    
+            loadForm();         
             
-            // EVENT DELEGATION (El reemplazo eficiente de "onchange")
             document.body.addEventListener('change', (e) => {
                 if (e.target.matches('input, select, textarea')) {
                     saveForm();
-                    // Si es el selector de "Ejecutados", manejar logica admin
                     if (e.target.id === 'sys-ejecutados') handleAdminLogic();
-                    // Si es una fecha de admin, validar
                     if (e.target.closest('.input-cluster')) validateDates();
-                    // Actualizar barra de la sección correspondiente
                     const section = e.target.closest('.section');
                     if (section) checkSection(section.id);
                 }
             });
 
-            // UX: Resaltar sección activa
             document.querySelectorAll('.section').forEach(sec => {
                 sec.addEventListener('focusin', () => sec.classList.add('active-section'));
                 sec.addEventListener('focusout', () => sec.classList.remove('active-section'));
             });
         });
-
     </script>
 </body>
 </html>
