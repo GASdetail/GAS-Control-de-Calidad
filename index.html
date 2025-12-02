@@ -6,10 +6,10 @@
     <title>Formulario de Control de Calidad - GAS Paint & Detail</title>
 
     <link rel="icon" type="image/jpeg" href="assets/logo2.JPG">
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    
     <style>
-        /* --- VARIABLES DE COLOR (Dark Mode para Pantalla) --- */
+        /* --- VARIABLES DE COLOR (Ajustadas para Dark Mode en Pantalla) --- */
         :root {
             --primary-dark: #202D3F; 
             --container-bg: #2c3e50; 
@@ -39,673 +39,2199 @@
             box-shadow: 0 8px 15px rgba(0,0,0,0.4);
         }
 
-        /* --- LOGOS --- */
-        .logo-container { text-align: center; margin-bottom: 20px; position: relative; }
-        .logo-screen { max-width: 250px; height: auto; display: block; margin: 0 auto; }
-        .logo-print { display: none !important; } /* Oculto en pantalla */
+        .logo-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo-container img {
+            max-width: 250px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+      /* --- CONFIGURACIÓN DE LOGOS (PANTALLA) --- */
+        /* Por defecto en pantalla se ve el PNG */
+        .logo-screen {
+            max-width: 250px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        /* El JPEG de impresión está oculto en pantalla */
+        .logo-print {
+            display: none !important;
+        }
+
+        /* Ocultar fecha en pantalla */
         #print-date-display { display: none; }
 
         h1 {
-            text-align: center; color: var(--text-light); border-bottom: 2px solid var(--primary-blue);
-            padding-bottom: 10px; margin-top: 20px;
+            text-align: center;
+            color: var(--text-light);
+            border-bottom: 2px solid var(--primary-blue);
+            padding-bottom: 10px;
+            margin-top: 20px;
         }
         
-        /* --- FORMULARIOS --- */
+        /* Estilos Generales y Secciones */
         .form-group { display: flex; flex-direction: column; margin-bottom: 10px; }
         .form-group label { font-weight: bold; margin-bottom: 5px; font-size: 0.9em; color: var(--text-muted); }
 
-        input, select, textarea {
-            padding: 10px; border: 1px solid var(--border-dark); border-radius: 4px; 
-            font-size: 14px; background-color: var(--input-bg); color: var(--text-light);
-            font-family: inherit; line-height: 1.5; width: 100%; box-sizing: border-box;
+        input[type="text"], input[type="number"], select, input[type="date"], input[type="time"], textarea {
+            padding: 10px; 
+            border: 1px solid var(--border-dark);
+            border-radius: 4px; 
+            font-size: 14px;
+            background-color: var(--input-bg);
+            color: var(--text-light);
+            font-family: inherit;
+            line-height: 1.5;
         }
-        /* Touch targets */
-        @media (max-width: 900px) {
-            input, select, textarea { min-height: 44px; padding: 12px; font-size: 16px; }
+        /* Touch-friendly tap targets on mobile */
+        @media (max-width: 900px), (max-height: 700px) {
+            input[type="text"], input[type="number"], select, input[type="date"], input[type="time"], textarea {
+                min-height: 44px;
+                padding: 12px;
+                font-size: 16px;
+                line-height: 1.6;
+            }
         }
         
         .uppercase-input { text-transform: uppercase; } 
         textarea { resize: vertical; min-height: 60px; } 
         select option { background: var(--input-bg); color: var(--text-light); }
 
-        /* Header Info (Grid Adaptable en Pantalla) */
         .header-info {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
-            gap: 15px; margin-bottom: 20px; background: var(--input-bg);
-            padding: 15px; border-radius: 5px; border: 1px solid var(--border-dark);
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+            gap: 15px; 
+            margin-bottom: 20px;
+            background: var(--input-bg);
+            padding: 15px; 
+            border-radius: 5px;
+            border: 1px solid var(--border-dark);
         }
-
-        /* --- SECCIONES --- */
+        .header-info label {
+            color: var(--text-light) !important;
+            font-weight: 600;
+        }
         .section {
-            border: 1px solid var(--border-dark); border-radius: 8px; margin-bottom: 25px; 
-            overflow: hidden; background: var(--input-bg); position: relative;
+            border: 1px solid var(--border-dark); 
+            border-radius: 8px; 
+            margin-bottom: 25px; 
+            overflow: hidden;
+            background: var(--input-bg);
             transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
         }
         .section::before {
-            content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
-            background: var(--border-dark); transition: background 0.3s ease;
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--border-dark);
+            transition: background 0.3s ease;
         }
-        .section:hover { box-shadow: 0 8px 24px rgba(0, 123, 255, 0.2); border-color: var(--primary-blue); transform: translateY(-2px); }
-        .section:hover::before { background: var(--primary-blue); }
-        .section.active-section { border-color: var(--primary-blue); box-shadow: 0 0 15px 3px rgba(0, 123, 255, 0.6); }
-        .section.active-section::before { background: var(--success); }
+        .section:hover { 
+            box-shadow: 0 8px 24px rgba(0, 123, 255, 0.2);
+            border-color: var(--primary-blue);
+            transform: translateY(-2px);
+        }
+        .section:hover::before {
+            background: var(--primary-blue);
+        }
+        .section.active-section::before {
+            background: var(--success);
+        }
+        
+        /* Resaltado de la sección activa */
+        .section.active-section {
+            box-shadow: 0 0 15px 3px rgba(0, 123, 255, 0.6); 
+            border-color: var(--primary-blue);
+        }
+
+        /* Indicador de progreso */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-blue) 0%, var(--success) 100%);
+            z-index: 9999;
+            transition: width 0.3s ease;
+        }
+
+        /* Barra de progreso individual por sección */
+        .section-progress-bar {
+            height: 3px;
+            background: linear-gradient(90deg, var(--border-dark) 0%, var(--border-dark) 100%);
+            margin-top: 10px;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .section-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-blue) 0%, var(--success) 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
 
         .section-header {
             background: linear-gradient(90deg, var(--primary-dark) 0%, rgba(0, 123, 255, 0.05) 100%);
-            color: var(--text-light); padding: 16px 15px; font-weight: 700; 
-            display: flex; justify-content: space-between; align-items: center; 
+            color: var(--text-light); 
+            padding: 16px 15px; 
+            font-weight: 700; 
+            display: flex;
+            justify-content: space-between; 
+            align-items: center; 
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            letter-spacing: 0.3px;
         }
-        .section-header.completed { background-color: var(--success) !important; color: white !important; }
-        .status-indicator { background: var(--border-dark); color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.8em; }
-        .section-header.completed .status-indicator { background: white !important; color: var(--success) !important; }
+        .section:hover .section-header {
+            background: linear-gradient(90deg, var(--primary-dark) 0%, rgba(0, 123, 255, 0.1) 100%);
+        }
+        .status-indicator {
+            background: var(--border-dark);
+            color: white; 
+            padding: 5px 15px; 
+            border-radius: 20px; 
+            font-size: 0.8em;
+            transition: background-color 0.3s;
+        }
+        .section-header.completed { 
+            background-color: var(--success) !important; 
+            color: white !important; 
+            border-bottom: 1px solid var(--success); 
+        }
+        .section-header.completed .status-indicator { 
+            background: white !important; 
+            color: var(--success) !important; 
+        }
 
-        /* Barras de progreso */
-        .progress-bar { position: fixed; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--primary-blue), var(--success)); z-index: 9999; }
-        .section-progress-bar { height: 3px; background: var(--border-dark); margin-top: 0; }
-        .section-progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary-blue), var(--success)); width: 0%; transition: width 0.3s ease; }
+        /* Estilos Administrativos */
+        .admin-row { 
+            padding: 15px; 
+            border-bottom: 1px solid var(--border-dark); 
+            background-color: var(--input-bg); 
+        }
+        .admin-question { 
+            font-weight: 600; 
+            color: var(--text-light); 
+            margin-bottom: 10px; 
+            display: block; 
+        }
+        .input-cluster { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+        .sub-note { font-size: 0.85em; color: var(--text-muted); margin-top: 5px; font-style: italic; }
+        .highlight-box { 
+            padding: 10px; 
+            border-radius: 4px; 
+            margin-top: 10px; 
+            border: 1px solid; 
+        }
+        
+        #devolucion-block { background-color: #5d4037; border-color: #8d6e63; color: var(--text-light); }
+        #corregido-block { background-color: #004d40; border-color: #26a69a; color: var(--text-light); }
+        #devolucion-block .sub-note, #corregido-block .sub-note { color: var(--text-light); }
 
-        /* --- CHECKLIST (Estilos Pantalla) --- */
-        .checklist { padding: 10px 18px 18px 18px; }
+        /* Error / validación */
+        .input-invalid { border-color: var(--error) !important; box-shadow: 0 0 8px rgba(231,76,60,0.25); }
+        .error-text { color: var(--error); font-size: 0.85em; margin-top: 6px; display: none; }
+        .error-text.visible { display: block; }
+
+        /* --- REGLAS PARA FLATPICKR (Dark mode) --- */
+        .flatpickr-input,
+        input.flatpickr-input,
+        .flatpickr-alt-input {
+            background-color: var(--input-bg) !important;
+            color: var(--text-light) !important;
+            border: 1px solid var(--border-dark) !important;
+            padding: 10px !important;
+            border-radius: 4px !important;
+            box-sizing: border-box !important;
+        }
+        .flatpickr-input::placeholder,
+        .flatpickr-alt-input::placeholder {
+            color: var(--text-muted) !important;
+            opacity: 0.9;
+        }
+        .flatpickr-input:hover,
+        .flatpickr-input:focus,
+        .flatpickr-alt-input:hover,
+        .flatpickr-alt-input:focus {
+            background-color: var(--input-bg) !important;
+            color: var(--text-light) !important;
+            outline: none !important;
+            box-shadow: 0 0 0 4px rgba(0,123,255,0.06) !important;
+        }
+
+        .flatpickr-time input {
+            background-color: var(--input-bg) !important;
+            color: var(--text-light) !important;
+            border: 1px solid var(--border-dark) !important;
+        }
+
+        .input-cluster .flatpickr-input,
+        .input-cluster input.flatpickr-input,
+        .input-cluster .flatpickr-alt-input {
+            background-color: var(--input-bg) !important;
+            color: var(--text-light) !important;
+        }
+
+        /* Dark theme para flatpickr calendar */
+        .flatpickr-calendar {
+            background: var(--input-bg) !important;
+            border: 1px solid var(--border-dark) !important;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5) !important;
+        }
+        .flatpickr-calendar.open {
+            background: var(--input-bg) !important;
+        }
+        .flatpickr-months {
+            background: var(--primary-dark) !important;
+        }
+        .flatpickr-months .flatpickr-month {
+            background: var(--primary-dark) !important;
+            color: var(--text-light) !important;
+        }
+        .flatpickr-months .flatpickr-prev-month,
+        .flatpickr-months .flatpickr-next-month {
+            color: var(--primary-blue) !important;
+            fill: var(--primary-blue) !important;
+        }
+        .flatpickr-months .flatpickr-prev-month:hover,
+        .flatpickr-months .flatpickr-next-month:hover {
+            color: var(--text-light) !important;
+            fill: var(--text-light) !important;
+        }
+        .flatpickr-weekdays {
+            background: var(--primary-dark) !important;
+        }
+        .flatpickr-weekday {
+            background: var(--primary-dark) !important;
+            color: var(--text-muted) !important;
+            font-weight: 600;
+        }
+        .flatpickr-days {
+            background: var(--input-bg) !important;
+        }
+        .flatpickr-day {
+            color: var(--text-light) !important;
+            background: transparent;
+            border: 1px solid transparent;
+        }
+        .flatpickr-day:hover,
+        .flatpickr-day.prevMonthDay:hover,
+        .flatpickr-day.nextMonthDay:hover,
+        .flatpickr-day.disabled:hover,
+        .flatpickr-day.disabled.prevMonthDay:hover,
+        .flatpickr-day.disabled.nextMonthDay:hover {
+            background: var(--primary-blue) !important;
+            color: white !important;
+            border-color: var(--primary-blue) !important;
+        }
+        .flatpickr-day.today {
+            border-color: var(--success) !important;
+            color: var(--success) !important;
+            background: transparent !important;
+        }
+        .flatpickr-day.today:hover {
+            border-color: var(--success) !important;
+            background: var(--success) !important;
+            color: white !important;
+        }
+        .flatpickr-day.selected,
+        .flatpickr-day.startRange,
+        .flatpickr-day.endRange,
+        .flatpickr-day.selected.inRange {
+            background: var(--primary-blue) !important;
+            border-color: var(--primary-blue) !important;
+            color: white !important;
+        }
+        .flatpickr-day.inRange {
+            background: rgba(0, 123, 255, 0.25) !important;
+            border-color: rgba(0, 123, 255, 0.25) !important;
+            color: var(--text-light) !important;
+        }
+        .flatpickr-day.prevMonthDay,
+        .flatpickr-day.nextMonthDay {
+            color: var(--text-muted) !important;
+            background: rgba(0,0,0,0.1) !important;
+        }
+        .flatpickr-day.disabled {
+            color: var(--text-muted) !important;
+            background: rgba(0,0,0,0.2) !important;
+            cursor: not-allowed;
+        }
+        /* Time picker styling */
+        .flatpickr-time {
+            border-top: 1px solid var(--border-dark) !important;
+            background: var(--primary-dark) !important;
+        }
+        .flatpickr-time input,
+        .flatpickr-time .flatpickr-am-pm {
+            background: var(--input-bg) !important;
+            color: var(--text-light) !important;
+        }
+        .flatpickr-time .flatpickr-am-pm:hover,
+        .flatpickr-time .numInputWrapper span:hover {
+            background: var(--primary-blue) !important;
+            color: white !important;
+        }
+/* --- Flatpickr DARK para el selector de meses --- */
+.flatpickr-monthDropdown-months,
+.flatpickr-current-month input.cur-year {
+    background: #2c3e50 !important;
+    color: #ecf0f1 !important;
+    border: 1px solid #495a6b !important;
+}
+
+/* Opciones del dropdown */
+.flatpickr-monthDropdown-months option {
+    background: #2c3e50 !important;
+    color: #ecf0f1 !important;
+}
+
+/* Flechitas de navegación */
+.flatpickr-prev-month,
+.flatpickr-next-month {
+    fill: #ecf0f1 !important;
+    color: #ecf0f1 !important;
+}
+
+        /* Área de observaciones dentro de secciones */
+        .obs-area {
+            padding: 15px;
+            border-top: 1px dashed var(--border-dark);
+            background-color: rgba(0,0,0,0.1);
+            display: flex; 
+            flex-direction: column; 
+        }
+        .obs-area textarea {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+
+        /* CHECKLIST - Pantalla */
+        .checklist { padding: 18px; }
         .check-item {
-            display: flex; align-items: center; padding: 12px 0;
-            border-bottom: 1px solid var(--border-dark); transition: 0.2s ease;
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-dark); 
+            transition: 0.25s ease;
         }
         .check-item:last-child { border-bottom: none; }
-        .check-item:hover { background: rgba(255, 255, 255, 0.05); }
+        .check-item:hover { transform: translateX(5px); background: rgba(255, 255, 255, 0.05); color: var(--text-light); }
+        .check-item:hover label { color: var(--text-light); }
+
+
         .check-item input[type="checkbox"] {
-            width: 22px; height: 22px; border: 2px solid var(--border-dark); 
-            border-radius: 6px; margin-right: 12px; cursor: pointer; flex-shrink: 0;
-            appearance: none; -webkit-appearance: none; background-color: var(--input-bg);
-            display: flex; align-items: center; justify-content: center;
+            width: 22px; height: 22px; border: 2px solid var(--border-dark); border-radius: 6px; margin-right: 12px;
+            cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            background-color: var(--input-bg);
+            appearance: none; -webkit-appearance: none;
+        }
+        .check-item input[type="checkbox"]:hover {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
         }
         .check-item input[type="checkbox"]:checked {
-            background: var(--success); border-color: var(--success);
+            background: linear-gradient(135deg, var(--success) 0%, #1e8449 100%); border-color: var(--success); box-shadow: 0 0 12px rgba(39, 174, 96, 0.6); animation: pulseCheck .3s ease-out;
         }
-        /* El check ✔ de pantalla */
-        .check-item input[type="checkbox"]:checked::after { content: "✔"; color: white; font-weight: bold; font-size: 14px; }
-        .check-item label { cursor: pointer; line-height: 1.4; width: 100%; }
+        .check-item input[type="checkbox"]:checked::after { content: "✔"; color: white; font-size: 14px; font-weight: bold; }
 
-        /* --- ADMIN CLUSTERS --- */
-        .admin-row { padding: 15px; border-bottom: 1px solid var(--border-dark); }
-        .admin-question { font-weight: 600; margin-bottom: 10px; display: block; }
-        .input-cluster { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-        
-        /* Bloques Condicionales */
-        .highlight-box { padding: 10px; border-radius: 4px; margin-top: 10px; border: 1px solid; display: none; }
-        #devolucion-block { background-color: #5d4037; border-color: #8d6e63; }
-        #corregido-block { background-color: #004d40; border-color: #26a69a; }
-        .sub-note { font-size: 0.85em; color: var(--text-light); margin-top: 5px; font-style: italic; }
-        .error-text { color: var(--error); font-size: 0.85em; display: none; margin-top: 5px;}
-        .error-text.visible { display: block; }
-        .input-invalid { border-color: var(--error) !important; }
-
-        /* --- TEXTAREAS DE OBS --- */
-        .obs-area { padding: 15px; border-top: 1px dashed var(--border-dark); background-color: rgba(0,0,0,0.1); }
-
-        /* --- CORRECCIÓN VISUAL FECHAS/HORAS (MOBILE) --- */
-        .flat-date, .flat-date + input {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23bdc3c7' viewBox='0 0 24 24'%3E%3Cpath d='M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10z'/%3E%3C/svg%3E") !important;
-            background-repeat: no-repeat !important; background-position: right 10px center !important; background-size: 20px !important; padding-right: 35px !important;
-        }
-        .flat-time, .flat-time + input {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23bdc3c7' viewBox='0 0 24 24'%3E%3Cpath d='M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z'/%3E%3C/svg%3E") !important;
-            background-repeat: no-repeat !important; background-position: right 10px center !important; background-size: 20px !important; padding-right: 35px !important;
-        }
-        ::placeholder { color: #bdc3c7 !important; opacity: 1 !important; font-weight: normal; }
-        @media (max-width: 600px) {
-            .input-cluster input.flat-date, .input-cluster input.flat-time { min-width: 130px !important; flex-grow: 1; }
-        }
-
-        /* --- BOTONES & FOOTER --- */
+        /* Botones mejorados con iconos */
         .button-group { display: flex; gap: 10px; margin-top: 30px; }
-        .btn-submit, .btn-clear { flex-grow: 1; padding: 15px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; color: white; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 1.1em; }
-        .btn-submit { background: linear-gradient(135deg, var(--primary-blue), #0056b3); }
-        .btn-clear { background: linear-gradient(135deg, #e74c3c, #c0392b); }
-        .btn-submit[disabled] { opacity: 0.6; cursor: not-allowed; }
-        
-        .footer-info { text-align: center; margin-top: 40px; padding: 20px; border-top: 2px solid var(--border-dark); color: var(--text-muted); font-size: 0.85em; }
-        .signature-box { display: none; }
+        .btn-submit, .btn-clear { flex-grow: 1; padding: 15px; border: none; border-radius: 6px; font-size: 1.1em; font-weight: 600; cursor: pointer; color: white; transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); display: flex; align-items: center; justify-content: center; gap: 8px; letter-spacing: 0.5px; }
+        .btn-submit { background: linear-gradient(135deg, var(--primary-blue) 0%, #0056b3 100%); box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3); }
+        .btn-clear { background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3); }
+        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0, 123, 255, 0.5); }
+        .btn-clear:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(231, 76, 60, 0.5); }
+        .btn-submit:active, .btn-clear:active { transform: translateY(0); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); }
+        .btn-submit:focus, .btn-clear:focus { outline: 2px solid var(--success); outline-offset: 2px; }
+        .btn-submit::before { content: '🖨️'; font-size: 1.2em; }
+        .btn-clear::before { content: '🗑️'; font-size: 1.2em; }
 
-        /* --- UI COMPONENTS (Toast/Modal) --- */
-        #save-indicator { position: fixed; top: 20px; right: 20px; background: var(--success); color: white; padding: 8px 15px; border-radius: 5px; opacity: 0; transition: opacity 0.5s; z-index: 1000; font-weight: bold; }
-        
-        /* Modal Overlay */
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 20000; }
-        .confirm-dialog { background: var(--container-bg); padding: 20px; border-radius: 10px; width: 90%; max-width: 400px; border: 1px solid var(--border-dark); }
-        .cd-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
-        .cd-actions button { padding: 10px 15px; border-radius: 5px; cursor: pointer; border: none; font-weight: bold; }
-        .btn-cancel { background: transparent; border: 1px solid var(--border-dark) !important; color: var(--text-light); }
-        
-        /* Toasts */
-        .toast-container { position: fixed; right: 20px; bottom: 20px; z-index: 10001; display: flex; flex-direction: column; gap: 10px; }
-        .toast { background: rgba(0,0,0,0.9); color: white; padding: 12px 16px; border-radius: 8px; border-left: 5px solid; max-width: 350px; }
-        .toast.error { border-color: var(--error); } .toast.info { border-color: var(--primary-blue); }
-
-        /* ========================================= */
-        /* ESTILOS BLINDADOS DE IMPRESIÓN       */
-        /* ========================================= */
-        @media print {
-            @page { margin: 1cm; size: auto; }
-            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-
-            body { background: white !important; color: black !important; font-family: Arial, sans-serif; font-size: 11pt; padding: 0; margin: 0; }
-            .container { box-shadow: none; border: none; padding: 0; margin: 0; max-width: 100%; width: 100%; background: white !important; }
-            
-            /* Ocultar elementos de interfaz */
-            .button-group, .print-hidden-icon, .footer-info, h1, #save-indicator, .toast-container, .logo-screen { display: none !important; }
-            .section-index { display: none; }
-            .section-progress-bar { display: none !important; }
-
-            /* Encabezado */
-            .logo-container { 
-                border-bottom: 2px solid black; padding-bottom: 10px; margin-bottom: 15px; 
-                display: flex; align-items: center; justify-content: space-between;
-            }
-            .logo-print { display: block !important; max-width: 160px; height: auto; }
-            .logo-container::after { 
-                content: "REPORTE Control de Calidad"; 
-                font-size: 16pt; font-weight: bold; color: black;
-                margin-left: 15px; flex-grow: 1; text-align: right;
-            }
-            #print-date-display { 
-                display: block !important; position: absolute; right: 0; top: -15px; font-size: 9pt; 
-            }
-
-            /* Info Header: FORZAR GRID DE 3 COLUMNAS */
-            .header-info { 
-                display: grid !important; 
-                grid-template-columns: 1fr 1fr 1fr !important; /* Estricto 3 columnas */
-                gap: 10px; border: 1px solid black; background: white !important; color: black !important; 
-                margin-bottom: 15px; padding: 10px;
-            }
-            .header-info .form-group { margin-bottom: 0; }
-            .header-info label { color: black !important; font-size: 10pt; }
-            .header-info input { 
-                border: 1px solid #ccc; background: white !important; color: black !important; 
-                font-weight: bold; font-size: 11pt; padding: 5px; height: auto;
-            }
-
-            /* Secciones */
-            .section { 
-                border: 1px solid black !important; page-break-inside: avoid; margin-bottom: 10px; 
-                background: white !important; box-shadow: none !important;
-            }
-            .section-header { 
-                background: #e0e0e0 !important; color: black !important; border-bottom: 1px solid black; 
-                padding: 8px 10px; font-size: 12pt;
-            }
-            .status-indicator { display: none; }
-
-            /* Checklist: Resetear Flexbox para que parezca lista de papel */
-            .checklist { padding: 5px 10px; }
-            
-            /* Ocultar items no marcados */
-            .check-item { display: none !important; }
-            
-            /* Mostrar SOLO marcados y resetear estilo */
-            .check-item.is-checked-print { 
-                display: block !important; /* Bloque simple */
-                border-bottom: 1px dotted #ccc; 
-                padding: 4px 0; margin: 0;
-            }
-
-            /* --- CORRECCIÓN CRÍTICA DE LA CASILLA VERDE --- */
-            /* Forzar ocultamiento del input (la caja verde) */
-            .check-item input,
-            .check-item input[type="checkbox"] { 
-                display: none !important; 
-                width: 0 !important; 
-                height: 0 !important; 
-                opacity: 0 !important;
-                position: absolute;
-            }
-            
-            /* Simular el check con texto limpio */
-            .check-item label { 
-                color: black !important; font-weight: 500; font-size: 10pt; 
-                display: block; width: 100%;
-            }
-            .check-item label::before { 
-                content: "☑ "; font-size: 12pt; margin-right: 5px; font-weight: bold; 
-            }
-
-            /* Admin y Obs */
-            .admin-row { background: white !important; border-bottom: 1px solid #ccc; padding: 8px; }
-            .admin-question { color: black !important; font-size: 10pt; }
-            .obs-area { 
-                border-top: 1px solid black; background: white !important; color: black; padding: 8px;
-            }
-            .obs-area textarea { border: 1px solid #999; color: black; font-size: 10pt; min-height: 40px; }
-            
-            /* Ocultar vacíos */
-            .obs-area.empty-print, .section.empty-print { display: none !important; }
-
-            /* Firma */
-            .signature-box { 
-                display: flex !important; justify-content: space-between; margin-top: 40px; margin-bottom: 20px;
-                padding: 0 30px; page-break-inside: avoid; font-weight: bold; color: black; font-size: 12pt;
-            }
-            
-            /* Inputs de fecha/admin en impresión */
-            .input-cluster select, .input-cluster input { 
-                border: none; border-bottom: 1px dotted black; padding: 0; margin-left: 5px; 
-                font-weight: bold; background: transparent !important;
-            }
-            .sub-note { color: #333 !important; }
+        .btn-submit[disabled] {
+            opacity: 0.6;
+            cursor: not-allowed;
+            box-shadow: none;
         }
+
+        /* Touch-friendly button sizing */
+        @media (max-width: 900px), (max-height: 700px) {
+            .btn-submit, .btn-clear {
+                min-height: 48px;
+                padding: 12px;
+                font-size: 1.1em;
+            }
+        }
+/* --- CORRECCIÓN VISUAL PARA FECHAS Y HORAS (MÓVIL) --- */
+
+/* 1. Añadir iconos de fondo SVG (Calendario y Reloj) en color gris claro */
+.flat-date, .flat-date + input {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23bdc3c7' viewBox='0 0 24 24'%3E%3Cpath d='M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm-8 4H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 10px center !important; /* Icono a la derecha */
+    background-size: 20px !important;
+    padding-right: 35px !important; /* Espacio para que el texto no tape el icono */
+}
+
+.flat-time, .flat-time + input {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23bdc3c7' viewBox='0 0 24 24'%3E%3Cpath d='M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 10px center !important;
+    background-size: 20px !important;
+    padding-right: 35px !important;
+}
+
+/* 2. Hacer el texto de ayuda (placeholder) mucho más visible */
+::placeholder {
+    color: #bdc3c7 !important; /* Color gris claro */
+    opacity: 1 !important;     /* Opacidad al 100% */
+    font-weight: normal;
+}
+
+/* 3. Ajuste específico para móviles: Que los campos no sean tan pequeños */
+@media (max-width: 600px) {
+    .input-cluster {
+        flex-direction: row; /* Mantener en fila */
+        flex-wrap: wrap;     /* Permitir que bajen si no caben */
+    }
+    
+    .input-cluster input.flat-date,
+    .input-cluster input.flat-time,
+    .input-cluster .flatpickr-input {
+        min-width: 130px !important; /* Ancho mínimo para leer DD/MM/YYYY */
+        flex-grow: 1;                /* Que ocupen el espacio disponible */
+    }
+}
+        /* INDICADOR DE GUARDADO */
+        #save-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--success);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            z-index: 1000;
+        }
+                /* Toast container + alerts (modern, non-blocking) */
+                .toast-container { position: fixed; right: 20px; bottom: 20px; z-index: 10001; display: flex; flex-direction: column; gap: 10px; align-items: flex-end; pointer-events: none; }
+                .toast { pointer-events: auto; display:flex; align-items:flex-start; gap:10px; padding: 12px 14px; border-radius: 10px; background: rgba(0,0,0,0.88); color: #fff; box-shadow: 0 6px 20px rgba(0,0,0,0.45); min-width: 240px; max-width: 420px; transform: translateY(10px); animation: toastIn .35s ease forwards; }
+                .toast.success { border-left: 6px solid #2ecc71; }
+                .toast.error { border-left: 6px solid #e74c3c; }
+                .toast.info { border-left: 6px solid #3498db; }
+                .toast.warning { border-left: 6px solid #f1c40f; }
+                .toast .icon { font-size: 18px; line-height: 1; margin-top: 2px; }
+                .toast .content { display: flex; flex-direction: column; }
+                .toast .title { font-weight: 700; margin-bottom: 4px; }
+                .toast .message { white-space: pre-line; font-size: 0.95rem; color: #f5f7f9; }
+                .toast .close { background: transparent; border: none; color: inherit; font-size: 16px; cursor: pointer; margin-left: 8px; padding: 4px; border-radius: 6px; }
+                .toast:focus { outline: none; box-shadow: 0 0 0 4px rgba(52,152,219,0.12); }
+
+                @keyframes toastIn { from { opacity: 0; transform: translateY(15px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+                @keyframes toastOut { from { opacity: 1; transform: translateX(0) translateY(0) scale(1); } to { opacity: 0; transform: translateX(120%) translateY(-5px) scale(0.95); } }
+                @keyframes toastPulse { 0% { transform: scale(1); } 50% { transform: scale(1.04); } 100% { transform: scale(1); } }
+
+                /* Responsive: in small screens move container to top-center and full width minus margin */
+                @media (max-width: 900px), (max-height: 700px) {
+                    .toast-container { left: 50% !important; right: auto !important; bottom: auto !important; top: env(safe-area-inset-top,20px); transform: translateX(-50%); align-items: center; }
+                    .toast { width: calc(100% - 40px); max-width: calc(100% - 40px); }
+                }
+
+
+                /* Hide toasts when printing */
+                @media print { .toast-container { display: none !important; } }
+
+                /* Confirmation modal (clean form) */
+                .modal-overlay { position: fixed; inset: 0; background: rgba(2,6,23,0.6); display: flex; align-items: center; justify-content: center; z-index: 20000; }
+                .confirm-dialog { background: var(--container-bg); color: var(--text-light); padding: 20px; border-radius: 10px; width: 92%; max-width: 520px; box-shadow: 0 12px 30px rgba(0,0,0,0.6); border: 1px solid var(--border-dark); animation: modalIn .22s cubic-bezier(.2,.9,.2,1) both; }
+                .confirm-dialog.animate-out { animation: modalOut .18s ease both; }
+                .confirm-dialog .cd-title { font-size: 1.05rem; font-weight: 800; margin-bottom: 8px; }
+                .confirm-dialog .cd-message { color: var(--text-muted); margin-bottom: 16px; }
+                .confirm-dialog .cd-actions { display: flex; gap: 10px; justify-content: flex-end; }
+                .confirm-dialog .btn-cancel { background: transparent; border: 1px solid var(--border-dark); color: var(--text-light); padding: 10px 14px; border-radius: 6px; cursor: pointer; }
+                .confirm-dialog .btn-confirm { background: var(--error); color: white; border: none; padding: 10px 14px; border-radius: 6px; cursor: pointer; }
+                .confirm-dialog .btn-confirm:hover { background: #c0392b; }
+                .confirm-dialog .btn-cancel:hover { background: rgba(255,255,255,0.02); }
+
+                @keyframes modalIn { from { opacity: 0; transform: translateY(8px) scale(.995); } to { opacity: 1; transform: translateY(0) scale(1); } }
+                @keyframes modalOut { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(8px) scale(.995); } }
+
+                /* Toast action buttons */
+                .toast-actions { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+                .toast-action-btn { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: #fff; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; cursor: pointer; }
+                .toast-action-btn:hover { background: rgba(255,255,255,0.25); }
+                .toast-action-btn:focus { outline: 1px solid #fff; }
+
+                /* History modal */
+                .history-modal { background: var(--container-bg); color: var(--text-light); padding: 20px; border-radius: 10px; width: 92%; max-width: 520px; box-shadow: 0 12px 30px rgba(0,0,0,0.6); border: 1px solid var(--border-dark); animation: modalIn .22s cubic-bezier(.2,.9,.2,1) both; }
+                .history-modal.animate-out { animation: modalOut .18s ease both; }
+                .history-modal .hm-title { font-size: 1.05rem; font-weight: 800; margin-bottom: 16px; }
+                .history-modal .hm-list { list-style: none; padding: 0; margin: 0; max-height: 300px; overflow-y: auto; }
+                .history-modal .hm-list li { padding: 10px; margin-bottom: 8px; background: rgba(0,0,0,0.2); border-radius: 6px; display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; }
+                .history-modal .hm-restore { background: var(--success); color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.85rem; }
+                .history-modal .hm-restore:hover { background: #1e8449; }
+                .history-modal .hm-close { text-align: center; margin-top: 16px; }
+                .history-modal .btn-close-history { background: transparent; border: 1px solid var(--border-dark); color: var(--text-light); padding: 10px 14px; border-radius: 6px; cursor: pointer; }
+                .history-modal .btn-close-history:hover { background: rgba(255,255,255,0.02); }
+
+                /* Responsive: en pantallas pequeñas colocamos el toast arriba y centrado */
+                @media (max-width: 900px), (max-height: 700px) {
+                    .toast {
+                        left: 50% !important;
+                        right: auto !important;
+                        transform: translateX(-50%);
+                        width: calc(100% - 40px);
+                        bottom: auto !important;
+                        top: 20px !important;
+                        font-size: 0.95rem;
+                    }
+                    body { line-height: 1.6; }
+                    textarea { line-height: 1.6; }
+                    .check-item label { line-height: 1.6; }
+                    .admin-question { line-height: 1.6; }
+                }
+        
+        /* Estilos del Pie de Página */
+        .footer-info {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px 15px;
+            border-top: 2px solid var(--border-dark);
+            font-size: 0.85em;
+            color: var(--text-muted);
+            background: linear-gradient(180deg, transparent 0%, rgba(0, 123, 255, 0.03) 100%);
+            border-radius: 8px;
+        }
+
+        /* ESTILOS DEL SUBRAYADO DE TEXTO ADAPTADO */
+        .hover-underline {
+            font-size: 1em; 
+            color: var(--text-muted);
+            position: relative;
+            display: inline-block;
+            cursor: default;
+        }
+
+        .hover-underline::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(to right, var(--primary-blue), var(--success)); 
+            bottom: -3px; 
+            left: 0;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s ease-out;
+        }
+
+        .hover-underline:hover {
+            color: var(--text-light);
+        }
+
+        .hover-underline:hover::after {
+            transform: scaleX(1);
+        }
+        
+        /* --- ESTILO PARA FIRMA (OCULTO EN PANTALLA) --- */
+        .signature-box {
+            display: none; 
+        }
+
+        @media print {
+    @page { 
+        margin: 1cm;
+        size: auto;
+    }
+
+    /* Ocultar lo que ya ocultabas */
+    .print-hidden-icon,
+    #save-indicator,
+    .button-group,
+    h1,
+    .footer-info {
+        display: none !important;
+    }
+
+    /* Quitar letra de índice (A, B, etc.) como en la versión vieja */
+    .section-index {
+        display: none !important;
+    }
+
+    /* Alto contraste pero sin romper padding */
+    body, .container, .section, .header-info,
+    input, select, textarea, label, span, div, p {
+        background: #fff !important;
+        color: #000 !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    body {
+        padding: 0;
+        font-size: 11pt;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .container {
+        max-width: 100%;
+        margin: 0;
+        padding: 0 5px;
+        border: none !important;
+    }
+
+
+
+    /* --------------------------- */
+    /*          ENCABEZADO        */
+    /* --------------------------- */
+
+    .logo-container {
+        text-align: left;
+        margin-bottom: 15px;
+        padding: 0 0 10px 0;
+        border-bottom: 2px solid #000;
+        display: flex;
+        align-items: center;
+        position: relative;
+    }
+
+    /* PNG oculto como antes */
+    .logo-screen {
+        display: none !important;
+    }
+
+    /* JPEG visible como antes */
+    .logo-print {
+        display: block !important;
+        max-width: 150px !important;
+        height: auto;
+        margin-right: 15px;
+    }
+
+    /* Título al estilo viejo */
+    .logo-container::after { 
+        content: "REPORTE Control de Calidad";
+        font-size: 15pt;
+        font-weight: bold;
+        margin-left: 10px;
+        display: block;
+        flex-grow: 1;
+    }
+
+    #print-date-display {
+        display: block !important;
+        position: absolute;
+        right: 0;
+        top: 0;
+        font-size: 10pt;
+        font-weight: bold;
+    }
+
+
+
+    /* --------------------------- */
+    /*   CABECERA DE INFORMACIÓN  */
+    /* --------------------------- */
+
+    .header-info {
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 5px;
+        border: 1px solid #000;
+        padding: 8px;
+        margin-bottom: 15px;
+        background: #fff !important;
+    }
+
+    .header-info label {
+        color: #000 !important;
+        font-size: 10pt;
+        font-weight: bold;
+        margin-bottom: 2px;
+    }
+
+
+
+    /* --------------------------- */
+    /*         SECCIONES           */
+    /* --------------------------- */
+
+    .section {
+        border: 1px solid #000 !important;
+        margin-bottom: 12px;
+        page-break-inside: avoid;
+        background: #fff !important;
+    }
+
+    .section-header {
+        border-bottom: 1px solid #000;
+        padding: 8px 10px;
+        background: #e0e0e0 !important;
+        font-size: 12pt;
+        font-weight: bold;
+        color: #000 !important;
+    }
+
+    .section-header.completed { 
+        background: #c8e6c9 !important;
+        color: #000 !important;
+    }
+
+    .status-indicator {
+        display: none !important;
+    }
+
+
+
+    /* --------------------------- */
+    /*           ADMIN             */
+    /* --------------------------- */
+
+    .admin-row { 
+        border-bottom: 1px solid #bbb;
+        padding: 8px 10px;
+        background: #fff !important;
+    }
+
+    .admin-question {
+        font-weight: bold;
+        color: #000 !important;
+        margin-bottom: 4px;
+        font-size: 10pt;
+    }
+
+    #devolucion-block, #corregido-block {
+        border: 1px solid #000 !important;
+        background: #fff !important;
+        padding: 5px;
+        margin-top: 6px;
+    }
+
+
+
+    /* --------------------------- */
+    /*          CHECKLIST          */
+    /* --------------------------- */
+
+    .checklist {
+        padding: 8px 12px;
+    }
+
+    /* Ocultamos los checkboxes reales */
+    .check-item input[type="checkbox"] {
+        display: none !important;
+    }
+
+    /* Ocultamos todos los items */
+    .check-item {
+        display: none !important;
+        border-bottom: 1px dotted #ccc;
+        padding: 4px 0;
+        font-size: 10pt;
+    }
+
+    /* Solo mostramos los marcados */
+    .check-item.is-checked-print {
+        display: block !important;
+    }
+
+    .check-item.is-checked-print label {
+        color: #000 !important;
+        font-weight: bold;
+    }
+
+    /* Icono estilo viejo pero limpio */
+    .check-item.is-checked-print label::before {
+        content: "☑ ";
+        font-size: 12pt;
+        margin-right: 4px;
+        font-weight: bold;
+    }
+
+
+
+    /* --------------------------- */
+    /*       ÁREA OBSERVACIONES    */
+    /* --------------------------- */
+
+    .obs-area {
+        border-top: 1px solid #000;
+        padding: 10px;
+        background: #fff !important;
+    }
+
+    .obs-area textarea {
+        border: 1px solid #000 !important;
+        padding: 5px;
+        min-height: 40px;
+        resize: none !important;
+        font-size: 10pt;
+        color: #000 !important;
+    }
+
+    .obs-area label {
+        font-size: 10pt;
+        font-weight: bold;
+        color: #000 !important;
+    }
+
+
+
+    /* Ocultar secciones vacías */
+    .obs-area.empty-print,
+    .section.empty-print {
+        display: none !important;
+    }
+
+
+
+    /* --------------------------- */
+    /*        NOMBRE / FIRMA       */
+    /* --------------------------- */
+
+    .signature-box {
+        display: flex !important;
+        justify-content: space-between;
+        margin-top: 40px;
+        margin-bottom: 20px;
+        padding: 0 10px;
+        page-break-inside: avoid;
+    }
+
+    .signature-box div {
+        font-size: 14pt;
+        font-weight: bold;
+        color: #000 !important;
+    }
+
+}
+
     </style>
 </head>
 <body>
-
     <div id="save-indicator">💾 Guardado</div>
 
-    <div class="container">
-        <div class="logo-container">
-            <img src="assets/logo.png" class="logo-screen" alt="Logo" onerror="this.style.display='none'">
-            <img src="assets/logo.jpeg" class="logo-print" alt="Logo Impresión">
-            <div id="print-date-display"></div>
-        </div>
+<div class="container">
+    
+<div class="logo-container">
+    <img src="assets/logo.png" class="logo-screen" alt="GAS Paint & Detail Logo" onerror="this.style.display='none'">
+    
+    <img src="assets/logo.jpeg" class="logo-print" alt="GAS Paint & Detail Logo (Impresión)" onerror="this.style.display='none'">
+    
+    <div id="print-date-display"></div>
+</div>
+    
+    <h1>Control de Calidad - GAS Paint</h1>
 
-        <h1>Control de Calidad - GAS Paint</h1>
-
-        <div class="header-info">
-            <div class="form-group">
-                <label>Nº Orden de Trabajo:</label>
-                <input type="text" id="orderNum" class="uppercase-input" placeholder="Ej: OT-2025-001">
-            </div>
-            <div class="form-group">
-                <label>Placa:</label>
-                <input type="text" id="plate" class="uppercase-input" maxlength="9" placeholder="Ej: ABC-1234">
-            </div>
-            <div class="form-group">
-                <label>Marca del Vehículo:</label>
-                <input type="text" id="brand" placeholder="Ej: Toyota"> 
-            </div>
+    <div class="header-info">
+        <div class="form-group">
+            <label>Nº Orden de Trabajo:</label>
+            <input type="text" id="orderNum" class="uppercase-input" placeholder="Ej: OT-2025-001">
         </div>
-
-        <div class="section" id="sec-sistema">
-            <div class="section-header">
-                <span><span class="print-hidden-icon">📝</span> <span class="section-index">A.</span> ORDEN DE TRABAJO Y SISTEMA</span>
-                <span class="status-indicator">PENDIENTE</span>
-            </div>
-            <div class="admin-row">
-                <span class="admin-question">1. ¿Se encuentra la Orden de Trabajo finalizada en el Sistema?</span>
-                <div class="input-cluster">
-                    <select id="sys-finalizada">
-                        <option value="" selected disabled hidden>Seleccione...</option><option value="SI">SÍ</option><option value="NO">NO</option>
-                    </select>
-                    <input type="text" id="sys-finalizada-date" class="flat-date" placeholder="DD/MM/YYYY">
-                    <input type="text" id="sys-finalizada-time" class="flat-time" placeholder="HH:MM">
-                </div>
-            </div>
-            <div class="admin-row">
-                <span class="admin-question">2.a. ¿Todos los servicios en la Orden verificables, se ejecutaron?</span>
-                <div class="input-cluster">
-                    <select id="sys-ejecutados">
-                        <option value="" selected disabled hidden>Seleccione...</option><option value="SI">SÍ</option><option value="NO">NO</option>
-                    </select>
-                    <input type="text" id="sys-ejecutados-date" class="flat-date" placeholder="DD/MM/YYYY">
-                    <input type="text" id="sys-ejecutados-time" class="flat-time" placeholder="HH:MM">
-                </div>
-                <div id="devolucion-block" class="highlight-box">
-                    <span class="sub-note">2.b. En caso negativo, devolver a Operaciones.</span>
-                    <div class="input-cluster" style="margin-top:5px;">
-                        <label>Devuelto:</label>
-                        <input type="text" id="devuelto-date" class="flat-date" placeholder="DD/MM/YYYY">
-                        <input type="text" id="devuelto-time" class="flat-time" placeholder="HH:MM">
-                    </div>
-                </div>
-                <div id="corregido-block" class="highlight-box">
-                    <span class="sub-note">3. Revisado y corregido.</span>
-                    <div class="input-cluster" style="margin-top:5px;">
-                        <label>Corregido:</label>
-                        <input type="text" id="corregido-date" class="flat-date" placeholder="DD/MM/YYYY">
-                        <input type="text" id="corregido-time" class="flat-time" placeholder="HH:MM">
-                    </div>
-                    <div id="corregido-error" class="error-text">La fecha de corrección no puede ser anterior a la de devolución.</div>
-                </div>
-            </div>
-            <div class="checklist">
-                <div class="check-item" style="background-color: var(--input-bg); border-radius:4px; padding:10px;">
-                    <input type="checkbox" id="admin-ok">
-                    <label for="admin-ok"><strong>CONFIRMAR:</strong> La revisión administrativa está completa.</label>
-                </div>
-            </div>
-            <div class="obs-area">
-                <label class="form-group">Observaciones:</label>
-                <textarea id="obs-sistema" placeholder="Detalles administrativos..."></textarea>
-            </div>
+        <div class="form-group">
+            <label>Placa:</label>
+            <input type="text" id="plate" class="uppercase-input" maxlength="9" placeholder="Ej: ABC-1234">
         </div>
-
-        <div class="section" id="sec-pintura" data-config-key="pintura">
-            <div class="section-header">
-                <span><span class="print-hidden-icon">🖌️</span> <span class="section-index">B.</span> PINTURA</span>
-                <span class="status-indicator">PENDIENTE</span>
-            </div>
-            <div class="section-progress-bar"><div class="section-progress-fill"></div></div>
-            <div class="checklist"></div> <div class="obs-area">
-                <label class="form-group">Observaciones Pintura:</label>
-                <textarea id="obs-pintura" placeholder="Defectos encontrados..."></textarea>
-            </div>
+        <div class="form-group">
+            <label>Marca del Vehículo:</label>
+            <input type="text" id="brand" placeholder="Ej: Toyota"> 
         </div>
-
-        <div class="section" id="sec-armado" data-config-key="armado">
-            <div class="section-header">
-                <span><span class="print-hidden-icon">🔩</span> <span class="section-index">B.</span> ARMADO Y AJUSTE</span>
-                <span class="status-indicator">PENDIENTE</span>
-            </div>
-            <div class="section-progress-bar"><div class="section-progress-fill"></div></div>
-            <div class="checklist"></div>
-            <div class="obs-area">
-                <label class="form-group">Observaciones Armado:</label>
-                <textarea id="obs-armado" placeholder="Detalles de ajuste..."></textarea>
-            </div>
-        </div>
-
-        <div class="section" id="sec-pulido" data-config-key="pulido">
-            <div class="section-header">
-                <span><span class="print-hidden-icon">✨</span> <span class="section-index">C.</span> PULIDO Y EXTERIOR</span>
-                <span class="status-indicator">PENDIENTE</span>
-            </div>
-            <div class="section-progress-bar"><div class="section-progress-fill"></div></div>
-            <div class="checklist"></div>
-            <div class="obs-area">
-                <label class="form-group">Observaciones Exterior:</label>
-                <textarea id="obs-pulido" placeholder="Detalles de corrección..."></textarea>
-            </div>
-        </div>
-
-        <div class="section" id="sec-tapiceria" data-config-key="tapiceria">
-            <div class="section-header">
-                <span><span class="print-hidden-icon">🧼</span> <span class="section-index">D.</span> TAPICERÍA E INTERIOR</span>
-                <span class="status-indicator">PENDIENTE</span>
-            </div>
-            <div class="section-progress-bar"><div class="section-progress-fill"></div></div>
-            <div class="checklist"></div>
-            <div class="obs-area">
-                <label class="form-group">Observaciones Interior:</label>
-                <textarea id="obs-interior" placeholder="Detalles de tapicería..."></textarea>
-            </div>
-        </div>
-
-        <div class="section" id="sec-control" data-config-key="control">
-            <div class="section-header">
-                <span><span class="print-hidden-icon">⚙️</span> <span class="section-index">E.</span> CONTROL MECÁNICO</span>
-                <span class="status-indicator">PENDIENTE</span>
-            </div>
-            <div class="section-progress-bar"><div class="section-progress-fill"></div></div>
-            <div class="checklist"></div>
-            <div class="obs-area">
-                <label class="form-group">Observaciones Mecánicas:</label>
-                <textarea id="obs-control" placeholder="Notas mecánicas..."></textarea>
-            </div>
-        </div>
-
-        <div class="button-group">
-            <button class="btn-clear" onclick="limpiarFormulario()">🗑️ Limpiar</button>
-            <button id="btn-print" class="btn-submit" onclick="generarReporte()">🖨️ Finalizar e Imprimir</button>
-        </div>
-        
-        <div class="signature-box">
-            <div>Nombre: __________________________</div>
-            <div>Firma: __________________________</div>
-        </div>
-
-        <div class="footer-info">Versión 2.0.2 (Fix Visual) - Control de Calidad GAS</div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script>
-        // --- 1. CONFIGURACIÓN DINÁMICA DE PREGUNTAS ---
-        const CHECKLIST_CONFIG = {
-            pintura: [
-                {id: "p1", text: "La textura del transparente es la adecuada conforme con la originalidad"},
-                {id: "p2", text: "Los bordes, filos y líneas repasadas están libres de excesos"},
-                {id: "p3", text: "Las líneas de las piezas repintadas son idénticas a las originales"},
-                {id: "p4", text: "Superficies libres de defectos (rayas, opacamiento, manchas)"},
-                {id: "p5", text: "Empaques externos libres de residuos de pintura/pulimento"},
-                {id: "p6", text: "Si negativo: Revisar contra Recepción por daños preexistentes"},
-                {id: "p7", text: "Corrección Total: verificar si servicios incompletos fueron corregidos"}
-            ],
-            armado: [
-                {id: "a1", text: "Interior de piezas reparadas libre de suciedad"},
-                {id: "a2", text: "Piezas móviles abren/cierran con suavidad y sin golpes"},
-                {id: "a3", text: "Piezas ajustan correctamente (sin desalineaciones)"},
-                {id: "a4", text: "Niveles de aceite, frenos y refrigerante adecuados"},
-                {id: "a5", text: "Luces y testigos funcionan correctamente"},
-                {id: "a6", text: "Molduras, parrillas y empaques limpios y sin daños"},
-                {id: "a7", text: "Vidrios sin daños derivados de la reparación"},
-                {id: "a8", text: "Exterior libre de suciedad de proceso (cinta, polvo)"}
-            ],
-            pulido: [
-                {id: "pu1", text: "Sin rayas, manchas u opacamiento por pulido"},
-                {id: "pu2", text: "Vidrios pulidos (sin manchas ni marcas de agua)"},
-                {id: "pu3", text: "Partes negras acondicionadas"},
-                {id: "pu4", text: "Manillas de puertas limpias (interior y exterior)"},
-                {id: "pu5", text: "Torpedo y escobillas detallados correctamente"},
-                {id: "pu6", text: "Bordes del vehículo sin residuos (polish/cera)"},
-                {id: "pu7", text: "Superficies externas sin residuos de pulimento"},
-                {id: "pu8", text: "Capó, guardabarros y superficies externas limpias"},
-                {id: "pu9", text: "Superficies lavadas correctamente tras el proceso"},
-                {id: "pu10", text: "Libre de rayas superficiales que debieron eliminarse"},
-                {id: "pu11", text: "En caso negativo, corregir antes de la entrega"}
-            ],
-            tapiceria: [
-                {id: "t1", text: "Aspirado de piso y alfombras detallado"},
-                {id: "t2", text: "Tapicería aspirada y detallada correctamente"},
-                {id: "t3", text: "Rejillas de ventilación limpias y detalladas"},
-                {id: "t4", text: "Dash limpio y detallado"},
-                {id: "t5", text: "Guarda soles limpios y detallados"},
-                {id: "t6", text: "Consola central limpia y detallada"},
-                {id: "t7", text: "Guantera y compartimientos limpios"},
-                {id: "t8", text: "Cielo (techo) detallado y limpio"},
-                {id: "t9", text: "Asientos detallados y limpios"},
-                {id: "t10", text: "Empaques externos limpios y detallados"},
-                {id: "t11", text: "Empaques internos limpios y detallados"},
-                {id: "t12", text: "Empaque del capó limpio y detallado"},
-                {id: "t13", text: "Empaque de la cajuela limpio y detallado"},
-                {id: "t14", text: "Pantallas y espejos limpios"},
-                {id: "t15", text: "Pedales correctamente limpios y detallados"},
-                {id: "t16", text: "Cajuela aspirada y limpia"},
-                {id: "t17", text: "Habitáculo/cajuela/batea limpio y detallado"}
-            ],
-            control: [
-                {id: "m1", text: "Niveles de líquidos adecuados"},
-                {id: "m2", text: "Luces y testigos funcionando"},
-                {id: "m3", text: "Vehículo listo para entrega sin reportes pendientes"}
-            ]
-        };
+    <div class="section" id="sec-sistema">
+        <div class="section-header">
+            <span><span class="print-hidden-icon">📝</span> <span class="section-index">A.</span> ORDEN DE TRABAJO Y SISTEMA</span>
+            <span class="status-indicator">PENDIENTE</span>
+        </div>
+        
+        <div class="admin-row">
+            <span class="admin-question">1. ¿Se encuentra la Orden de Trabajo finalizada en el Sistema?</span>
+            <div class="input-cluster">
+                <select id="sys-finalizada">
+                    <option value="" selected disabled hidden>Seleccione...</option>
+                    <option value="SI">SÍ</option>
+                    <option value="NO">NO</option>
+                </select>
+                <input type="text" id="sys-finalizada-date" class="flat-date" title="Fecha" placeholder="DD/MM/YYYY" aria-label="Fecha finalización">
+                <input type="text" id="sys-finalizada-time" class="flat-time" title="Hora" placeholder="HH:MM" aria-label="Hora finalización">
+            </div>
+        </div>
 
-        const STORAGE_KEY = "form-calidad-gas";
-
-        // --- 2. RENDERIZADO DEL HTML ---
-        function renderChecklists() {
-            document.querySelectorAll('.section[data-config-key]').forEach(section => {
-                const key = section.dataset.configKey;
-                const items = CHECKLIST_CONFIG[key];
-                const container = section.querySelector('.checklist');
-                
-                if (items && container) {
-                    container.innerHTML = items.map(item => `
-                        <div class="check-item">
-                            <input type="checkbox" id="${item.id}">
-                            <label for="${item.id}">${item.text}</label>
-                        </div>
-                    `).join('');
-                }
-            });
-        }
-
-        // --- 3. LÓGICA DE NEGOCIO ---
-        function initFlatpickr() {
-            flatpickr(".flat-date", { dateFormat: "Y-m-d", altInput: true, altFormat: "d/m/Y", onChange: saveForm });
-            flatpickr(".flat-time", { enableTime: true, noCalendar: true, dateFormat: "H:i", altInput: true, altFormat: "h:i K", onChange: saveForm });
-        }
-
-        function checkSection(sectionId) {
-            const section = document.getElementById(sectionId);
-            if(!section) return;
-            const allChecks = Array.from(section.querySelectorAll('input[type="checkbox"]'));
-            const contentChecks = allChecks.filter(c => !c.id.includes('admin-ok')); 
+        <div class="admin-row">
+            <span class="admin-question">2.a. ¿Todos los servicios en la Orden verificables, se ejecutaron?</span>
+            <div class="input-cluster">
+                <select id="sys-ejecutados" onchange="saveForm()">
+                    <option value="" selected disabled hidden>Seleccione...</option>>
+                    <option value="SI">SÍ</option>
+                    <option value="NO">NO</option>
+                </select>
+                <input type="text" id="sys-ejecutados-date" class="flat-date" title="Fecha" placeholder="DD/MM/YYYY" aria-label="Fecha ejecución">
+                <input type="text" id="sys-ejecutados-time" class="flat-time" title="Hora" placeholder="HH:MM" aria-label="Hora ejecución">
+            </div>
             
-            const total = contentChecks.length;
-            const checked = contentChecks.filter(c => c.checked).length;
-            const percent = total === 0 ? 0 : (checked / total) * 100;
+            <div id="devolucion-block" class="highlight-box">
+                <span class="sub-note">2.b. En caso negativo, devolver a Operaciones el vehículo y este Formulario.</span>
+                <div class="input-cluster" style="margin-top:5px;">
+                    <label>Devuelto:</label>
+                    <input type="text" id="devuelto-date" class="flat-date" title="Fecha Devolución" placeholder="DD/MM/YYYY" aria-label="Fecha de devolución">
+                    <input type="text" id="devuelto-time" class="flat-time" title="Hora Devolución" placeholder="HH:MM" aria-label="Hora de devolución">
+                </div>
+            </div>
 
-            const bar = section.querySelector('.section-progress-fill');
-            if(bar) bar.style.width = percent + '%';
+            <div id="corregido-block" class="highlight-box">
+                <span class="sub-note">3. Revisado por Operaciones y debidamente corregidos los servicios incompletos.</span>
+                <div class="input-cluster" style="margin-top:5px;">
+                    <label>Corregido:</label>
+                    <input type="text" id="corregido-date" class="flat-date" title="Fecha Corrección" placeholder="DD/MM/YYYY" aria-label="Fecha de corrección" aria-describedby="corregido-error">
+                    <input type="text" id="corregido-time" class="flat-time" title="Hora Corrección" placeholder="HH:MM" aria-label="Hora de corrección" aria-describedby="corregido-error">
+                </div>
+                <div id="corregido-error" class="error-text">La fecha/hora de corrección no puede ser anterior a la fecha/hora de devolución.</div>
+            </div>
+        </div>
 
-            let isComplete = false;
-            if(sectionId === 'sec-sistema') {
-                const adminOk = document.getElementById('admin-ok');
-                isComplete = adminOk && adminOk.checked;
-            } else {
-                isComplete = (checked === total && total > 0);
+        <div class="checklist">
+            <div class="check-item" style="background-color: var(--input-bg); padding: 10px;">
+                <input type="checkbox" id="admin-ok" onchange="checkSection('sec-sistema'); saveForm();">
+                <label for="admin-ok"><strong>CONFIRMAR:</strong> La revisión administrativa está completa.</label>
+            </div>
+        </div>
+        <div class="obs-area">
+            <label class="form-group">Observaciones:</label>
+            <textarea id="obs-sistema" placeholder="Detalles administrativos adicionales..."></textarea>
+        </div>
+    </div>
+
+    <div class="section" id="sec-pintura">
+        <div class="section-header">
+            <span><span class="print-hidden-icon">🖌️</span> <span class="section-index">B.</span> PINTURA</span>
+            <span class="status-indicator">PENDIENTE</span>
+        </div>
+        <div class="checklist">
+            <div class="check-item"><input type="checkbox" id="p1" onchange="checkSection('sec-pintura'); saveForm();"><label for="p1">La textura del transparente es la adecuada conforme con la originalidad del vehículo</label></div>
+            <div class="check-item"><input type="checkbox" id="p2" onchange="checkSection('sec-pintura'); saveForm();"><label for="p2">Los bordes, filos y líneas repasadas están libres de excesos de transparente o pintura</label></div>
+            <div class="check-item"><input type="checkbox" id="p3" onchange="checkSection('sec-pintura'); saveForm();"><label for="p3">Las líneas de las piezas repintadas son idénticas a las originales</label></div>
+            <div class="check-item"><input type="checkbox" id="p4" onchange="checkSection('sec-pintura'); saveForm();"><label for="p4">Las superficies pintadas están libres de defectos de repintado (rayas, opacamiento, manchas)</label></div>
+            <div class="check-item"><input type="checkbox" id="p5" onchange="checkSection('sec-pintura'); saveForm();"><label for="p5">Los empaques externos están libres de residuos de pintura, pulimento, o cualquier suciedad</label></div>
+            <div class="check-item"><input type="checkbox" id="p6" onchange="checkSection('sec-pintura'); saveForm();"><label for="p6">En caso negativo, revisar contra la Recepción del Auto por daños que debieron eliminarse en el taller</label></div>
+            <div class="check-item"><input type="checkbox" id="p7" onchange="checkSection('sec-pintura'); saveForm();"><label for="p7">En caso de Corrección de Pintura Total: verificar si los servicios incompletos fueron corregidos</label></div>
+        </div>
+        <div class="obs-area">
+            <label class="form-group">Observaciones Pintura:</label>
+            <textarea id="obs-pintura" placeholder="Defectos encontrados, correcciones pendientes..."></textarea>
+        </div>
+    </div>
+
+    <div class="section" id="sec-armado">
+        <div class="section-header">
+            <span><span class="print-hidden-icon">🔩</span> <span class="section-index">B.</span> ARMADO Y AJUSTE DE PIEZAS</span>
+            <span class="status-indicator">PENDIENTE</span>
+        </div>
+        <div class="checklist">
+            <div class="check-item"><input type="checkbox" id="a1" onchange="checkSection('sec-armado'); saveForm();"><label for="a1">El interior de las piezas reparadas está libre de residuos de pulimento o suciedad</label></div>
+            <div class="check-item"><input type="checkbox" id="a2" onchange="checkSection('sec-armado'); saveForm();"><label for="a2">Las piezas reparadas y aledañas son móviles, abren y cierran con la suavidad original y sin golpes</label></div>
+            <div class="check-item"><input type="checkbox" id="a3" onchange="checkSection('sec-armado'); saveForm();"><label for="a3">Las piezas ajustan correctamente y no presentan levantamientos o desalineaciones</label></div>
+            <div class="check-item"><input type="checkbox" id="a4" onchange="checkSection('sec-armado'); saveForm();"><label for="a4">Los niveles de aceite, líquido de frenos y refrigerante son los adecuados</label></div>
+            <div class="check-item"><input type="checkbox" id="a5" onchange="checkSection('sec-armado'); saveForm();"><label for="a5">Las luces y testigos funcionan correctamente</label></div>
+            <div class="check-item"><input type="checkbox" id="a6" onchange="checkSection('sec-armado'); saveForm();"><label for="a6">Las molduras, parrillas, empaques, escobillas u otras piezas están limpias y sin daños</label></div>
+            <div class="check-item"><input type="checkbox" id="a7" onchange="checkSection('sec-armado'); saveForm();"><label for="a7">Los vidrios no presentan daños derivados del proceso de reparación</label></div>
+            <div class="check-item"><input type="checkbox" id="a8" onchange="checkSection('sec-armado'); saveForm();"><label for="a8">El exterior del auto está libre de suciedad producida por el proceso de reparación (polvo, cinta, residuos)</label></div>
+        </div>
+        <div class="obs-area">
+            <label class="form-group">Observaciones Armado/Ajuste:</label>
+            <textarea id="obs-armado" placeholder="Detalles de ajuste y piezas..."></textarea>
+        </div>
+    </div>
+
+    <div class="section" id="sec-pulido">
+        <div class="section-header">
+            <span><span class="print-hidden-icon">✨</span> <span class="section-index">C.</span> PULIDO Y EXTERIOR</span>
+            <span class="status-indicator">PENDIENTE</span>
+        </div>
+        <div class="checklist">
+            <div class="check-item"><input type="checkbox" id="pu1" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu1">Sin rayas, manchas u opacamiento por pulido</label></div>
+            <div class="check-item"><input type="checkbox" id="pu2" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu2">Vidrios pulidos (sin manchas ni marcas de agua)</label></div>
+            <div class="check-item"><input type="checkbox" id="pu3" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu3">Partes negras acondicionadas</label></div>
+            <div class="check-item"><input type="checkbox" id="pu4" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu4">Manillas de puertas limpias (interior y exterior)</label></div>
+            <div class="check-item"><input type="checkbox" id="pu5" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu5">Torpedo y escobillas detallados correctamente</label></div>
+            <div class="check-item"><input type="checkbox" id="pu6" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu6">Bordes del vehículo sin residuos (polish/cera)</label></div>
+            <div class="check-item"><input type="checkbox" id="pu7" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu7">Superficies externas sin residuos de pulimento</label></div>
+            <div class="check-item"><input type="checkbox" id="pu8" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu8">Capó, guardabarros, tapa motor, y superficies externas limpias</label></div>
+            <div class="check-item"><input type="checkbox" id="pu9" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu9">Superficies lavadas correctamente y sin suciedad posterior al proceso</label></div>
+            <div class="check-item"><input type="checkbox" id="pu10" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu10">Las superficies exteriores están libres de rayas superficiales o daños que debieron eliminarse</label></div>
+            <div class="check-item"><input type="checkbox" id="pu11" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu11">En caso negativo, finalizar en el taller y corregir antes de la entrega</label></div>
+        </div>
+        <div class="obs-area">
+            <label class="form-group">Observaciones Exterior/Pulido:</label>
+            <textarea id="obs-pulido" placeholder="Detalles de corrección..."></textarea>
+        </div>
+    </div>
+
+    <div class="section" id="sec-tapiceria">
+        <div class="section-header">
+            <span><span class="print-hidden-icon">🧼</span> <span class="section-index">D.</span> TAPICERÍA E INTERIOR</span>
+            <span class="status-indicator">PENDIENTE</span>
+        </div>
+        <div class="checklist"> 
+            <div class="check-item"><input type="checkbox" id="t1" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t1">Aspirado de piso y alfombras detallado</label></div>
+            <div class="check-item"><input type="checkbox" id="t2" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t2">Tapicería aspirada y detallada correctamente</label></div>
+            <div class="check-item"><input type="checkbox" id="t3" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t3">Rejillas de ventilación limpias y detalladas</label></div>
+            <div class="check-item"><input type="checkbox" id="t4" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t4">Dash limpio y detallado</label></div>
+            <div class="check-item"><input type="checkbox" id="t5" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t5">Guarda soles limpios y detallados</label></div>
+            <div class="check-item"><input type="checkbox" id="t6" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t6">Consola central limpia y detallada</label></div>
+            <div class="check-item"><input type="checkbox" id="t7" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t7">Guantera y compartimientos limpios</label></div>
+            <div class="check-item"><input type="checkbox" id="t8" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t8">Cielo (techo) detallado y limpio</label></div>
+            <div class="check-item"><input type="checkbox" id="t9" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t9">Asientos detallados y limpios</label></div>
+            <div class="check-item"><input type="checkbox" id="t10" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t10">Empaques externos limpios y detallados</label></div>
+            <div class="check-item"><input type="checkbox" id="t11" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t11">Empaques internos limpios y detallados</label></div>
+            <div class="check-item"><input type="checkbox" id="t12" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t12">Empaque del capó limpio y detallado</label></div>
+            <div class="check-item"><input type="checkbox" id="t13" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t13">Empaque de la cajuela limpio y detallado</label></div>
+            <div class="check-item"><input type="checkbox" id="t14" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t14">Pantallas y espejos limpios</label></div>
+            <div class="check-item"><input type="checkbox" id="t15" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t15">Pedales correctamente limpios y detallados</label></div>
+            <div class="check-item"><input type="checkbox" id="t16" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t16">Cajuela aspirada y limpia</label></div>
+            <div class="check-item"><input type="checkbox" id="t17" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t17">Habitáculo/cajuela/batea limpio y detallado (según tipo de vehículo)</label></div>
+        </div>
+        <div class="obs-area">
+            <label class="form-group">Observaciones Interior:</label>
+            <textarea id="obs-interior" placeholder="Detalles de tapicería..."></textarea>
+        </div>
+    </div>
+
+    <div class="section" id="sec-control">
+        <div class="section-header">
+            <span><span class="print-hidden-icon">⚙️</span> <span class="section-index">E.</span> CONTROL MECÁNICO BÁSICO</span>
+            <span class="status-indicator">PENDIENTE</span>
+        </div>
+        <div class="checklist">
+            <div class="check-item"><input type="checkbox" id="m1" onchange="checkSection('sec-control'); saveForm();"><label for="m1">Niveles de líquidos adecuados (aceite, frenos, refrigerante)</label></div>
+            <div class="check-item"><input type="checkbox" id="m2" onchange="checkSection('sec-control'); saveForm();"><label for="m2">Luces y testigos funcionando</label></div>
+            <div class="check-item"><input type="checkbox" id="m3" onchange="checkSection('sec-control'); saveForm();"><label for="m3">Vehículo listo para la entrega sin reportes pendientes</label></div>
+        </div>
+        <div class="obs-area">
+            <label class="form-group">Observaciones Control Mecánico:</label>
+            <textarea id="obs-control" placeholder="Notas mecánicas..."></textarea>
+        </div>
+    </div>
+
+    <div class="button-group">
+        <button class="btn-clear" onclick="limpiarFormulario()">Limpiar</button>
+        <button id="btn-print" class="btn-submit" onclick="generarReporte()">Finalizar e Imprimir Reporte</button>
+    </div>
+    
+    <div class="signature-box">
+        <div>Nombre: __________________________</div>
+        <div>Firma: __________________________</div>
+    </div>
+
+    <div class="footer-info">
+        <span class="hover-underline" id="version-link">Versión 1.1.9 - Control de Calidad GAS</span>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script>
+    const STORAGE_KEY = "form-calidad-gas";
+    const HISTORY_KEY = "form-calidad-history";
+    const MAX_HISTORY = 5;
+
+    // Variables para instancias de flatpickr (se inicializan en initFlatpickr)
+    let datePickers = [];
+    let timePickers = [];
+
+    function checkSection(sectionId) {
+        const section = document.getElementById(sectionId);
+        const header = section.querySelector('.section-header');
+        const indicator = section.querySelector('.status-indicator');
+        const checkboxes = section.querySelectorAll('input[type="checkbox"]');
+        
+        let allChecked = true;
+        
+        checkboxes.forEach(box => {
+            if (!box.checked) {
+                allChecked = false;
             }
+        });
 
-            const header = section.querySelector('.section-header');
-            const indicator = section.querySelector('.status-indicator');
-            if (isComplete) {
-                header.classList.add('completed');
-                indicator.textContent = "✔ COMPLETADO";
-            } else {
-                header.classList.remove('completed');
-                indicator.textContent = "PENDIENTE";
-            }
+        if (allChecked) {
+            header.classList.add('completed');
+            indicator.textContent = "✔ COMPLETADO";
+        } else {
+            header.classList.remove('completed');
+            indicator.textContent = "PENDIENTE";
         }
+    }
 
-        function updateAllSections() {
-            ["sec-sistema", "sec-pintura", "sec-armado", "sec-pulido", "sec-tapiceria", "sec-control"].forEach(checkSection);
-            handleAdminLogic();
-        }
-
-        function handleAdminLogic() {
-            const val = document.getElementById("sys-ejecutados").value;
-            const dev = document.getElementById("devolucion-block");
-            const corr = document.getElementById("corregido-block");
-            
-            if (val === "NO") {
-                dev.style.display = "block";
-                corr.style.display = "block";
-            } else {
-                dev.style.display = "none";
-                corr.style.display = "none";
+    // Inicializa flatpickr en los inputs con clase .flat-date y .flat-time
+    function initFlatpickr() {
+        // Fecha -> guardamos en Y-m-d (ISO) pero mostramos en d/m/Y
+        datePickers = Array.from(document.querySelectorAll(".flat-date")).map(el => flatpickr(el, {
+            dateFormat: "Y-m-d",      // valor real que se guarda en el input (facil para parsear)
+            altInput: true,
+            altFormat: "d/m/Y",       // formato visible para el usuario
+            allowInput: true,
+            clickOpens: true,
+            onChange: function(selectedDates, dateStr, instance) { 
+                saveForm(); 
+                validateCorrectionAfterReturn();
             }
-            validateDates();
-        }
+        }));
 
-        function validateDates() {
-            const getD = (id) => document.getElementById(id).value;
-            const devDate = getD("devuelto-date") + "T" + (getD("devuelto-time") || "00:00");
-            const corDate = getD("corregido-date") + "T" + (getD("corregido-time") || "00:00");
-            const err = document.getElementById("corregido-error");
-            const btn = document.getElementById("btn-print");
-            
-            if (getD("devuelto-date") && getD("corregido-date")) {
-                if (new Date(corDate) < new Date(devDate)) {
-                    err.classList.add("visible");
-                    btn.setAttribute("disabled", "true");
-                    return false;
-                }
+        // Hora -> usamos formato 12h con AM/PM, guardamos en H:i (24h internamente) pero mostramos h:i K (12h)
+        timePickers = Array.from(document.querySelectorAll(".flat-time")).map(el => flatpickr(el, {
+            enableTime: true,
+            noCalendar: true,
+            dateFormat: "H:i",    // valor real guardado en el input (formato 24h)
+            altInput: true,
+            altFormat: "h:i K",   // formato mostrado: 12h con AM/PM
+            time_24hr: false,     // modo 12 horas
+            allowInput: true,
+            clickOpens: true,
+            minuteIncrement: 1,
+            onChange: function(selectedDates, dateStr, instance) {
+                saveForm();
+                validateCorrectionAfterReturn();
             }
-            err.classList.remove("visible");
-            btn.removeAttribute("disabled");
+        }));
+    }
+
+    // Helper: devuelve un objeto Date combinado desde inputs de fecha (Y-m-d) y hora (H:i).
+    // Si falta fecha, retorna null. Si falta hora, se asume 00:00.
+    function getDateTimeFromInputs(dateId, timeId) {
+        const dateEl = document.getElementById(dateId);
+        if (!dateEl || !dateEl.value) return null; // fecha obligatoria para construir
+        const timeEl = document.getElementById(timeId);
+        const dateStr = dateEl.value; // YYYY-MM-DD (flatpickr dateFormat)
+        const timeStr = (timeEl && timeEl.value) ? timeEl.value : "00:00"; // HH:MM
+
+        // Construir ISO string: YYYY-MM-DDTHH:MM:00
+        const iso = dateStr + "T" + timeStr + ":00";
+        const dt = new Date(iso);
+        if (isNaN(dt.getTime())) return null;
+        return dt;
+    }
+
+    // Valida que la fecha/hora de corrección no sea anterior a la de devolución.
+    // Muestra mensaje y marca inputs si hay un problema; también deshabilita el botón de imprimir.
+    function validateCorrectionAfterReturn() {
+        const devuelto = getDateTimeFromInputs("devuelto-date", "devuelto-time");
+        const corregido = getDateTimeFromInputs("corregido-date", "corregido-time");
+        const errorEl = document.getElementById("corregido-error");
+        const corregidoDateEl = document.getElementById("corregido-date");
+        const corregidoTimeEl = document.getElementById("corregido-time");
+        const btnPrint = document.getElementById("btn-print");
+
+        // Si no hay fecha de devolución, no aplicamos validación
+        if (!devuelto || !corregido) {
+            // limpiar estados
+            if (errorEl) errorEl.classList.remove("visible");
+            if (corregidoDateEl) corregidoDateEl.classList.remove("input-invalid");
+            if (corregidoTimeEl) corregidoTimeEl.classList.remove("input-invalid");
+            if (btnPrint) btnPrint.removeAttribute("disabled");
             return true;
         }
 
-        // --- 4. ALMACENAMIENTO (SAVE/LOAD) ---
-        function saveForm() {
-            const data = {};
-            document.querySelectorAll("input, select, textarea").forEach(el => {
-                if (!el.id) return;
-                data[el.id] = el.type === "checkbox" ? el.checked : el.value;
-            });
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-            
-            const ind = document.getElementById('save-indicator');
-            ind.style.opacity = 1;
-            setTimeout(() => ind.style.opacity = 0, 800);
+        if (corregido < devuelto) {
+            // invalid
+            if (errorEl) errorEl.classList.add("visible");
+            if (corregidoDateEl) corregidoDateEl.classList.add("input-invalid");
+            if (corregidoTimeEl) corregidoTimeEl.classList.add("input-invalid");
+            if (btnPrint) btnPrint.setAttribute("disabled", "true");
+            return false;
+        } else {
+            // valid
+            if (errorEl) errorEl.classList.remove("visible");
+            if (corregidoDateEl) corregidoDateEl.classList.remove("input-invalid");
+            if (corregidoTimeEl) corregidoTimeEl.classList.remove("input-invalid");
+            if (btnPrint) btnPrint.removeAttribute("disabled");
+            return true;
         }
+    }
 
-        function loadForm() {
-            const raw = localStorage.getItem(STORAGE_KEY);
-            if (!raw) return;
-            const data = JSON.parse(raw);
-            for (let id in data) {
-                const el = document.getElementById(id);
-                if (el) {
-                    if (el.type === "checkbox") el.checked = data[id];
-                    else if (el._flatpickr) el._flatpickr.setDate(data[id]);
-                    else el.value = data[id];
-                }
+    // 👉 Guarda todos los campos en localStorage
+    function saveForm() {
+        const data = {};
+
+        document.querySelectorAll("input, select, textarea").forEach(el => {
+            if (!el.id) return; 
+
+            if (el.type === "checkbox") {
+                data[el.id] = el.checked;
+            } else {
+                data[el.id] = el.value;
             }
-            updateAllSections();
-        }
+        });
 
-        function limpiarFormulario() {
-            if(!confirm("¿Borrar todo el formulario?")) return;
-            localStorage.removeItem(STORAGE_KEY);
-            location.reload();
-        }
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        
+        // MOSTRAR INDICADOR DE GUARDADO
+        const indicator = document.getElementById('save-indicator');
+        indicator.style.opacity = 1;
+        setTimeout(() => {
+            indicator.style.opacity = 0;
+        }, 900); // Ocultar después de 0.9 segundos
+    }
 
-        // --- 5. IMPRESIÓN ---
-        function generarReporte() {
-            // Validar campos críticos
-            if(!document.getElementById('plate').value || !document.getElementById('orderNum').value) {
-                alert("Faltan campos obligatorios (Placa u Orden).");
-                return;
+    // 👉 Carga los datos desde localStorage
+    function loadForm() {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+
+        const data = JSON.parse(raw);
+
+        for (let id in data) {
+            const el = document.getElementById(id);
+            if (!el) continue;
+
+            if (el.type === "checkbox") {
+                el.checked = data[id];
+            } else {
+                el.value = data[id];
             }
-            if(!validateDates()) return alert("Corrija las fechas antes de imprimir.");
+        }
 
-            // Poner fecha
-            const today = new Date().toLocaleDateString('es-ES');
-            document.getElementById('print-date-display').textContent = today;
-
-            // Preparar visualización impresión
-            document.querySelectorAll('.check-item input:checked').forEach(input => {
-                input.closest('.check-item').classList.add('is-checked-print');
+        // Si hay pickers inicializados, sincronizarlos con los valores cargados
+        if (datePickers && datePickers.length) {
+            datePickers.forEach(inst => {
+                try {
+                    if (inst.input && inst.input.value) {
+                        // inst.setDate acepta el valor real (Y-m-d)
+                        inst.setDate(inst.input.value, false, "Y-m-d");
+                    }
+                } catch (e) { /* ignore invalid dates */ }
             });
-
-            // Ocultar secciones vacías
-            document.querySelectorAll('.section').forEach(sec => {
-                const hasChecks = sec.querySelector('.is-checked-print');
-                const hasObs = sec.querySelector('textarea').value.trim() !== "";
-                // Sistema siempre visible si tiene datos, otros condicionales
-                if(sec.id !== 'sec-sistema' && !hasChecks && !hasObs) {
-                    sec.classList.add('empty-print');
-                }
+        }
+        if (timePickers && timePickers.length) {
+            timePickers.forEach(inst => {
+                try {
+                    if (inst.input && inst.input.value) {
+                        inst.setDate(inst.input.value, false, "H:i");
+                    }
+                } catch (e) { /* ignore invalid times */ }
             });
+        }
 
-            window.print();
+        // Actualizar estados de secciones después de cargar
+        ["sec-sistema", "sec-pintura", "sec-armado", "sec-pulido", "sec-tapiceria", "sec-control"].forEach(id => {
+            if (document.getElementById(id)) {
+                checkSection(id);
+            }
+        });
 
-            // Restaurar tras impresión
+        // Ejecutar validaciones iniciales
+        validateCorrectionAfterReturn();
+    }
+
+    // --- Funciones de Historial Local ---
+    function saveToHistory() {
+        const current = localStorage.getItem(STORAGE_KEY);
+        if (!current) return;
+        let history = [];
+        try {
+            const stored = localStorage.getItem(HISTORY_KEY);
+            history = stored ? JSON.parse(stored) : [];
+        } catch (e) {}
+        history.push({ data: current, timestamp: new Date().toLocaleString('es-ES') });
+        if (history.length > MAX_HISTORY) history.shift();
+        localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+    }
+
+    function getHistory() {
+        try {
+            const stored = localStorage.getItem(HISTORY_KEY);
+            return stored ? JSON.parse(stored) : [];
+        } catch (e) {
+            return [];
+        }
+    }
+
+    function restoreFromHistory(index) {
+        const history = getHistory();
+        if (index >= 0 && index < history.length) {
+            localStorage.setItem(STORAGE_KEY, history[index].data);
+            window.location.reload();
+        }
+    }
+
+    function showHistoryModal() {
+        const history = getHistory();
+        if (!history || !history.length) {
+            showRichToast('', 'No hay historial guardado', 'info', 3000);
+            return;
+        }
+
+        const overlay = document.createElement('div');
+        overlay.className = 'modal-overlay';
+        overlay.tabIndex = -1;
+
+        const dialog = document.createElement('div');
+        dialog.className = 'history-modal';
+        dialog.setAttribute('role', 'dialog');
+        dialog.setAttribute('aria-modal', 'true');
+
+        const title = document.createElement('div');
+        title.className = 'hm-title';
+        title.textContent = 'Historial de Cambios';
+
+        const list = document.createElement('ul');
+        list.className = 'hm-list';
+
+        history.forEach((entry, idx) => {
+            const li = document.createElement('li');
+            const label = document.createElement('span');
+            label.textContent = entry.timestamp;
+            const btn = document.createElement('button');
+            btn.className = 'hm-restore';
+            btn.textContent = 'Restaurar';
+            btn.addEventListener('click', () => restoreFromHistory(idx));
+            li.appendChild(label);
+            li.appendChild(btn);
+            list.appendChild(li);
+        });
+
+        const closeDiv = document.createElement('div');
+        closeDiv.className = 'hm-close';
+        const closeBtn = document.createElement('button');
+        closeBtn.className = 'btn-close-history';
+        closeBtn.textContent = 'Cerrar';
+        closeDiv.appendChild(closeBtn);
+
+        dialog.appendChild(title);
+        dialog.appendChild(list);
+        dialog.appendChild(closeDiv);
+        overlay.appendChild(dialog);
+        document.body.appendChild(overlay);
+
+        function closeModal() {
+            try { dialog.classList.add('animate-out'); } catch (e) {}
             setTimeout(() => {
-                document.querySelectorAll('.is-checked-print').forEach(el => el.classList.remove('is-checked-print'));
-                document.querySelectorAll('.empty-print').forEach(el => el.classList.remove('empty-print'));
-            }, 500);
+                if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
+            }, 180);
         }
 
-        // --- 6. INICIALIZACIÓN ---
-        document.addEventListener("DOMContentLoaded", () => {
-            renderChecklists(); 
-            initFlatpickr();    
-            loadForm();         
-            
-            document.body.addEventListener('change', (e) => {
-                if (e.target.matches('input, select, textarea')) {
-                    saveForm();
-                    if (e.target.id === 'sys-ejecutados') handleAdminLogic();
-                    if (e.target.closest('.input-cluster')) validateDates();
-                    const section = e.target.closest('.section');
-                    if (section) checkSection(section.id);
+        closeBtn.addEventListener('click', closeModal);
+        overlay.addEventListener('click', (ev) => {
+            if (ev.target === overlay) closeModal();
+        });
+    }
+
+    // --- Diálogo de confirmación visual (reemplaza confirm()) ---
+    function showConfirm(options) {
+        // options: { title, message, confirmText, cancelText, onConfirm, onCancel }
+        const title = options.title || 'Confirmar';
+        const message = options.message || '';
+        const confirmText = options.confirmText || 'Confirmar';
+        const cancelText = options.cancelText || 'Cancelar';
+        const onConfirm = typeof options.onConfirm === 'function' ? options.onConfirm : () => {};
+        const onCancel = typeof options.onCancel === 'function' ? options.onCancel : () => {};
+
+        // Prevent multiple dialogs
+        if (document.querySelector('.modal-overlay')) return;
+
+        const overlay = document.createElement('div');
+        overlay.className = 'modal-overlay';
+        overlay.tabIndex = -1;
+
+        const dialog = document.createElement('div');
+        dialog.className = 'confirm-dialog';
+        dialog.setAttribute('role', 'dialog');
+        dialog.setAttribute('aria-modal', 'true');
+        dialog.setAttribute('aria-labelledby', 'cd-title');
+        dialog.setAttribute('aria-describedby', 'cd-message');
+
+        const titleEl = document.createElement('div');
+        titleEl.className = 'cd-title';
+        titleEl.id = 'cd-title';
+        titleEl.textContent = title;
+
+        const msgEl = document.createElement('div');
+        msgEl.className = 'cd-message';
+        msgEl.id = 'cd-message';
+        msgEl.textContent = message;
+
+        const actions = document.createElement('div');
+        actions.className = 'cd-actions';
+
+        const btnCancel = document.createElement('button');
+        btnCancel.className = 'btn-cancel';
+        btnCancel.textContent = cancelText;
+
+        const btnConfirm = document.createElement('button');
+        // Use existing btn-clear class for consistency (red destructive button)
+        btnConfirm.className = 'btn-confirm btn-clear';
+        btnConfirm.textContent = confirmText;
+
+        actions.appendChild(btnCancel);
+        actions.appendChild(btnConfirm);
+
+        dialog.appendChild(titleEl);
+        dialog.appendChild(msgEl);
+        dialog.appendChild(actions);
+        overlay.appendChild(dialog);
+        document.body.appendChild(overlay);
+
+        // Save previously focused element
+        const previousActive = document.activeElement;
+
+        // Focus management
+        btnCancel.focus();
+
+        function closeDialog(result) {
+            // play exit animation then remove
+            try { dialog.classList.add('animate-out'); } catch (e) {}
+            setTimeout(() => {
+                if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
+                try { if (previousActive) previousActive.focus(); } catch (e) {}
+                if (result) onConfirm(); else onCancel();
+            }, 180);
+        }
+
+        btnCancel.addEventListener('click', () => closeDialog(false));
+        btnConfirm.addEventListener('click', () => closeDialog(true));
+
+        // Close when clicking outside dialog
+        overlay.addEventListener('click', (ev) => {
+            if (ev.target === overlay) closeDialog(false);
+        });
+
+        // Keyboard handling: Esc to cancel, Enter to confirm when focused inside
+        function keyHandler(e) {
+            if (e.key === 'Escape') { e.preventDefault(); closeDialog(false); }
+            if (e.key === 'Enter') {
+                // if focus inside overlay, treat as confirm
+                if (overlay.contains(document.activeElement)) { e.preventDefault(); closeDialog(true); }
+            }
+            // trap Tab inside the dialog (basic)
+            if (e.key === 'Tab') {
+                const focusables = [btnCancel, btnConfirm];
+                const idx = focusables.indexOf(document.activeElement);
+                if (e.shiftKey) {
+                    // move backward
+                    const next = (idx <= 0) ? focusables[focusables.length - 1] : focusables[idx - 1];
+                    next.focus();
+                    e.preventDefault();
+                } else {
+                    const next = (idx === -1 || idx === focusables.length - 1) ? focusables[0] : focusables[idx + 1];
+                    next.focus();
+                    e.preventDefault();
                 }
+            }
+        }
+
+        document.addEventListener('keydown', keyHandler);
+
+        // Ensure cleanup of listener on close
+        const origOnConfirm = onConfirm;
+        const origOnCancel = onCancel;
+        const wrappedConfirm = () => { document.removeEventListener('keydown', keyHandler); origOnConfirm(); };
+        const wrappedCancel = () => { document.removeEventListener('keydown', keyHandler); origOnCancel(); };
+
+        // Replace handlers to ensure key listener removed
+        onConfirm = wrappedConfirm;
+        onCancel = wrappedCancel;
+
+        // Also remove key listener if overlay removed by other means
+        overlay.addEventListener('remove', () => document.removeEventListener('keydown', keyHandler));
+    }
+
+    // 👉 Limpia todo: pantalla + almacenamiento local (usa diálogo visual)
+    function limpiarFormulario() {
+        // Check if there's any data to clear
+        const hasData = localStorage.getItem(STORAGE_KEY) !== null;
+        
+        if (!hasData) {
+            showRichToast(
+                'Formulario vacío',
+                'No hay datos para limpiar.',
+                'info',
+                3000
+            );
+            return;
+        }
+
+        showConfirm({
+            title: 'Limpiar formulario',
+            message: '¿Está seguro que desea limpiar todo el formulario? Se perderán todos los datos guardados.',
+            confirmText: 'Limpiar',
+            cancelText: 'Cancelar',
+            onConfirm: () => {
+                // Save current state to history before clearing
+                saveToHistory();
+                localStorage.removeItem(STORAGE_KEY);
+                
+                                // Limpiar todos los inputs, selects y textareas inmediatamente
+                                document.querySelectorAll('input[type="text"], input[type="date"], input[type="time"], input[type="number"], select, textarea').forEach(el => {
+                                    el.value = '';
+                                });
+                
+                                // Limpiar y desmarcar todos los checkboxes
+                                document.querySelectorAll('input[type="checkbox"]').forEach(el => {
+                                    el.checked = false;
+                                });
+                
+                                // Actualizar estado de secciones y progreso
+                                ["sec-sistema", "sec-pintura", "sec-armado", "sec-pulido", "sec-tapiceria", "sec-control"].forEach(id => {
+                                    checkSection(id);
+                                    updateSectionProgress(id);
+                                });
+                
+                // Show undo toast with action
+                showRichToast(
+                    'Formulario limpiado',
+                    'Los datos han sido borrados. Tienes 30 segundos para deshacer.',
+                    'info',
+                    30000,
+                    [{
+                        label: 'Deshacer',
+                        className: '',
+                        onClick: () => {
+                            const history = getHistory();
+                            if (history.length > 0) {
+                                restoreFromHistory(history.length - 1);
+                            }
+                        }
+                    }]
+                );
+                
+                // Reload after delay
+                setTimeout(() => { window.location.reload(); }, 32000);
+            },
+            onCancel: () => {
+                // no-op
+            }
+        });
+    }
+
+    // --- FUNCIONES PARA INSERTAR / REMOVER FECHA EN LA ESQUINA SUPERIOR DERECHA AL IMPRIMIR ---
+    function formatDateForPrint(d = new Date()) {
+        // Formato dd/mm/yyyy
+        const dd = String(d.getDate()).padStart(2, '0');
+        const mm = String(d.getMonth() + 1).padStart(2, '0');
+        const yyyy = d.getFullYear();
+        return `${dd}/${mm}/${yyyy}`;
+    }
+
+    function addPrintDate() {
+        // Si ya existe, actualizarla
+        let el = document.querySelector('.print-date');
+        if (!el) {
+            el = document.createElement('div');
+            el.className = 'print-date';
+            el.setAttribute('aria-hidden', 'true');
+            document.body.appendChild(el);
+        }
+   
+    }
+
+    function removePrintDate() {
+        const el = document.querySelector('.print-date');
+        if (el && el.parentNode) el.parentNode.removeChild(el);
+    }
+
+    // --- Toast helper and compatibility wrapper for existing calls ---
+    // Basic legacy toast (kept for compatibility) — uses plain message text
+    function showToast(message, kind = 'success', duration = 2800) {
+        showRichToast('', message, kind, duration);
+    }
+
+    // Rich toast: title + message + kind + duration. Adds accessible attributes, pause-on-hover, close button, swipe-to-dismiss, and action buttons.
+    function showRichToast(title, message, kind = 'success', duration = 3000, actions = []) {
+        // Ensure container exists
+        let container = document.querySelector('.toast-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.className = 'toast-container';
+            container.setAttribute('aria-live', 'polite');
+            container.setAttribute('role', 'status');
+            document.body.appendChild(container);
+
+                
+        }
+
+        // Normalize inputs when building a dedupe key so small differences
+        // (extra spaces, newlines) don't produce different keys.
+        const normalize = s => (s || '').toString().replace(/\s+/g, ' ').trim();
+        const keyRaw = (kind || '') + '|' + normalize(title) + '|' + normalize(message);
+        const key = encodeURIComponent(keyRaw);
+
+        // Ensure we have a global set of active toast keys to prevent race-created duplicates
+        if (!window.__activeToastKeys) window.__activeToastKeys = new Set();
+
+        // If a toast with this key is already being displayed/created, pulse it and return
+        const existingToasts = Array.from(container.querySelectorAll('.toast'));
+        const matching = existingToasts.find(ex => ex.dataset && ex.dataset.toastKey === key);
+        if (matching || window.__activeToastKeys.has(key)) {
+            // If we have DOM element, pulse visually (but don't restart timer)
+            if (matching) {
+                // Temporarily lock the toast so mouseleave/focusout don't restart the timer during pulse
+                matching.__pulseActive = true;
+                try { matching.style.animation = 'toastPulse .28s ease'; } catch (e) {}
+                setTimeout(() => { 
+                    try { matching.style.animation = ''; } catch (e) {} 
+                    matching.__pulseActive = false;
+                }, 300);
+            }
+            return matching || null;
+        }
+
+        // Reserve the key immediately to avoid concurrent creators from both inserting
+        window.__activeToastKeys.add(key);
+
+        // Otherwise remove/animate other toasts before showing new one
+        if (existingToasts.length) {
+            existingToasts.forEach((ex) => { try { ex.style.animation = 'toastOut 0.35s cubic-bezier(0.4, 0, 1, 1) forwards'; } catch (e) {} });
+            setTimeout(() => { existingToasts.forEach((ex) => { try { if (ex && ex.parentNode) ex.parentNode.removeChild(ex); } catch (e) {} }); }, 360);
+        }
+
+        const t = document.createElement('div');
+        t.dataset.toastKey = key;
+        t.className = 'toast ' + (kind || 'success');
+        t.setAttribute('tabindex', '0');
+
+        // Icon map (simple emoji for now)
+        const icons = { success: '✔️', error: '⛔', info: 'ℹ️', warning: '⚠️' };
+
+        const iconEl = document.createElement('div');
+        iconEl.className = 'icon';
+        iconEl.textContent = icons[kind] || '';
+
+        const content = document.createElement('div');
+        content.className = 'content';
+
+        if (title) {
+            const titleEl = document.createElement('div');
+            titleEl.className = 'title';
+            titleEl.textContent = title;
+            content.appendChild(titleEl);
+        }
+
+        if (message) {
+            const msgEl = document.createElement('div');
+            msgEl.className = 'message';
+            msgEl.textContent = message;
+            content.appendChild(msgEl);
+        }
+
+        const closeBtn = document.createElement('button');
+        closeBtn.className = 'close';
+        closeBtn.setAttribute('aria-label', 'Cerrar aviso');
+        closeBtn.innerHTML = '✕';
+
+        // Actions container (optional buttons like 'Deshacer' or 'Ir al campo')
+        let actionsContainer = null;
+        if (Array.isArray(actions) && actions.length) {
+            actionsContainer = document.createElement('div');
+            actionsContainer.className = 'toast-actions';
+            actions.forEach(act => {
+                const b = document.createElement('button');
+                b.className = 'toast-action-btn ' + (act.className || '');
+                b.textContent = act.label || 'Acción';
+                b.addEventListener('click', (ev) => {
+                    ev.stopPropagation();
+                    try { if (typeof act.onClick === 'function') act.onClick(ev, t); } catch (e) { console.error(e); }
+                    // remove toast after action
+                    removeToast(true);
+                });
+                actionsContainer.appendChild(b);
+            });
+        }
+
+        // Append children
+        t.appendChild(iconEl);
+        t.appendChild(content);
+        if (actionsContainer) t.appendChild(actionsContainer);
+        t.appendChild(closeBtn);
+
+        // Insert at top for newest on top
+        container.insertBefore(t, container.firstChild);
+
+        // Accessibility: announce
+        t.setAttribute('role', 'alert');
+
+        // Auto-remove with pause-on-hover/focus
+        let removed = false;
+        let timeoutId = null;
+        const startTimer = (ms) => {
+            // Don't restart timer if a pulse animation is active
+            if (t.__pulseActive) return;
+            clearTimer();
+            timeoutId = setTimeout(() => removeToast(true), ms);
+        };
+        const clearTimer = () => { if (timeoutId) { clearTimeout(timeoutId); timeoutId = null; } };
+
+        function removeToast(animated) {
+            if (removed) return;
+            removed = true;
+            clearTimer();
+            t.style.animation = 'toastOut 0.4s cubic-bezier(0.4, 0, 1, 1) forwards';
+            setTimeout(() => { if (t && t.parentNode) t.parentNode.removeChild(t); }, 300);
+            // free reserved key so future toasts can be created
+            try { if (t && t.dataset && t.dataset.toastKey) window.__activeToastKeys && window.__activeToastKeys.delete(t.dataset.toastKey); } catch (e) {}
+        }
+
+        // Pause on hover/focus
+        t.addEventListener('mouseenter', () => clearTimer());
+        t.addEventListener('mouseleave', () => startTimer(duration));
+        t.addEventListener('focusin', () => clearTimer());
+        t.addEventListener('focusout', () => startTimer(duration));
+
+        // Close button
+        closeBtn.addEventListener('click', (e) => { e.stopPropagation(); removeToast(true); });
+
+        // Ensure action buttons are keyboard accessible
+        if (actionsContainer) {
+            actionsContainer.querySelectorAll('button').forEach(btn => {
+                btn.setAttribute('tabindex','0');
+            });
+        }
+
+        // Touch: basic swipe-to-dismiss (horizontal)
+        let startX = null;
+        let currentX = 0;
+        let swiping = false;
+        t.addEventListener('touchstart', (ev) => {
+            if (!ev.touches || !ev.touches.length) return;
+            startX = ev.touches[0].clientX;
+            swiping = true;
+            clearTimer();
+            t.style.transition = '';
+        }, { passive: true });
+
+        t.addEventListener('touchmove', (ev) => {
+            if (!swiping || !ev.touches || !ev.touches.length) return;
+            currentX = ev.touches[0].clientX - startX;
+            // translate only horizontally
+            t.style.transform = `translateX(${currentX}px)`;
+            t.style.opacity = `${Math.max(0.25, 1 - Math.abs(currentX) / 240)}`;
+        }, { passive: true });
+
+        t.addEventListener('touchend', (ev) => {
+            swiping = false;
+            t.style.transition = 'transform 0.18s ease, opacity 0.18s ease';
+            if (Math.abs(currentX) > 80) {
+                // dismiss
+                t.style.transform = `translateX(${currentX > 0 ? 1000 : -1000}px)`;
+                t.style.opacity = '0';
+                setTimeout(() => removeToast(true), 160);
+            } else {
+                // reset
+                t.style.transform = '';
+                t.style.opacity = '';
+                startTimer(duration);
+            }
+            startX = null; currentX = 0;
+        }, { passive: true });
+
+        // Start timer
+        startTimer(duration);
+
+        return t;
+    }
+
+    // Keep existing API name so callers don't need changes.
+    function showCustomAlert(title, message, listItems = [], type = 'warning', duration = null, actions = []) {
+        // type: 'error' | 'warning' | 'info' | 'success'
+        const kind = (type === 'error') ? 'error' : (type === 'warning' ? 'warning' : (type === 'info' ? 'info' : 'success'));
+
+        // Compose a multiline message for toasts (title on first line, message next, then list)
+        const parts = [];
+        if (title) parts.push(title);
+        if (message) parts.push(message);
+        if (Array.isArray(listItems) && listItems.length) {
+            parts.push(listItems.map(i => '• ' + i).join('\n'));
+        }
+        const text = parts.join('\n\n');
+
+        // Decide a sensible default duration when none provided (longer for info so users notice it)
+        let finalDuration = duration;
+        if (!finalDuration) {
+            finalDuration = (kind === 'info') ? 6000 : 3000;
+        }
+
+        // Use rich toast: pass title separately when available
+        const composedTitle = title || '';
+        const composedMessage = [];
+        if (message) composedMessage.push(message);
+        if (Array.isArray(listItems) && listItems.length) composedMessage.push(listItems.map(i => '• ' + i).join('\n'));
+
+        // If actions provided, map them to toast actions; otherwise default behavior
+        const toastActions = Array.isArray(actions) && actions.length ? actions : [];
+        showRichToast(composedTitle, composedMessage.join('\n\n'), kind, finalDuration, toastActions);
+    }
+
+    function closeCustomAlert(event) {
+        // no-op for toast-based alerts; kept for compatibility
+        return;
+    }
+
+    // Integrar con generarReporte: insertamos la fecha justo antes de imprimir y la removemos después.
+    function generarReporte() {
+        // --- CÓDIGO NUEVO: INSERTAR SOLO FECHA (SIN HORA, SIN TITULO) ---
+        const today = new Date();
+        const dateStr = today.toLocaleDateString('es-ES', { 
+            day: '2-digit', month: '2-digit', year: 'numeric' 
+        });
+        // Modificado: Solo asignamos dateStr (Ej: "28/11/2025")
+        document.getElementById('print-date-display').textContent = dateStr;
+
+        // Defensive UI: briefly disable the print button to avoid rapid repeated clicks
+        const btnPrint = document.getElementById('btn-print');
+        if (btnPrint) {
+            try {
+                btnPrint.setAttribute('disabled', 'true');
+                setTimeout(() => { try { btnPrint.removeAttribute('disabled'); } catch (e) {} }, 900);
+            } catch (e) {}
+        }
+        // --------------------------------------------------
+
+        // Re-ejecutar validación antes de imprimir
+        const valid = validateCorrectionAfterReturn();
+        if (!valid) {
+            showCustomAlert(
+                "Fechas incorrectas",
+                "La fecha de corrección no puede ser anterior a la fecha de devolución.",
+                [],
+                "error"
+            );
+            return;
+        }
+
+        // Validación de campos críticos vs opcionales
+        const requiredFields = [
+            { id: 'plate', name: 'Placa', critical: true },
+            { id: 'orderNum', name: 'Nº Orden de Trabajo', critical: true },
+            { id: 'brand', name: 'Marca del Vehículo', critical: false }
+        ];
+
+        const criticalMissing = [];
+        const criticalMissingIds = [];
+        const optionalMissing = [];
+
+        requiredFields.forEach(f => {
+            const el = document.getElementById(f.id);
+            const val = el ? (el.value || '').toString().trim() : '';
+            if (!val) {
+                if (f.critical) {
+                    criticalMissing.push(f.name);
+                    criticalMissingIds.push(f.id);
+                }
+                else optionalMissing.push(f.name);
+            }
+        });
+
+        if (criticalMissing.length > 0) {
+            const firstMissingId = criticalMissingIds.length > 0 ? criticalMissingIds[0] : null;
+            const goAction = [];
+            if (firstMissingId) {
+                goAction.push({
+                    label: 'Ir al campo',
+                    className: '',
+                    onClick: () => {
+                        const el = document.getElementById(firstMissingId);
+                        if (el) {
+                            el.focus();
+                            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    }
+                });
+            }
+
+            showCustomAlert(
+                'Faltan campos obligatorios',
+                'Por favor complete los siguientes campos antes de imprimir:',
+                criticalMissing,
+                'error',
+                null,
+                goAction
+            );
+            return;
+        }
+
+        if (optionalMissing.length > 0) {
+            // Mostrar aviso informativo; en pantallas pequeñas aumentamos duración y
+            // usamos estilos responsivos para que el toast sea visible (no bloqueamos impresión).
+            const isSmall = (window.innerWidth && window.innerWidth < 900) || (window.innerHeight && window.innerHeight < 700);
+            if (isSmall) {
+                showCustomAlert(
+                    'Campos recomendados faltantes',
+                    'Faltan campos recomendados; el reporte se imprimirá igual. Recomendado: revisar antes de imprimir en pantallas pequeñas.',
+                    optionalMissing,
+                    'info',
+                    7000
+                );
+            } else {
+                showCustomAlert(
+                    'Campos recomendados faltantes',
+                    'Faltan campos recomendados; el reporte se imprimirá igual:',
+                    optionalMissing,
+                    'info'
+                );
+            }
+        }
+
+        // --- LÓGICA CONDICIONAL SÓLO PARA IMPRESIÓN ---
+
+        // 1. Bloques Administrativos (Devolución/Corrección)
+        const ejecutadosSelect = document.getElementById('sys-ejecutados').value;
+        const devolucion = document.getElementById('devolucion-block');
+        const corregido = document.getElementById('corregido-block');
+        
+        if (ejecutadosSelect === 'SI') {
+            devolucion.classList.add('ocultar-admin-print');
+            corregido.classList.add('ocultar-admin-print');
+        } else {
+            devolucion.classList.remove('ocultar-admin-print');
+            corregido.classList.remove('ocultar-admin-print');
+        }
+        
+        // 2. LÓGICA CONDICIONAL PARA SECCIÓN A. SISTEMA (QUITAR SECCIÓN VACÍA)
+        const secSistema = document.getElementById('sec-sistema');
+        const adminOkChecked = document.getElementById('admin-ok').checked;
+        const obsSistemaVacia = document.getElementById('obs-sistema').value.trim() === '';
+        const sysFinalizadaVacia = document.getElementById('sys-finalizada').value === '';
+        const sysEjecutadosVacia = document.getElementById('sys-ejecutados').value === '';
+        
+        if (!adminOkChecked && obsSistemaVacia && sysFinalizadaVacia && sysEjecutadosVacia) {
+            secSistema.classList.add('empty-print');
+        } else {
+            secSistema.classList.remove('empty-print');
+        }
+
+        // 3. Checklist (Solo mostrar marcados)
+        document.querySelectorAll('.check-item').forEach(item => {
+            const checkbox = item.querySelector('input[type="checkbox"]');
+            if (checkbox && checkbox.checked) {
+                item.classList.add('is-checked-print');
+            } else {
+                item.classList.remove('is-checked-print');
+            }
+        });
+        
+        // 4. Observaciones (Ocultar si están vacías)
+        document.querySelectorAll('.obs-area').forEach(obsArea => {
+            const textarea = obsArea.querySelector('textarea');
+            if (textarea && textarea.value.trim() === '') {
+                obsArea.classList.add('empty-print');
+            } else {
+                obsArea.classList.remove('empty-print');
+            }
+        });
+
+        // 4.b Ocultar secciones enteras si no tienen items marcados (las secciones que quieres ocultar en la impresión)
+        const sectionsToEvaluate = ["sec-pintura","sec-armado","sec-pulido","sec-tapiceria","sec-control"];
+        sectionsToEvaluate.forEach(secId => {
+            const sec = document.getElementById(secId);
+            if (!sec) return;
+            // buscar checkboxes dentro de la sección
+            const checkboxes = Array.from(sec.querySelectorAll('input[type="checkbox"]'));
+            // si no hay checkboxes marcados y no hay observaciones visibles -> ocultar sección en impresión
+            const anyChecked = checkboxes.some(cb => cb.checked);
+            const obs = sec.querySelector('.obs-area');
+            const obsHasText = obs && obs.querySelector('textarea') && obs.querySelector('textarea').value.trim() !== '';
+            if (!anyChecked && !obsHasText) {
+                sec.classList.add('empty-print');
+            } else {
+                sec.classList.remove('empty-print');
+            }
+        });
+
+        // Insertar fecha antes de imprimir (dinámico)
+        addPrintDate();
+
+        // 5. Imprimir
+        window.print();
+        
+        // 6. Restaurar la vista del formulario después de imprimir (QUITAR TODAS LAS CLASES TEMPORALES)
+        setTimeout(() => {
+            document.querySelectorAll('.check-item').forEach(item => {
+                item.classList.remove('is-checked-print');
+            });
+            document.querySelectorAll('.obs-area').forEach(obsArea => {
+                obsArea.classList.remove('empty-print');
+            });
+            devolucion.classList.remove('ocultar-admin-print');
+            corregido.classList.remove('ocultar-admin-print');
+            secSistema.classList.remove('empty-print'); // Restaurar la sección A
+
+            // Restaurar las secciones evaluadas
+            sectionsToEvaluate.forEach(secId => {
+                const sec = document.getElementById(secId);
+                if (sec) sec.classList.remove('empty-print');
             });
 
-            document.querySelectorAll('.section').forEach(sec => {
-                sec.addEventListener('focusin', () => sec.classList.add('active-section'));
-                sec.addEventListener('focusout', () => sec.classList.remove('active-section'));
+            // Remover la fecha por seguridad (en caso afterprint no se dispare)
+            removePrintDate();
+        }, 1000);
+    }
+    
+    // Registrar eventos beforeprint/afterprint y matchMedia para compatibilidad
+    if (window.matchMedia) {
+        const mql = window.matchMedia('print');
+        mql.addListener((m) => {
+            if (m.matches) {
+                addPrintDate();
+            } else {
+                removePrintDate();
+            }
+        });
+    }
+    window.addEventListener('beforeprint', addPrintDate);
+    window.addEventListener('afterprint', removePrintDate);
+
+    // Configura los listeners para el resaltado de sección
+    function setupFocusListeners() {
+        const sectionIds = ["sec-sistema", "sec-pintura", "sec-armado", "sec-pulido", "sec-tapiceria", "sec-control"];
+
+        sectionIds.forEach(sectionId => {
+            const section = document.getElementById(sectionId);
+            if (!section) return;
+
+            section.querySelectorAll('input, select, textarea').forEach(input => {
+                input.addEventListener('focus', () => {
+                    section.classList.add('active-section');
+                });
+
+                input.addEventListener('blur', () => {
+                    setTimeout(() => {
+                        if (!section.contains(document.activeElement)) {
+                            section.classList.remove('active-section');
+                        }
+                    }, 100); 
+                });
             });
         });
-    </script>
+    }
+
+    // Función para actualizar la barra de progreso por sección
+    function updateSectionProgress(sectionId) {
+        const section = document.getElementById(sectionId);
+        if (!section) return;
+
+        // Obtener todos los checkboxes de la sección (excluyendo el de confirmación final)
+        const checkboxes = Array.from(section.querySelectorAll('input[type="checkbox"]'))
+            .filter(cb => !cb.id.includes('-ok')); // Excluir el checkbox de confirmación
+        
+        if (checkboxes.length === 0) return;
+
+        const checkedCount = checkboxes.filter(cb => cb.checked).length;
+        const progress = (checkedCount / checkboxes.length) * 100;
+
+        // Crear o actualizar barra de progreso
+        let progressBar = section.querySelector('.section-progress-bar');
+        if (!progressBar) {
+            progressBar = document.createElement('div');
+            progressBar.className = 'section-progress-bar';
+            const obs = section.querySelector('.obs-area');
+            if (obs) {
+                obs.insertAdjacentElement('beforebegin', progressBar);
+            } else {
+                section.appendChild(progressBar);
+            }
+        }
+
+        const fill = progressBar.querySelector('.section-progress-fill');
+        if (fill) {
+            fill.style.width = progress + '%';
+        } else {
+            const fillEl = document.createElement('div');
+            fillEl.className = 'section-progress-fill';
+            fillEl.style.width = progress + '%';
+            progressBar.appendChild(fillEl);
+        }
+    }
+
+    // Función para actualizar todas las barras de progreso
+    function updateAllSectionProgress() {
+        const sectionIds = ["sec-sistema", "sec-pintura", "sec-armado", "sec-pulido", "sec-tapiceria", "sec-control"];
+        sectionIds.forEach(id => updateSectionProgress(id));
+    }
+
+    // 👉 Al cargar la página: inicializar pickers, cargar datos y activar autosave
+    window.addEventListener("DOMContentLoaded", () => {
+        // 1) Inicializa flatpickr en los inputs (antes de cargar valores)
+        initFlatpickr();
+
+        // 2) Carga valores guardados en localStorage y sincroniza con los pickers
+        loadForm();
+        actualizarBloquesAdmin();
+
+        // 3) Resto de listeners y comportamiento
+        setupFocusListeners(); 
+        updateAllSectionProgress(); // Inicializar barras de progreso
+
+document.getElementById("sys-ejecutados")
+    .addEventListener("change", actualizarBloquesAdmin);
+
+        document.querySelectorAll("input, select, textarea").forEach(el => {
+            el.addEventListener("input", (e) => {
+                saveForm();
+                updateAllSectionProgress(); // Actualizar progreso al cambiar
+            });
+            el.addEventListener("change", (e) => {
+                saveForm();
+                updateAllSectionProgress();
+            });
+        });
+
+
+    function actualizarBloquesAdmin() {
+        const valor = document.getElementById("sys-ejecutados").value;
+
+        const devolucion = document.getElementById("devolucion-block");
+        const corregido = document.getElementById("corregido-block");
+
+    if (valor === "SI") {
+        // Ocultar ambos bloques
+        devolucion.style.display = "none";
+        corregido.style.display = "none";
+    } else if (valor === "NO") {
+        // Mostrar ambos bloques
+        devolucion.style.display = "block";
+        corregido.style.display = "block";
+    } else {
+        // Estado inicial (ni SI ni NO aún)
+        devolucion.style.display = "none";
+        corregido.style.display = "none";
+    }
+}
+
+
+        // Ejecutar validación cada vez que los campos de devolución/corrección cambian (cuando no hay picker events por alguna razón)
+        ["devuelto-date","devuelto-time","corregido-date","corregido-time"].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.addEventListener("blur", validateCorrectionAfterReturn);
+            }
+        });
+
+        document.querySelectorAll('.uppercase-input').forEach(input => {
+            input.addEventListener('input', (e) => {
+                const start = input.selectionStart;
+                const end = input.selectionEnd;
+                input.value = input.value.toUpperCase();
+                input.setSelectionRange(start, end);
+            });
+        });
+    });
+</script>
+
 </body>
 </html>
