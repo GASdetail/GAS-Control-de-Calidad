@@ -21,7 +21,7 @@
             --input-bg: #34495e; 
             --error: #e74c3c;
         }
-        
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--primary-dark);
@@ -49,8 +49,20 @@
             display: block;
             margin: 0 auto;
         }
+      /* --- CONFIGURACIÓN DE LOGOS (PANTALLA) --- */
+        /* Por defecto en pantalla se ve el PNG */
+        .logo-screen {
+            max-width: 250px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        /* El JPEG de impresión está oculto en pantalla */
+        .logo-print {
+            display: none !important;
+        }
 
-        /* --- NUEVO: Ocultar fecha en pantalla --- */
+        /* Ocultar fecha en pantalla */
         #print-date-display { display: none; }
 
         h1 {
@@ -370,6 +382,26 @@
             background: var(--primary-blue) !important;
             color: white !important;
         }
+/* --- Flatpickr DARK para el selector de meses --- */
+.flatpickr-monthDropdown-months,
+.flatpickr-current-month input.cur-year {
+    background: #2c3e50 !important;
+    color: #ecf0f1 !important;
+    border: 1px solid #495a6b !important;
+}
+
+/* Opciones del dropdown */
+.flatpickr-monthDropdown-months option {
+    background: #2c3e50 !important;
+    color: #ecf0f1 !important;
+}
+
+/* Flechitas de navegación */
+.flatpickr-prev-month,
+.flatpickr-next-month {
+    fill: #ecf0f1 !important;
+    color: #ecf0f1 !important;
+}
 
         /* Área de observaciones dentro de secciones */
         .obs-area {
@@ -581,209 +613,279 @@
             display: none; 
         }
 
-        /* REGLAS DE IMPRESIÓN */
         @media print {
-            @page { 
-                margin: 1cm; 
-                size: auto; 
-            }
-            
-            /* Ocultar elementos no deseados */
-            .print-hidden-icon, #save-indicator, .footer-info { 
-                display: none !important; 
-            }
-            
-            /* OCULTAR LETRA DE ÍNDICE (A., B., C.) */
-            .section-index {
-                display: none !important;
-            }
-            
-            /* FUERZA TODO A ALTO CONTRASTE */
-            body, .container, .section, .header-info, input, select, textarea, label, span, div, p {
-                background-color: #ffffff !important;
-                color: #000000 !important; 
-                box-shadow: none !important;
-                text-shadow: none !important;
-            }
-            * { 
-                -webkit-print-color-adjust: exact !important; 
-                print-color-adjust: exact !important; 
-            }
+    @page { 
+        margin: 1cm;
+        size: auto;
+    }
 
-            body {
-                padding: 0;
-                font-size: 11pt; 
-                font-family: Arial, Helvetica, Helvetica, sans-serif; 
-            }
+    /* Ocultar lo que ya ocultabas */
+    .print-hidden-icon,
+    #save-indicator,
+    .button-group,
+    h1,
+    .footer-info {
+        display: none !important;
+    }
 
-            .container { max-width: 100%; width: 100%; margin: 0; padding: 0; border: none; }
-            
-            /* Encabezado y botones */
-            .button-group, h1 { display: none !important; }
-            
-            /* --- MODIFICADO: LOGO CONTAINER PARA FECHA --- */
-            .logo-container { 
-                text-align: left; margin-bottom: 15px; padding: 0 0 10px 0; border-bottom: 2px solid #000;
-                display: flex; 
-                align-items: center; 
-                position: relative; /* Importante para posicionar la fecha */
-            }
-            .logo-container img { 
-                max-width: 150px !important; 
-                height: auto !important;
-                display: inline-block !important; 
-                margin-right: 15px !important; 
+    /* Quitar letra de índice (A, B, etc.) como en la versión vieja */
+    .section-index {
+        display: none !important;
+    }
 
-            }
-            .logo-container::after { 
-                content: "REPORTE CONTROL DE CALIDAD - GAS PAINT"; 
-                font-size: 14pt; font-weight: bold; display: block;
-                flex-grow: 1; 
-                text-align: left; 
-            }
-            
-            /* --- NUEVO: ESTILO FECHA IMPRESIÓN --- */
-            #print-date-display {
-                display: block !important;
-                position: absolute;
-                top: 0;
-                right: 0;
-                font-size: 10pt;
-                font-weight: bold;
-                color: #000 !important;
-                background: white !important;
-            }
+    /* Alto contraste pero sin romper padding */
+    body, .container, .section, .header-info,
+    input, select, textarea, label, span, div, p {
+        background: #fff !important;
+        color: #000 !important;
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
 
-            /* INPUTS */
-            input[type="text"], input[type="date"], input[type="time"], input[type="number"], select, textarea {
-                border: 1px solid #000 !important; 
-                border-radius: 0 !important; 
-                font-weight: bold; 
-                padding: 3px; 
-                background: white !important;
-                color: black !important;
-                appearance: none; -webkit-appearance: none;
-                margin-top: 2px;
-                height: auto !important;
-            }
-            
-            /* Cabecera de Datos del Vehículo */
-            .header-info {
-                grid-template-columns: 1fr 1fr 1fr;
-                gap: 5px;
-                border: 1px solid #000;
-                padding: 8px;
-                margin-bottom: 15px;
-            }
-            .header-info label { color: #000 !important; font-weight: normal; font-size: 10pt; }
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
 
-            /* Secciones */
-            .section {
-                border: 1px solid #000;
-                margin-bottom: 12px;
-                page-break-inside: avoid; 
-                background: white !important;
-            }
-            .section-header {
-                border-bottom: 1px solid #000;
-                padding: 8px 10px;
-                background-color: #e0e0e0 !important; 
-                font-size: 12pt;
-                font-weight: bold;
-            }
-            .section-header.completed { 
-                background-color: #aaddaa !important; 
-                border-bottom-color: #000 !important; 
-            }
-            .status-indicator { display: none; } 
+    body {
+        padding: 0;
+        font-size: 11pt;
+        font-family: Arial, Helvetica, sans-serif;
+    }
 
-            /* Preguntas Admin */
-            .admin-row { border-bottom: 1px solid #ccc; padding: 8px 10px; background: white !important; }
-            .admin-question { margin-bottom: 2px; font-weight: bold; color: #000 !important; font-size: 10pt; }
-            
-            #devolucion-block, #corregido-block {
-                border: 1px solid #000 !important;
-                background: #fff !important;
-                padding: 5px;
-                margin-top: 5px;
-            }
-            .ocultar-admin-print { display: none !important; }
+    .container {
+        max-width: 100%;
+        margin: 0;
+        padding: 0 5px;
+        border: none !important;
+    }
 
-            .checklist { padding: 10px 10px 5px 10px; }
-            .check-item { 
-                display: none !important; 
-                padding: 4px 0; 
-                border-bottom: 1px dotted #ccc; 
-                font-size: 10pt;
-                font-weight: normal; 
-            }
-            
-            .check-item.is-checked-print {
-                display: block !important; 
-            }
-            
-            .check-item:last-child { border-bottom: none; }
 
-            .check-item input[type="checkbox"] { display: none !important; }
-            .check-item label { color: #000 !important; display: inline; } 
 
-            .check-item.is-checked-print label {
-                font-weight: bold; 
-            }
-            .check-item.is-checked-print label::before {
-                font-family: Arial, sans-serif;
-                font-size: 12pt;
-                margin-right: 5px;
-                font-weight: bold;
-                content: "☑ "; 
-            }
+    /* --------------------------- */
+    /*          ENCABEZADO        */
+    /* --------------------------- */
 
-            .obs-area {
-                border-top: 1px solid #000;
-                background: #fff !important;
-                padding: 10px;
-            }
-            .obs-area label { font-size: 10pt; color: #000 !important; }
-            textarea { 
-                border: 1px solid #000 !important; 
-                min-height: 40px; 
-                padding: 5px; 
-                font-size: 10pt;
-                resize: none !important; 
-            }
+    .logo-container {
+        text-align: left;
+        margin-bottom: 15px;
+        padding: 0 0 10px 0;
+        border-bottom: 2px solid #000;
+        display: flex;
+        align-items: center;
+        position: relative;
+    }
 
-            .obs-area.empty-print, .section.empty-print {
-                display: none !important;
-            }
+    /* PNG oculto como antes */
+    .logo-screen {
+        display: none !important;
+    }
 
-            /* --- MOSTRAR NOMBRE Y FIRMA AL IMPRIMIR --- */
-            .signature-box {
-                display: flex !important; /* Usamos flex para ponerlos lado a lado */
-                justify-content: space-between; /* Uno a la izquierda, otro a la derecha */
-                margin-top: 50px;
-                margin-bottom: 20px;
-                page-break-inside: avoid;
-                padding-left: 10px;
-                padding-right: 10px;
-            }
-            .signature-box div {
-                font-size: 14pt;
-                font-weight: bold;
-                color: #000 !important;
-            }
+    /* JPEG visible como antes */
+    .logo-print {
+        display: block !important;
+        max-width: 150px !important;
+        height: auto;
+        margin-right: 15px;
+    }
 
-            /* Fecha de impresión: elemento dinámico que se coloca en la esquina superior derecha */
-            .print-date {
-                display: block;
-                position: fixed;
-                top: 6mm; /* dentro de la página */
-                right: 6mm;
-                font-size: 10pt;
-                color: #000;
-                font-weight: bold;
-                z-index: 9999;
-            }
-        }
+    /* Título al estilo viejo */
+    .logo-container::after { 
+        content: "REPORTE Control de Calidad";
+        font-size: 15pt;
+        font-weight: bold;
+        margin-left: 10px;
+        display: block;
+        flex-grow: 1;
+    }
+
+    #print-date-display {
+        display: block !important;
+        position: absolute;
+        right: 0;
+        top: 0;
+        font-size: 10pt;
+        font-weight: bold;
+    }
+
+
+
+    /* --------------------------- */
+    /*   CABECERA DE INFORMACIÓN  */
+    /* --------------------------- */
+
+    .header-info {
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 5px;
+        border: 1px solid #000;
+        padding: 8px;
+        margin-bottom: 15px;
+        background: #fff !important;
+    }
+
+    .header-info label {
+        color: #000 !important;
+        font-size: 10pt;
+        font-weight: bold;
+        margin-bottom: 2px;
+    }
+
+
+
+    /* --------------------------- */
+    /*         SECCIONES           */
+    /* --------------------------- */
+
+    .section {
+        border: 1px solid #000 !important;
+        margin-bottom: 12px;
+        page-break-inside: avoid;
+        background: #fff !important;
+    }
+
+    .section-header {
+        border-bottom: 1px solid #000;
+        padding: 8px 10px;
+        background: #e0e0e0 !important;
+        font-size: 12pt;
+        font-weight: bold;
+        color: #000 !important;
+    }
+
+    .section-header.completed { 
+        background: #c8e6c9 !important;
+        color: #000 !important;
+    }
+
+    .status-indicator {
+        display: none !important;
+    }
+
+
+
+    /* --------------------------- */
+    /*           ADMIN             */
+    /* --------------------------- */
+
+    .admin-row { 
+        border-bottom: 1px solid #bbb;
+        padding: 8px 10px;
+        background: #fff !important;
+    }
+
+    .admin-question {
+        font-weight: bold;
+        color: #000 !important;
+        margin-bottom: 4px;
+        font-size: 10pt;
+    }
+
+    #devolucion-block, #corregido-block {
+        border: 1px solid #000 !important;
+        background: #fff !important;
+        padding: 5px;
+        margin-top: 6px;
+    }
+
+
+
+    /* --------------------------- */
+    /*          CHECKLIST          */
+    /* --------------------------- */
+
+    .checklist {
+        padding: 8px 12px;
+    }
+
+    /* Ocultamos los checkboxes reales */
+    .check-item input[type="checkbox"] {
+        display: none !important;
+    }
+
+    /* Ocultamos todos los items */
+    .check-item {
+        display: none !important;
+        border-bottom: 1px dotted #ccc;
+        padding: 4px 0;
+        font-size: 10pt;
+    }
+
+    /* Solo mostramos los marcados */
+    .check-item.is-checked-print {
+        display: block !important;
+    }
+
+    .check-item.is-checked-print label {
+        color: #000 !important;
+        font-weight: bold;
+    }
+
+    /* Icono estilo viejo pero limpio */
+    .check-item.is-checked-print label::before {
+        content: "☑ ";
+        font-size: 12pt;
+        margin-right: 4px;
+        font-weight: bold;
+    }
+
+
+
+    /* --------------------------- */
+    /*       ÁREA OBSERVACIONES    */
+    /* --------------------------- */
+
+    .obs-area {
+        border-top: 1px solid #000;
+        padding: 10px;
+        background: #fff !important;
+    }
+
+    .obs-area textarea {
+        border: 1px solid #000 !important;
+        padding: 5px;
+        min-height: 40px;
+        resize: none !important;
+        font-size: 10pt;
+        color: #000 !important;
+    }
+
+    .obs-area label {
+        font-size: 10pt;
+        font-weight: bold;
+        color: #000 !important;
+    }
+
+
+
+    /* Ocultar secciones vacías */
+    .obs-area.empty-print,
+    .section.empty-print {
+        display: none !important;
+    }
+
+
+
+    /* --------------------------- */
+    /*        NOMBRE / FIRMA       */
+    /* --------------------------- */
+
+    .signature-box {
+        display: flex !important;
+        justify-content: space-between;
+        margin-top: 40px;
+        margin-bottom: 20px;
+        padding: 0 10px;
+        page-break-inside: avoid;
+    }
+
+    .signature-box div {
+        font-size: 14pt;
+        font-weight: bold;
+        color: #000 !important;
+    }
+
+}
+
     </style>
 </head>
 <body>
@@ -791,12 +893,13 @@
 
 <div class="container">
     
-     <div class="logo-container">
-        <img src="assets/logo.png" class="logo-screen" alt="GAS Paint & Detail Logo" onerror="this.style.display='none'">
-        
-        
-        <div id="print-date-display"></div>
-    </div>
+<div class="logo-container">
+    <img src="assets/logo.png" class="logo-screen" alt="GAS Paint & Detail Logo" onerror="this.style.display='none'">
+    
+    <img src="assets/logo.jpeg" class="logo-print" alt="GAS Paint & Detail Logo (Impresión)" onerror="this.style.display='none'">
+    
+    <div id="print-date-display"></div>
+</div>
     
     <h1>Control de Calidad - GAS Paint</h1>
 
@@ -838,7 +941,7 @@
             <span class="admin-question">2.a. ¿Todos los servicios en la Orden verificables, se ejecutaron?</span>
             <div class="input-cluster">
                 <select id="sys-ejecutados" onchange="saveForm()">
-                    <option value="">Seleccione...</option>
+                    <option value="" selected disabled hidden>Seleccione...</option>>
                     <option value="SI">SÍ</option>
                     <option value="NO">NO</option>
                 </select>
@@ -2029,10 +2132,14 @@
 
         // 2) Carga valores guardados en localStorage y sincroniza con los pickers
         loadForm();
+        actualizarBloquesAdmin();
 
         // 3) Resto de listeners y comportamiento
         setupFocusListeners(); 
         updateAllSectionProgress(); // Inicializar barras de progreso
+
+document.getElementById("sys-ejecutados")
+    .addEventListener("change", actualizarBloquesAdmin);
 
         document.querySelectorAll("input, select, textarea").forEach(el => {
             el.addEventListener("input", (e) => {
@@ -2044,6 +2151,29 @@
                 updateAllSectionProgress();
             });
         });
+
+
+    function actualizarBloquesAdmin() {
+        const valor = document.getElementById("sys-ejecutados").value;
+
+        const devolucion = document.getElementById("devolucion-block");
+        const corregido = document.getElementById("corregido-block");
+
+    if (valor === "SI") {
+        // Ocultar ambos bloques
+        devolucion.style.display = "none";
+        corregido.style.display = "none";
+    } else if (valor === "NO") {
+        // Mostrar ambos bloques
+        devolucion.style.display = "block";
+        corregido.style.display = "block";
+    } else {
+        // Estado inicial (ni SI ni NO aún)
+        devolucion.style.display = "none";
+        corregido.style.display = "none";
+    }
+}
+
 
         // Ejecutar validación cada vez que los campos de devolución/corrección cambian (cuando no hay picker events por alguna razón)
         ["devuelto-date","devuelto-time","corregido-date","corregido-time"].forEach(id => {
