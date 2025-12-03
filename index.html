@@ -975,10 +975,16 @@
     <h1>Control de Calidad</h1>
 
     <div class="header-info">
-        <div class="form-group">
-            <label>Nº Orden de Trabajo:</label>
-            <input type="text" id="orderNum" class="uppercase-input" placeholder="Ej: OT-2025-001">
-        </div>
+        <div class="form-group input-cluster">
+    <label for="ot-number">Nº Orden de Trabajo:</label>
+    <div class="ot-container">
+        <span class="ot-prefix">OT-</span>
+        <input type="text" id="ot-number" name="ot-number" 
+               class="form-control" 
+               maxlength="4" pattern="\d{4}" 
+               required>
+    </div>
+</div>
         <div class="form-group">
             <label>Placa:</label>
             <input type="text" id="plate" class="uppercase-input" maxlength="9" placeholder="Ej: XYZ-1234">
