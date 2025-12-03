@@ -587,37 +587,7 @@
                 .history-modal .hm-close { text-align: center; margin-top: 16px; }
                 .history-modal .btn-close-history { background: transparent; border: 1px solid var(--border-dark); color: var(--text-light); padding: 10px 14px; border-radius: 6px; cursor: pointer; }
                 .history-modal .btn-close-history:hover { background: rgba(255,255,255,0.02); }
-/* --- FIX FINAL: ROMPER EL ESTILO READONLY EN MÓVILES --- */
-    
-    /* Usamos selectores muy específicos para el estado readonly */
-    input.flatpickr-input[readonly], 
-    .flatpickr-input[readonly], 
-    input[type="text"][readonly],
-    input[type="date"], 
-    input[type="time"] {
-        
-        /* 1. Forzar fondo blanco sobreponiendo cualquier estilo nativo */
-        background-color: #ffffff !important;
-        background: #ffffff !important;
-        
-        /* 2. Fix crítico para iOS (iPhone/iPad) que pone el texto gris */
-        -webkit-text-fill-color: #000000 !important;
-        color: #000000 !important;
-        
-        /* 3. Eliminar la apariencia de "burbuja" o "botón" nativa del móvil */
-        -webkit-appearance: none !important;
-        appearance: none !important;
-        
-        /* 4. Resetear opacidad (los móviles suelen poner 0.6 a los readonly) */
-        opacity: 1 !important;
-        
-        /* 5. Bordes definidos para que se vea que es un campo */
-        border: 1px solid #000000 !important;
-        border-radius: 0 !important; /* Quitar bordes redondos de iOS */
-        
-        /* 6. Eliminar sombras internas nativas */
-        box-shadow: none !important;
-    }
+
                 /* Responsive: en pantallas pequeñas colocamos el toast arriba y centrado */
                 @media (max-width: 900px), (max-height: 700px) {
                     .toast {
@@ -2228,4 +2198,3 @@ document.getElementById("sys-ejecutados")
 </body>
 
 </html>
-
