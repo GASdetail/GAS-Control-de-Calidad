@@ -671,10 +671,35 @@
     .section-index {
         display: none !important;
     }
-
+/* --- FIX ESPECÍFICO PARA FLATPICKR EN MÓVIL (IMPRESIÓN) --- */
+    
+    /* Forzar agresivamente que los inputs de fecha/hora sean blancos */
+    input.flatpickr-input, 
+    input.flatpickr-input[readonly], 
+    .flatpickr-mobile {
+        /* Fondo blanco puro obligado */
+        background-color: #ffffff !important;
+        background: #ffffff !important;
+        
+        /* Texto negro puro obligado */
+        color: #000000 !important;
+        -webkit-text-fill-color: #000000 !important; /* Truco vital para iOS/Safari */
+        
+        /* Eliminar apariencia nativa del móvil (burbuja gris/azul) */
+        -webkit-appearance: none !important;
+        appearance: none !important;
+        
+        /* Borde simple para que se vea como una caja de papel */
+        border: 1px solid #000000 !important;
+        border-radius: 0 !important;
+        
+        /* Eliminar sombras y opacidad que ponen los móviles */
+        box-shadow: none !important;
+        opacity: 1 !important;
+    }
     /* Alto contraste pero sin romper padding */
     body, .container, .section, .header-info,
-    input, select, textarea, label, span, div, p {
+    input, .flatpickr-calendar,.flat-date,.flat-time,.flatpickr-alt-input, .flatpickr-alt-input:hover,.flatpickr-alt-input:focus select, textarea, label, span, div, p {
         background: #fff !important;
         color: #000 !important;
         box-shadow: none !important;
@@ -2198,3 +2223,4 @@ document.getElementById("sys-ejecutados")
 </body>
 
 </html>
+
