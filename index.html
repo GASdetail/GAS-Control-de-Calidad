@@ -6,13 +6,11 @@
     <title>Formulario de Control de Calidad - GAS Paint & Detail</title>
 
     <link rel="icon" type="image/jpeg" href="assets/logo2.JPG">
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
 
     <style>
-        /* --- VARIABLES DE COLOR (Ajustadas para Dark Mode en Pantalla) --- */
+        /* --- VARIABLES DE COLOR --- */
         :root {
             --primary-dark: #202D3F; 
             --container-bg: #2c3e50; 
@@ -28,1047 +26,299 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--primary-dark);
-            margin: 0;
-            padding: 20px;
-            color: var(--text-light);
+            margin: 0; padding: 20px; color: var(--text-light);
             animation: fadePageIn 0.6s ease-out forwards;
         }
         .container {
-            max-width: 850px;
-            margin: 0 auto;
-            background: var(--container-bg);
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.4);
+            max-width: 850px; margin: 0 auto; background: var(--container-bg);
+            padding: 30px; border-radius: 8px; box-shadow: 0 8px 15px rgba(0,0,0,0.4);
         }
 
-        .logo-container {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .logo-container img {
-            max-width: 250px;
-            height: auto;
-            display: block;
-            margin: 0 auto;
-        }
-      /* --- CONFIGURACIÓN DE LOGOS (PANTALLA) --- */
-        /* Por defecto en pantalla se ve el PNG */
-        .logo-screen {
-            max-width: 250px;
-            height: auto;
-            display: block;
-            margin: 0 auto;
-        }
-        /* El JPEG de impresión está oculto en pantalla */
-        .logo-print {
-            display: none !important;
-        }
-
-        /* Ocultar fecha en pantalla */
-        #print-date-display { display: none; }
+        /* LOGOS */
+        .logo-container { text-align: center; margin-bottom: 20px; }
+        .logo-screen { max-width: 250px; height: auto; display: block; margin: 0 auto; }
+        .logo-print, #print-date-display { display: none; }
 
         h1 {
-            text-align: center;
-            color: var(--text-light);
-            border-bottom: 2px solid var(--primary-blue);
-            padding-bottom: 10px;
-            margin-top: 20px;
+            text-align: center; color: var(--text-light); border-bottom: 2px solid var(--primary-blue);
+            padding-bottom: 10px; margin-top: 20px;
         }
         
-        /* Estilos Generales y Secciones */
+        /* FORMULARIOS */
         .form-group { display: flex; flex-direction: column; margin-bottom: 10px; }
         .form-group label { font-weight: bold; margin-bottom: 5px; font-size: 0.9em; color: var(--text-muted); }
 
         input[type="text"], input[type="number"], select, input[type="date"], input[type="time"], textarea {
-            padding: 10px; 
-            border: 1px solid var(--border-dark);
-            border-radius: 4px; 
-            font-size: 14px;
-            background-color: var(--input-bg);
-            color: var(--text-light);
-            font-family: inherit;
-            line-height: 1.5;
+            padding: 10px; border: 1px solid var(--border-dark); border-radius: 4px; 
+            font-size: 14px; background-color: var(--input-bg); color: var(--text-light);
+            font-family: inherit; line-height: 1.5;
         }
-        /* Touch-friendly tap targets on mobile */
         @media (max-width: 900px), (max-height: 700px) {
             input[type="text"], input[type="number"], select, input[type="date"], input[type="time"], textarea {
-                min-height: 44px;
-                padding: 12px;
-                font-size: 16px;
-                line-height: 1.6;
+                min-height: 44px; padding: 12px; font-size: 16px; line-height: 1.6;
             }
         }
-        
         .uppercase-input { text-transform: uppercase; } 
         textarea { resize: vertical; min-height: 60px; } 
         select option { background: var(--input-bg); color: var(--text-light); }
 
         .header-info {
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
-            gap: 15px; 
-            margin-bottom: 20px;
-            background: var(--input-bg);
-            padding: 15px; 
-            border-radius: 5px;
-            border: 1px solid var(--border-dark);
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+            gap: 15px; margin-bottom: 20px; background: var(--input-bg);
+            padding: 15px; border-radius: 5px; border: 1px solid var(--border-dark);
         }
-        .header-info label {
-            color: var(--text-light) !important;
-            font-weight: 600;
-        }
+        .header-info label { color: var(--text-light) !important; font-weight: 600; }
+
+        /* SECCIONES */
         .section {
-            border: 1px solid var(--border-dark); 
-            border-radius: 8px; 
-            margin-bottom: 25px; 
-            overflow: hidden;
-            background: var(--input-bg);
-            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            position: relative;
+            border: 1px solid var(--border-dark); border-radius: 8px; margin-bottom: 25px; 
+            overflow: hidden; background: var(--input-bg); transition: all 0.3s; position: relative;
         }
         .section::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: var(--border-dark);
-            transition: background 0.3s ease;
+            content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+            background: var(--border-dark); transition: background 0.3s ease;
         }
-        .section:hover { 
-            box-shadow: 0 8px 24px rgba(0, 123, 255, 0.2);
-            border-color: var(--primary-blue);
-            transform: translateY(-2px);
-        }
-        .section:hover::before {
-            background: var(--primary-blue);
-        }
-        .section.active-section::before {
-            background: var(--success);
-        }
-        
-        /* Resaltado de la sección activa */
-        .section.active-section {
-            box-shadow: 0 0 15px 3px rgba(0, 123, 255, 0.6); 
-            border-color: var(--primary-blue);
-        }
+        .section:hover { box-shadow: 0 8px 24px rgba(0, 123, 255, 0.2); border-color: var(--primary-blue); transform: translateY(-2px); }
+        .section:hover::before { background: var(--primary-blue); }
+        .section.active-section { box-shadow: 0 0 15px 3px rgba(0, 123, 255, 0.6); border-color: var(--primary-blue); }
+        .section.active-section::before { background: var(--success); }
 
-        /* Indicador de progreso */
-        .progress-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary-blue) 0%, var(--success) 100%);
-            z-index: 9999;
-            transition: width 0.3s ease;
-        }
-
-        /* Barra de progreso individual por sección */
-        .section-progress-bar {
-            height: 3px;
-            background: linear-gradient(90deg, var(--border-dark) 0%, var(--border-dark) 100%);
-            margin-top: 10px;
-            border-radius: 2px;
-            overflow: hidden;
-        }
-
-        .section-progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary-blue) 0%, var(--success) 100%);
-            width: 0%;
-            transition: width 0.3s ease;
-        }
+        .section-progress-bar { height: 3px; background: var(--border-dark); margin-top: 10px; border-radius: 2px; overflow: hidden; }
+        .section-progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary-blue) 0%, var(--success) 100%); width: 0%; transition: width 0.3s ease; }
 
         .section-header {
             background: linear-gradient(90deg, var(--primary-dark) 0%, rgba(0, 123, 255, 0.05) 100%);
-            color: var(--text-light); 
-            padding: 16px 15px; 
-            font-weight: 700; 
-            display: flex;
-            justify-content: space-between; 
-            align-items: center; 
-            font-size: 1.1em;
-            transition: all 0.3s ease;
-            letter-spacing: 0.3px;
+            color: var(--text-light); padding: 16px 15px; font-weight: 700; 
+            display: flex; justify-content: space-between; align-items: center; font-size: 1.1em;
         }
-        .section:hover .section-header {
-            background: linear-gradient(90deg, var(--primary-dark) 0%, rgba(0, 123, 255, 0.1) 100%);
-        }
-        .status-indicator {
-            background: var(--border-dark);
-            color: white; 
-            padding: 5px 15px; 
-            border-radius: 20px; 
-            font-size: 0.8em;
-            transition: background-color 0.3s;
-        }
-        .section-header.completed { 
-            background-color: var(--success) !important; 
-            color: white !important; 
-            border-bottom: 1px solid var(--success); 
-        }
-        .section-header.completed .status-indicator { 
-            background: white !important; 
-            color: var(--success) !important; 
-        }
+        .status-indicator { background: var(--border-dark); color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.8em; transition: background 0.3s; }
+        .section-header.completed { background-color: var(--success) !important; color: white !important; border-bottom: 1px solid var(--success); }
+        .section-header.completed .status-indicator { background: white !important; color: var(--success) !important; }
 
-        /* Estilos Administrativos */
-        .admin-row { 
-            padding: 15px; 
-            border-bottom: 1px solid var(--border-dark); 
-            background-color: var(--input-bg); 
-        }
-        .admin-question { 
-            font-weight: 600; 
-            color: var(--text-light); 
-            margin-bottom: 10px; 
-            display: block; 
-        }
+        /* ADMIN & ERRORES */
+        .admin-row { padding: 15px; border-bottom: 1px solid var(--border-dark); background-color: var(--input-bg); }
+        .admin-question { font-weight: 600; color: var(--text-light); margin-bottom: 10px; display: block; }
         .input-cluster { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
         .sub-note { font-size: 0.85em; color: var(--text-muted); margin-top: 5px; font-style: italic; }
-        .highlight-box { 
-            padding: 10px; 
-            border-radius: 4px; 
-            margin-top: 10px; 
-            border: 1px solid; 
-        }
-        
+        .highlight-box { padding: 10px; border-radius: 4px; margin-top: 10px; border: 1px solid; }
         #devolucion-block { background-color: #5d4037; border-color: #8d6e63; color: var(--text-light); }
         #corregido-block { background-color: #004d40; border-color: #26a69a; color: var(--text-light); }
         #devolucion-block .sub-note, #corregido-block .sub-note { color: var(--text-light); }
-
-        /* Error / validación */
         .input-invalid { border-color: var(--error) !important; box-shadow: 0 0 8px rgba(231,76,60,0.25); }
         .error-text { color: var(--error); font-size: 0.85em; margin-top: 6px; display: none; }
         .error-text.visible { display: block; }
 
-        /* --- REGLAS PARA FLATPICKR (Dark mode) --- */
-        .flatpickr-input,
-        input.flatpickr-input,
-        .flatpickr-alt-input {
-            background-color: var(--input-bg) !important;
-            color: var(--text-light) !important;
-            border: 1px solid var(--border-dark) !important;
-            padding: 10px !important;
-            border-radius: 4px !important;
-            box-sizing: border-box !important;
-        }
-        .flatpickr-input::placeholder,
-        .flatpickr-alt-input::placeholder {
-            color: var(--text-muted) !important;
-            opacity: 0.9;
-        }
-        .flatpickr-input:hover,
-        .flatpickr-input:focus,
-        .flatpickr-alt-input:hover,
-        .flatpickr-alt-input:focus {
-            background-color: var(--input-bg) !important;
-            color: var(--text-light) !important;
-            outline: none !important;
-            box-shadow: 0 0 0 4px rgba(0,123,255,0.06) !important;
-        }
+        /* FLATPICKR */
+        .flatpickr-input, input.flatpickr-input, .flatpickr-alt-input { background-color: var(--input-bg) !important; color: var(--text-light) !important; border: 1px solid var(--border-dark) !important; padding: 10px !important; border-radius: 4px !important; }
+        .flatpickr-calendar { background: var(--input-bg) !important; border: 1px solid var(--border-dark) !important; box-shadow: 0 8px 20px rgba(0,0,0,0.5) !important; }
+        .flatpickr-months, .flatpickr-weekdays { background: var(--primary-dark) !important; }
+        .flatpickr-day { color: var(--text-light) !important; }
+        .flatpickr-day.selected { background: var(--primary-blue) !important; border-color: var(--primary-blue) !important; color: white !important; }
+        /* Iconos Flatpickr Mobile */
+        .flat-date, .flat-date + input { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23bdc3c7' viewBox='0 0 24 24'%3E%3Cpath d='M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm-8 4H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z'/%3E%3C/svg%3E") !important; background-repeat: no-repeat !important; background-position: right 15px center !important; background-size: 20px !important; padding-right: 35px !important; }
+        .flat-time, .flat-time + input { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23bdc3c7' viewBox='0 0 24 24'%3E%3Cpath d='M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z'/%3E%3C/svg%3E") !important; background-repeat: no-repeat !important; background-position: right 15px center !important; background-size: 20px !important; padding-right: 35px !important; }
+        ::placeholder { color: #bdc3c7 !important; opacity: 1 !important; }
+        @media (max-width: 600px) { .input-cluster { flex-direction: row; flex-wrap: wrap; } .input-cluster input { min-width: 130px !important; flex-grow: 1; } }
 
-        .flatpickr-time input {
-            background-color: var(--input-bg) !important;
-            color: var(--text-light) !important;
-            border: 1px solid var(--border-dark) !important;
-        }
+        /* OBSERVACIONES */
+        .obs-area { padding: 15px; border-top: 1px dashed var(--border-dark); background-color: rgba(0,0,0,0.1); display: flex; flex-direction: column; }
+        .obs-area textarea { width: 100%; box-sizing: border-box; }
 
-        .input-cluster .flatpickr-input,
-        .input-cluster input.flatpickr-input,
-        .input-cluster .flatpickr-alt-input {
-            background-color: var(--input-bg) !important;
-            color: var(--text-light) !important;
-        }
-
-        /* Dark theme para flatpickr calendar */
-        .flatpickr-calendar {
-            background: var(--input-bg) !important;
-            border: 1px solid var(--border-dark) !important;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.5) !important;
-        }
-        .flatpickr-calendar.open {
-            background: var(--input-bg) !important;
-        }
-        .flatpickr-months {
-            background: var(--primary-dark) !important;
-        }
-        .flatpickr-months .flatpickr-month {
-            background: var(--primary-dark) !important;
-            color: var(--text-light) !important;
-        }
-        .flatpickr-months .flatpickr-prev-month,
-        .flatpickr-months .flatpickr-next-month {
-            color: var(--primary-blue) !important;
-            fill: var(--primary-blue) !important;
-        }
-        .flatpickr-months .flatpickr-prev-month:hover,
-        .flatpickr-months .flatpickr-next-month:hover {
-            color: var(--text-light) !important;
-            fill: var(--text-light) !important;
-        }
-        .flatpickr-weekdays {
-            background: var(--primary-dark) !important;
-        }
-        .flatpickr-weekday {
-            background: var(--primary-dark) !important;
-            color: var(--text-muted) !important;
-            font-weight: 600;
-        }
-        .flatpickr-days {
-            background: var(--input-bg) !important;
-        }
-        .flatpickr-day {
-            color: var(--text-light) !important;
-            background: transparent;
-            border: 1px solid transparent;
-        }
-        .flatpickr-day:hover,
-        .flatpickr-day.prevMonthDay:hover,
-        .flatpickr-day.nextMonthDay:hover,
-        .flatpickr-day.disabled:hover,
-        .flatpickr-day.disabled.prevMonthDay:hover,
-        .flatpickr-day.disabled.nextMonthDay:hover {
-            background: var(--primary-blue) !important;
-            color: white !important;
-            border-color: var(--primary-blue) !important;
-        }
-        .flatpickr-day.today {
-            border-color: var(--success) !important;
-            color: var(--success) !important;
-            background: transparent !important;
-        }
-        .flatpickr-day.today:hover {
-            border-color: var(--success) !important;
-            background: var(--success) !important;
-            color: white !important;
-        }
-        .flatpickr-day.selected,
-        .flatpickr-day.startRange,
-        .flatpickr-day.endRange,
-        .flatpickr-day.selected.inRange {
-            background: var(--primary-blue) !important;
-            border-color: var(--primary-blue) !important;
-            color: white !important;
-        }
-        .flatpickr-day.inRange {
-            background: rgba(0, 123, 255, 0.25) !important;
-            border-color: rgba(0, 123, 255, 0.25) !important;
-            color: var(--text-light) !important;
-        }
-        .flatpickr-day.prevMonthDay,
-        .flatpickr-day.nextMonthDay {
-            color: var(--text-muted) !important;
-            background: rgba(0,0,0,0.1) !important;
-        }
-        .flatpickr-day.disabled {
-            color: var(--text-muted) !important;
-            background: rgba(0,0,0,0.2) !important;
-            cursor: not-allowed;
-        }
-        /* Time picker styling */
-        .flatpickr-time {
-            border-top: 1px solid var(--border-dark) !important;
-            background: var(--primary-dark) !important;
-        }
-        .flatpickr-time input,
-        .flatpickr-time .flatpickr-am-pm {
-            background: var(--input-bg) !important;
-            color: var(--text-light) !important;
-        }
-        .flatpickr-time .flatpickr-am-pm:hover,
-        .flatpickr-time .numInputWrapper span:hover {
-            background: var(--primary-blue) !important;
-            color: white !important;
-        }
-/* --- Flatpickr DARK para el selector de meses --- */
-.flatpickr-monthDropdown-months,
-.flatpickr-current-month input.cur-year {
-    background: #2c3e50 !important;
-    color: #ecf0f1 !important;
-    border: 1px solid #495a6b !important;
-}
-
-/* Opciones del dropdown */
-.flatpickr-monthDropdown-months option {
-    background: #2c3e50 !important;
-    color: #ecf0f1 !important;
-}
-
-/* Flechitas de navegación */
-.flatpickr-prev-month,
-.flatpickr-next-month {
-    fill: #ecf0f1 !important;
-    color: #ecf0f1 !important;
-}
-
-        /* Área de observaciones dentro de secciones */
-        .obs-area {
-            padding: 15px;
-            border-top: 1px dashed var(--border-dark);
-            background-color: rgba(0,0,0,0.1);
-            display: flex; 
-            flex-direction: column; 
-        }
-        .obs-area textarea {
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-
-        /* CHECKLIST - Pantalla */
-        .checklist { padding: 18px; }
+        /* --- NUEVO CSS: CHECKLIST DE DOBLE OPCIÓN --- */
+        .checklist { padding: 10px 18px; }
+        
         .check-item {
             display: flex;
-            align-items: center;
+            flex-direction: column; /* Columna para que la caja de texto baje */
             padding: 12px 0;
             border-bottom: 1px solid var(--border-dark); 
             transition: 0.25s ease;
         }
         .check-item:last-child { border-bottom: none; }
-        .check-item:hover { transform: translateX(5px); background: rgba(255, 255, 255, 0.05); color: var(--text-light); }
-        .check-item:hover label { color: var(--text-light); }
+        .check-item:hover { transform: translateX(5px); background: rgba(255, 255, 255, 0.05); }
 
+        /* Wrapper para la fila de checkboxes y label */
+        .check-row-wrapper { display: flex; align-items: center; width: 100%; }
 
+        /* Estilo base checkboxes */
         .check-item input[type="checkbox"] {
-            width: 22px; height: 22px; border: 2px solid var(--border-dark); border-radius: 6px; margin-right: 12px;
-            cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            background-color: var(--input-bg);
-            appearance: none; -webkit-appearance: none;
+            width: 22px; height: 22px; min-width: 22px;
+            border: 2px solid var(--border-dark); border-radius: 6px; margin-right: 10px;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            background-color: var(--input-bg); appearance: none; -webkit-appearance: none;
+            transition: all 0.2s;
         }
-        .check-item input[type="checkbox"]:hover {
-            border-color: var(--primary-blue);
-            box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
-        }
-        .check-item input[type="checkbox"]:checked {
-            background: linear-gradient(135deg, var(--success) 0%, #1e8449 100%); border-color: var(--success); box-shadow: 0 0 12px rgba(39, 174, 96, 0.6); animation: pulseCheck .3s ease-out;
-        }
-        .check-item input[type="checkbox"]:checked::after { content: "✔"; color: white; font-size: 14px; font-weight: bold; }
 
-        /* Botones mejorados con iconos */
+        /* CHECKBOX VERDE (OK) */
+        .check-pass:hover { border-color: var(--success); box-shadow: 0 0 8px rgba(39, 174, 96, 0.4); }
+        .check-pass:checked {
+            background: linear-gradient(135deg, var(--success) 0%, #1e8449 100%);
+            border-color: var(--success); box-shadow: 0 0 12px rgba(39, 174, 96, 0.6);
+            animation: pulseCheck .3s ease-out;
+        }
+        .check-pass:checked::after { content: "✔"; color: white; font-size: 14px; font-weight: bold; }
+
+        /* CHECKBOX ROJO (FAIL) - NUEVO */
+        .check-fail { border-color: #7f8c8d !important; margin-right: 15px !important; } /* Gris por defecto para diferenciar */
+        .check-fail:hover { border-color: var(--error) !important; box-shadow: 0 0 8px rgba(231, 76, 60, 0.4); }
+        .check-fail:checked {
+            background: linear-gradient(135deg, var(--error) 0%, #c0392b 100%);
+            border-color: var(--error) !important; box-shadow: 0 0 12px rgba(231, 76, 60, 0.6);
+            animation: pulseCheck .3s ease-out;
+        }
+        .check-fail:checked::after { content: "✖"; color: white; font-size: 14px; font-weight: bold; }
+
+        .check-row-wrapper label { color: var(--text-light); cursor: pointer; flex: 1; }
+
+        /* CAJA DE OBSERVACIÓN ESPECÍFICA (Oculta por defecto) */
+        .specific-obs {
+            display: none; width: 100%; margin-top: 8px; padding-left: 65px; /* Sangría */
+            box-sizing: border-box; animation: slideDown 0.2s ease-out;
+        }
+        .specific-obs.visible { display: block; }
+        .specific-obs input {
+            width: 95%; padding: 8px; border: 1px solid var(--error);
+            background-color: rgba(231, 76, 60, 0.1); color: #ffcccc; font-size: 0.9em;
+        }
+        .specific-obs input::placeholder { color: #e59898; }
+
+        @keyframes pulseCheck { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* BOTONES & UI */
         .button-group { display: flex; gap: 10px; margin-top: 30px; }
-        .btn-submit, .btn-clear { flex-grow: 1; padding: 15px; border: none; border-radius: 6px; font-size: 1.1em; font-weight: 600; cursor: pointer; color: white; transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); display: flex; align-items: center; justify-content: center; gap: 8px; letter-spacing: 0.5px; }
+        .btn-submit, .btn-clear { flex-grow: 1; padding: 15px; border: none; border-radius: 6px; font-size: 1.1em; font-weight: 600; cursor: pointer; color: white; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .btn-submit { background: linear-gradient(135deg, var(--primary-blue) 0%, #0056b3 100%); box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3); }
         .btn-clear { background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3); }
         .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0, 123, 255, 0.5); }
         .btn-clear:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(231, 76, 60, 0.5); }
-        .btn-submit:active, .btn-clear:active { transform: translateY(0); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); }
-        .btn-submit:focus, .btn-clear:focus { outline: 2px solid var(--success); outline-offset: 2px; }
-        .btn-submit::before { content: '🖨️'; font-size: 1.2em; }
-        .btn-clear::before { content: '🗑️'; font-size: 1.2em; }
+        .btn-submit::before { content: '🖨️'; font-size: 1.2em; } .btn-clear::before { content: '🗑️'; font-size: 1.2em; }
+        .btn-submit[disabled] { opacity: 0.6; cursor: not-allowed; box-shadow: none; }
 
-        .btn-submit[disabled] {
-            opacity: 0.6;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
+        /* INDICADOR GUARDADO */
+        #save-indicator { position: fixed; top: 20px; right: 20px; background-color: var(--success); color: white; padding: 8px 15px; border-radius: 5px; opacity: 0; transition: opacity 0.5s; font-weight: bold; box-shadow: 0 4px 8px rgba(0,0,0,0.3); z-index: 1000; }
 
-        /* Touch-friendly button sizing */
-        @media (max-width: 900px), (max-height: 700px) {
-            .btn-submit, .btn-clear {
-                min-height: 48px;
-                padding: 12px;
-                font-size: 1.1em;
-            }
-        }
-/* --- CORRECCIÓN VISUAL PARA FECHAS Y HORAS (MÓVIL) --- */
+        /* TOASTS (MANTENIDOS INTACTOS) */
+        .toast-container { position: fixed; right: 20px; bottom: 20px; z-index: 10001; display: flex; flex-direction: column; gap: 10px; align-items: flex-end; pointer-events: none; }
+        .toast { pointer-events: auto; display:flex; align-items:flex-start; gap:10px; padding: 12px 14px; border-radius: 10px; background: rgba(0,0,0,0.88); color: #fff; box-shadow: 0 6px 20px rgba(0,0,0,0.45); min-width: 240px; max-width: 420px; transform: translateY(10px); animation: toastIn .35s ease forwards; }
+        .toast.success { border-left: 6px solid #2ecc71; } .toast.error { border-left: 6px solid #e74c3c; } .toast.info { border-left: 6px solid #3498db; } .toast.warning { border-left: 6px solid #f1c40f; }
+        .toast .icon { font-size: 18px; line-height: 1; margin-top: 2px; }
+        .toast .content { display: flex; flex-direction: column; }
+        .toast .title { font-weight: 700; margin-bottom: 4px; }
+        .toast .message { white-space: pre-line; font-size: 0.95rem; color: #f5f7f9; }
+        .toast .close { background: transparent; border: none; color: inherit; font-size: 16px; cursor: pointer; margin-left: 8px; padding: 4px; border-radius: 6px; }
+        .toast-actions { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+        .toast-action-btn { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: #fff; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; cursor: pointer; }
+        @keyframes toastIn { from { opacity: 0; transform: translateY(15px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes toastOut { from { opacity: 1; transform: translateX(0) translateY(0) scale(1); } to { opacity: 0; transform: translateX(120%) translateY(-5px) scale(0.95); } }
+        @keyframes toastPulse { 0% { transform: scale(1); } 50% { transform: scale(1.04); } 100% { transform: scale(1); } }
+        @media (max-width: 900px), (max-height: 700px) { .toast-container { left: 50% !important; right: auto !important; bottom: auto !important; top: env(safe-area-inset-top,20px); transform: translateX(-50%); align-items: center; } .toast { width: calc(100% - 40px); max-width: calc(100% - 40px); } }
+        @media print { .toast-container { display: none !important; } }
 
-/* 1. Añadir iconos de fondo SVG (Calendario y Reloj) en color gris claro */
-.flat-date, .flat-date + input {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23bdc3c7' viewBox='0 0 24 24'%3E%3Cpath d='M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm-8 4H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z'/%3E%3C/svg%3E") !important;
-    background-repeat: no-repeat !important;
-    background-position: right 15px center !important; /* Icono a la derecha */
-    background-size: 20px !important;
-    padding-right: 35px !important; /* Espacio para que el texto no tape el icono */
-}
+        /* MODALES */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(2,6,23,0.6); display: flex; align-items: center; justify-content: center; z-index: 20000; }
+        .confirm-dialog { background: var(--container-bg); color: var(--text-light); padding: 20px; border-radius: 10px; width: 92%; max-width: 520px; box-shadow: 0 12px 30px rgba(0,0,0,0.6); border: 1px solid var(--border-dark); animation: modalIn .22s cubic-bezier(.2,.9,.2,1) both; }
+        .confirm-dialog .cd-title { font-size: 1.05rem; font-weight: 800; margin-bottom: 8px; }
+        .confirm-dialog .cd-message { color: var(--text-muted); margin-bottom: 16px; }
+        .confirm-dialog .cd-actions { display: flex; gap: 10px; justify-content: flex-end; }
+        .confirm-dialog .btn-cancel { background: transparent; border: 1px solid var(--border-dark); color: var(--text-light); padding: 10px 14px; border-radius: 6px; cursor: pointer; }
+        .confirm-dialog .btn-confirm { background: var(--error); color: white; border: none; padding: 10px 14px; border-radius: 6px; cursor: pointer; }
+        .history-modal { background: var(--container-bg); color: var(--text-light); padding: 20px; border-radius: 10px; width: 92%; max-width: 520px; box-shadow: 0 12px 30px rgba(0,0,0,0.6); border: 1px solid var(--border-dark); animation: modalIn .22s cubic-bezier(.2,.9,.2,1) both; }
+        .history-modal .hm-list li { padding: 10px; margin-bottom: 8px; background: rgba(0,0,0,0.2); border-radius: 6px; display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; }
+        .history-modal .hm-restore { background: var(--success); color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; }
+        .history-modal .btn-close-history { background: transparent; border: 1px solid var(--border-dark); color: var(--text-light); padding: 10px 14px; border-radius: 6px; cursor: pointer; }
+        @keyframes modalIn { from { opacity: 0; transform: translateY(8px) scale(.995); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
-.flat-time, .flat-time + input {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23bdc3c7' viewBox='0 0 24 24'%3E%3Cpath d='M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z'/%3E%3C/svg%3E") !important;
-    background-repeat: no-repeat !important;
-    background-position: right 15px center !important;
-    background-size: 20px !important;
-    padding-right: 35px !important;
-}
+        /* FOOTER & FIRMA */
+        .footer-info { text-align: center; margin-top: 40px; padding: 20px 15px; border-top: 2px solid var(--border-dark); font-size: 0.85em; color: var(--text-muted); background: linear-gradient(180deg, transparent 0%, rgba(0, 123, 255, 0.03) 100%); border-radius: 8px; }
+        .hover-underline { font-size: 1em; color: var(--text-muted); position: relative; display: inline-block; cursor: default; }
+        .hover-underline::after { content: ''; position: absolute; width: 100%; height: 1px; background: linear-gradient(to right, var(--primary-blue), var(--success)); bottom: -3px; left: 0; transform: scaleX(0); transform-origin: right; transition: transform 0.4s ease-out; }
+        .hover-underline:hover { color: var(--text-light); } .hover-underline:hover::after { transform: scaleX(1); }
 
-/* 2. Hacer el texto de ayuda (placeholder) mucho más visible */
-::placeholder {
-    color: #bdc3c7 !important; /* Color gris claro */
-    opacity: 1 !important;     /* Opacidad al 100% */
-    font-weight: normal;
-}
-
-/* 3. Ajuste específico para móviles: Que los campos no sean tan pequeños */
-@media (max-width: 600px) {
-    .input-cluster {
-        flex-direction: row; /* Mantener en fila */
-        flex-wrap: wrap;     /* Permitir que bajen si no caben */
-    }
-    
-    .input-cluster input.flat-date,
-    .input-cluster input.flat-time,
-    .input-cluster .flatpickr-input {
-        min-width: 130px !important; /* Ancho mínimo para leer DD/MM/YYYY */
-        flex-grow: 1;                /* Que ocupen el espacio disponible */
-    }
-}
-        /* INDICADOR DE GUARDADO */
-        #save-indicator {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background-color: var(--success);
-            color: white;
-            padding: 8px 15px;
-            border-radius: 5px;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-            font-weight: bold;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-            z-index: 1000;
-        }
-                /* Toast container + alerts (modern, non-blocking) */
-                .toast-container { position: fixed; right: 20px; bottom: 20px; z-index: 10001; display: flex; flex-direction: column; gap: 10px; align-items: flex-end; pointer-events: none; }
-                .toast { pointer-events: auto; display:flex; align-items:flex-start; gap:10px; padding: 12px 14px; border-radius: 10px; background: rgba(0,0,0,0.88); color: #fff; box-shadow: 0 6px 20px rgba(0,0,0,0.45); min-width: 240px; max-width: 420px; transform: translateY(10px); animation: toastIn .35s ease forwards; }
-                .toast.success { border-left: 6px solid #2ecc71; }
-                .toast.error { border-left: 6px solid #e74c3c; }
-                .toast.info { border-left: 6px solid #3498db; }
-                .toast.warning { border-left: 6px solid #f1c40f; }
-                .toast .icon { font-size: 18px; line-height: 1; margin-top: 2px; }
-                .toast .content { display: flex; flex-direction: column; }
-                .toast .title { font-weight: 700; margin-bottom: 4px; }
-                .toast .message { white-space: pre-line; font-size: 0.95rem; color: #f5f7f9; }
-                .toast .close { background: transparent; border: none; color: inherit; font-size: 16px; cursor: pointer; margin-left: 8px; padding: 4px; border-radius: 6px; }
-                .toast:focus { outline: none; box-shadow: 0 0 0 4px rgba(52,152,219,0.12); }
-
-                @keyframes toastIn { from { opacity: 0; transform: translateY(15px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
-                @keyframes toastOut { from { opacity: 1; transform: translateX(0) translateY(0) scale(1); } to { opacity: 0; transform: translateX(120%) translateY(-5px) scale(0.95); } }
-                @keyframes toastPulse { 0% { transform: scale(1); } 50% { transform: scale(1.04); } 100% { transform: scale(1); } }
-
-                /* Responsive: in small screens move container to top-center and full width minus margin */
-                @media (max-width: 900px), (max-height: 700px) {
-                    .toast-container { left: 50% !important; right: auto !important; bottom: auto !important; top: env(safe-area-inset-top,20px); transform: translateX(-50%); align-items: center; }
-                    .toast { width: calc(100% - 40px); max-width: calc(100% - 40px); }
-                }
-
-
-                /* Hide toasts when printing */
-                @media print { .toast-container { display: none !important; } }
-
-                /* Confirmation modal (clean form) */
-                .modal-overlay { position: fixed; inset: 0; background: rgba(2,6,23,0.6); display: flex; align-items: center; justify-content: center; z-index: 20000; }
-                .confirm-dialog { background: var(--container-bg); color: var(--text-light); padding: 20px; border-radius: 10px; width: 92%; max-width: 520px; box-shadow: 0 12px 30px rgba(0,0,0,0.6); border: 1px solid var(--border-dark); animation: modalIn .22s cubic-bezier(.2,.9,.2,1) both; }
-                .confirm-dialog.animate-out { animation: modalOut .18s ease both; }
-                .confirm-dialog .cd-title { font-size: 1.05rem; font-weight: 800; margin-bottom: 8px; }
-                .confirm-dialog .cd-message { color: var(--text-muted); margin-bottom: 16px; }
-                .confirm-dialog .cd-actions { display: flex; gap: 10px; justify-content: flex-end; }
-                .confirm-dialog .btn-cancel { background: transparent; border: 1px solid var(--border-dark); color: var(--text-light); padding: 10px 14px; border-radius: 6px; cursor: pointer; }
-                .confirm-dialog .btn-confirm { background: var(--error); color: white; border: none; padding: 10px 14px; border-radius: 6px; cursor: pointer; }
-                .confirm-dialog .btn-confirm:hover { background: #c0392b; }
-                .confirm-dialog .btn-cancel:hover { background: rgba(255,255,255,0.02); }
-
-                @keyframes modalIn { from { opacity: 0; transform: translateY(8px) scale(.995); } to { opacity: 1; transform: translateY(0) scale(1); } }
-                @keyframes modalOut { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(8px) scale(.995); } }
-
-                /* Toast action buttons */
-                .toast-actions { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
-                .toast-action-btn { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: #fff; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; cursor: pointer; }
-                .toast-action-btn:hover { background: rgba(255,255,255,0.25); }
-                .toast-action-btn:focus { outline: 1px solid #fff; }
-
-                /* History modal */
-                .history-modal { background: var(--container-bg); color: var(--text-light); padding: 20px; border-radius: 10px; width: 92%; max-width: 520px; box-shadow: 0 12px 30px rgba(0,0,0,0.6); border: 1px solid var(--border-dark); animation: modalIn .22s cubic-bezier(.2,.9,.2,1) both; }
-                .history-modal.animate-out { animation: modalOut .18s ease both; }
-                .history-modal .hm-title { font-size: 1.05rem; font-weight: 800; margin-bottom: 16px; }
-                .history-modal .hm-list { list-style: none; padding: 0; margin: 0; max-height: 300px; overflow-y: auto; }
-                .history-modal .hm-list li { padding: 10px; margin-bottom: 8px; background: rgba(0,0,0,0.2); border-radius: 6px; display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; }
-                .history-modal .hm-restore { background: var(--success); color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.85rem; }
-                .history-modal .hm-restore:hover { background: #1e8449; }
-                .history-modal .hm-close { text-align: center; margin-top: 16px; }
-                .history-modal .btn-close-history { background: transparent; border: 1px solid var(--border-dark); color: var(--text-light); padding: 10px 14px; border-radius: 6px; cursor: pointer; }
-                .history-modal .btn-close-history:hover { background: rgba(255,255,255,0.02); }
-
-                /* Responsive: en pantallas pequeñas colocamos el toast arriba y centrado */
-                @media (max-width: 900px), (max-height: 700px) {
-                    .toast {
-                        left: 50% !important;
-                        right: auto !important;
-                        transform: translateX(-50%);
-                        width: calc(100% - 40px);
-                        bottom: auto !important;
-                        top: 20px !important;
-                        font-size: 0.95rem;
-                    }
-                    body { line-height: 1.6; }
-                    textarea { line-height: 1.6; }
-                    .check-item label { line-height: 1.6; }
-                    .admin-question { line-height: 1.6; }
-                }
-        
-        /* Estilos del Pie de Página */
-        .footer-info {
-            text-align: center;
-            margin-top: 40px;
-            padding: 20px 15px;
-            border-top: 2px solid var(--border-dark);
-            font-size: 0.85em;
-            color: var(--text-muted);
-            background: linear-gradient(180deg, transparent 0%, rgba(0, 123, 255, 0.03) 100%);
-            border-radius: 8px;
-        }
-
-        /* ESTILOS DEL SUBRAYADO DE TEXTO ADAPTADO */
-        .hover-underline {
-            font-size: 1em; 
-            color: var(--text-muted);
-            position: relative;
-            display: inline-block;
-            cursor: default;
-        }
-
-        .hover-underline::after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 1px;
-            background: linear-gradient(to right, var(--primary-blue), var(--success)); 
-            bottom: -3px; 
-            left: 0;
-            transform: scaleX(0);
-            transform-origin: right;
-            transition: transform 0.4s ease-out;
-        }
-
-        .hover-underline:hover {
-            color: var(--text-light);
-        }
-
-        .hover-underline:hover::after {
-            transform: scaleX(1);
-        }
-        
-        /* --- ESTILOS PARA FIRMA DIGITAL --- */
-        .signature-pad-wrapper {
-            background-color: var(--input-bg);
-            border: 1px solid var(--border-dark);
-            border-radius: 8px;
-            padding: 10px;
-            margin-top: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .signature-pad-body {
-            position: relative;
-            width: 100%;
-            max-width: 600px; /* Ancho máximo de la firma */
-            height: 200px;
-            background-color: #fff; /* Fondo blanco para que se vea bien al imprimir */
-            border-radius: 4px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-            touch-action: none; /* Importante: evita que el celular haga scroll al firmar */
-        }
-
-        canvas#signature-pad {
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
-
-        .signature-actions {
-            margin-top: 10px;
-            width: 100%;
-            max-width: 600px;
-            display: flex;
-            justify-content: flex-end;
-        }
-
-        .btn-small {
-            padding: 5px 10px;
-            font-size: 0.9em;
-            background-color: var(--border-dark);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
+        .signature-pad-wrapper { background-color: var(--input-bg); border: 1px solid var(--border-dark); border-radius: 8px; padding: 10px; margin-top: 20px; display: flex; flex-direction: column; align-items: center; }
+        .signature-pad-body { position: relative; width: 100%; max-width: 600px; height: 200px; background-color: #fff; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.3); touch-action: none; }
+        canvas#signature-pad { width: 100%; height: 100%; display: block; }
+        .signature-actions { margin-top: 10px; width: 100%; max-width: 600px; display: flex; justify-content: flex-end; }
+        .btn-small { padding: 5px 10px; font-size: 0.9em; background-color: var(--border-dark); color: white; border: none; border-radius: 4px; cursor: pointer; }
         .btn-small:hover { background-color: var(--error); }
+        .signature-label { color: #000; position: absolute; bottom: 5px; left: 10px; font-size: 0.8em; pointer-events: none; opacity: 0.5; }
 
-        .signature-label {
-            color: #000; /* Texto negro porque el fondo es blanco */
-            position: absolute;
-            bottom: 5px;
-            left: 10px;
-            font-size: 0.8em;
-            pointer-events: none; /* Para que no interfiera al dibujar */
-            opacity: 0.5;
-        }
-        
-
-        /* --- MEDIA PRINT --- */
+        /* --- MEDIA PRINT (MODIFICADO PARA SOPORTAR DOBLE CHECK) --- */
         @media print {
-            @page { 
-                margin: 1cm;
-                size: auto;
-            }
+            @page { margin: 1cm; size: auto; }
+            .print-hidden-icon, #save-indicator, .button-group, h1, .footer-info, .section-index, .toast-container, .signature-actions { display: none !important; }
             
-/* --------------------------- */
-/* FIRMA DIGITAL IMPRESIÓN MEJORADA */
-/* --------------------------- */
-.signature-pad-wrapper {
-    border: none;
-    background: transparent;
-    padding: 0;
-    /* REGLAS REFORZADAS PARA CENTRADO ABSOLUTO */
-    margin: 0 auto 5px auto !important; /* Se agrega !important */
-    display: block !important;
-    float: none !important; /* Se asegura que no haya flotación a la izquierda */
-    /* FIN REGLAS REFORZADAS */
-    page-break-inside: avoid;
-    width: 300px; 
-    text-align: center;
-    position: relative;
-}
-.signature-pad-body {
-    box-shadow: none;
-    border: none !important; 
-    background-color: #fff !important;
-    height: 120px; 
-    margin-bottom: 2px;
-}
-.signature-actions { display: none !important; }
-.signature-label { 
-    display: block !important; /* Mostrar de nuevo la etiqueta de Firma */
-    font-size: 9pt !important;
-    font-weight: normal !important;
-    color: #555 !important;
-    text-align: center;
-    margin-bottom: 5px;
-}
+            body, .container, .section, .header-info, input, select, textarea, label, span, div, p { background: #fff !important; color: #000 !important; box-shadow: none !important; text-shadow: none !important; }
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            body { padding: 0; font-size: 11pt; font-family: Arial, Helvetica, sans-serif; }
+            .container { max-width: 100%; margin: 0; padding: 0 5px; border: none !important; }
 
-/* Estilos para el nombre del responsable */
-.responsible-name-container {
-    text-align: center;
-    margin: 20px auto 40px auto !important; /* Más separación del bloque anterior y centrado */
-    width: 300px; /* Ancho para el bloque del nombre, alineado con la firma */
-    display: block !important;
-    page-break-inside: avoid;
-}
-
-.responsible-name-container label {
-    display: none !important; /* Ocultar la etiqueta original del input */
-}
-
-.responsible-name-container input#responsibleName {
-    display: block !important;
-    border: none !important;
-    text-align: center;
-    padding: 0 !important;
-    margin: 0 auto;
-    font-size: 11pt !important;
-    font-weight: bold;
-    color: #000 !important;
-    background-color: transparent !important;
-    box-shadow: none !important;
-    /* Linea de firma */
-    border-bottom: 1px solid #000 !important;
-    width: 100%;
-    padding-bottom: 5px !important;
-    margin-bottom: 5px !important;
-}
-
-/* Nombre del responsable */
-.responsible-name-container::after {
-    content: "Nombre del Responsable"; 
-    display: block;
-    text-align: center;
-    font-size: 9pt;
-    font-style: italic;
-    color: #555;
-    margin-top: 2px;
-}
-            /* Ocultar lo que ya ocultabas */
-            .print-hidden-icon,
-            #save-indicator,
-            .button-group,
-            h1,
-            .footer-info {
-                display: none !important;
+            /* INPUTS PLANOS */
+            input[type="text"], input[type="date"], input[type="time"], input[type="number"], select, .flatpickr-input {
+                -webkit-appearance: none !important; appearance: none !important; background: transparent !important; border: none !important; box-shadow: none !important; color: #000 !important; padding: 0 !important; margin: 0 !important; font-weight: normal; background-image: none !important; 
             }
+            select { text-indent: 0.01px; text-overflow: ""; }
+            ::placeholder { color: transparent !important; opacity: 0 !important; }
 
-            /* Quitar letra de índice (A, B, etc.) como en la versión vieja */
-            .section-index {
-                display: none !important;
-            }
+            /* HEADER */
+            .logo-container { text-align: left; margin-bottom: 15px; padding: 0 0 10px 0; border-bottom: 2px solid #000; display: flex; align-items: center; position: relative; }
+            .logo-screen { display: none !important; }
+            .logo-print { display: block !important; max-width: 150px !important; height: auto; margin-right: 15px; }
+            .logo-container::after { content: "REPORTE Control de Calidad"; font-size: 15pt; font-weight: bold; margin-left: 10px; display: block; flex-grow: 1; }
+            #print-date-display { display: block !important; position: absolute; right: 0; top: 0; font-size: 10pt; font-weight: bold; }
 
-            /* Alto contraste pero sin romper padding */
-            body, .container, .section, .header-info,
-            input, select, textarea, label, span, div, p {
-                background: #fff !important;
-                color: #000 !important;
-                box-shadow: none !important;
-                text-shadow: none !important;
-            }
+            .header-info { grid-template-columns: 1fr 1fr 1fr; gap: 5px; border: 1px solid #000; padding: 8px; margin-bottom: 15px; background: #fff !important; }
+            .header-info label { color: #000 !important; font-size: 10pt; font-weight: bold; margin-bottom: 2px; }
 
-            * {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
+            /* SECCIONES */
+            .section { border: 1px solid #000 !important; margin-bottom: 12px; page-break-inside: avoid; background: #fff !important; }
+            .section-header { border-bottom: 1px solid #000; padding: 8px 10px; background: #e0e0e0 !important; font-size: 12pt; font-weight: bold; color: #000 !important; }
+            .section-header.completed { background: #e0e0e0 !important; color: #000 !important; }
+            .status-indicator { display: none !important; }
 
-            body {
-                padding: 0;
-                font-size: 11pt;
-                font-family: Arial, Helvetica, sans-serif;
-            }
+            .admin-row { border-bottom: 1px solid #bbb; padding: 8px 10px; background: #fff !important; }
+            .admin-question { font-weight: bold; color: #000 !important; margin-bottom: 4px; font-size: 10pt; }
+            #devolucion-block, #corregido-block { border: 1px solid #000 !important; background: #fff !important; padding: 5px; margin-top: 6px; }
 
-            .container {
-                max-width: 100%;
-                margin: 0;
-                padding: 0 5px;
-                border: none !important;
-            }
+            /* --- LÓGICA DE IMPRESIÓN DE CHECKLIST --- */
+            .checklist { padding: 8px 12px; }
+            /* Ocultamos checkboxes reales */
+            .check-item input[type="checkbox"] { display: none !important; }
+            /* Ocultamos todo por defecto */
+            .check-item { display: none !important; border-bottom: 1px dotted #ccc; padding: 4px 0; font-size: 10pt; }
+            
+            /* Mostramos solo los que tienen clase .is-checked-print */
+            .check-item.is-checked-print { display: block !important; }
+            .check-item.is-checked-print label { color: #000 !important; font-weight: bold; }
 
-            /* --- CORRECCIÓN CRÍTICA PARA ANDROID/MÓVIL --- */
-            /* Forzar que los inputs sean texto plano sin cajas ni fondo azul */
-            input[type="text"], 
-            input[type="date"], 
-            input[type="time"], 
-            input[type="number"],
-            select,
-            .flatpickr-input {
-                -webkit-appearance: none !important;
-                -moz-appearance: none !important;
-                appearance: none !important;
-                background-color: transparent !important;
-                background: transparent !important;
-                border: none !important;
-                box-shadow: none !important;
-                color: #000 !important;
-                padding: 0 !important;
-                margin: 0 !important;
-                font-weight: normal;
-                /* Eliminar iconos nativos de fecha/hora en la impresión */
-                background-image: none !important; 
-            }
+            /* ICONOS SEGÚN ESTADO */
+            /* Si pasó (OK) */
+            .check-item.is-pass-print label::before { content: "☑ "; font-size: 12pt; margin-right: 4px; font-weight: bold; }
+            /* Si falló (X) */
+            .check-item.is-fail-print label::before { content: "☒ DEFECTO: "; font-size: 12pt; margin-right: 4px; font-weight: bold; }
 
-            select {
-                text-indent: 0.01px;
-                text-overflow: "";
-            }
+            /* Mostrar la caja de texto solo si es un fallo */
+            .specific-obs { display: none; }
+            .check-item.is-fail-print .specific-obs.visible { display: block !important; margin-top: 2px; padding-left: 20px; }
+            .check-item.is-fail-print .specific-obs input { border: none !important; font-style: italic; width: 100%; color: #000 !important; background: transparent !important; }
 
-            ::placeholder {
-                color: transparent !important;
-                opacity: 0 !important;
-            }
+            /* OBSERVACIONES GENERALES */
+            .obs-area { border-top: 1px solid #000; padding: 10px; background: #fff !important; }
+            .obs-area textarea { border: 1px solid #000 !important; padding: 5px; min-height: 40px; resize: none !important; font-size: 10pt; color: #000 !important; }
+            
+            /* OCULTAR VACÍOS */
+            .obs-area.empty-print, .section.empty-print { display: none !important; }
 
-            /* --------------------------- */
-            /* ENCABEZADO        */
-            /* --------------------------- */
+            /* FIRMA (MANTENIDA EXACTA AL ORIGINAL) */
+            .signature-pad-wrapper { border: none; background: transparent; padding: 0; margin: 0 auto 5px auto !important; display: block !important; float: none !important; page-break-inside: avoid; width: 300px; text-align: center; position: relative; }
+            .signature-pad-body { box-shadow: none; border: none !important; background-color: #fff !important; height: 120px; margin-bottom: 2px; }
+            .signature-label { display: block !important; font-size: 9pt !important; font-weight: normal !important; color: #555 !important; text-align: center; margin-bottom: 5px; }
 
-            .logo-container {
-                text-align: left;
-                margin-bottom: 15px;
-                padding: 0 0 10px 0;
-                border-bottom: 2px solid #000;
-                display: flex;
-                align-items: center;
-                position: relative;
-            }
-
-            /* PNG oculto como antes */
-            .logo-screen {
-                display: none !important;
-            }
-
-            /* JPEG visible como antes */
-            .logo-print {
-                display: block !important;
-                max-width: 150px !important;
-                height: auto;
-                margin-right: 15px;
-            }
-
-            /* Título al estilo viejo */
-            .logo-container::after { 
-                content: "REPORTE Control de Calidad";
-                font-size: 15pt;
-                font-weight: bold;
-                margin-left: 10px;
-                display: block;
-                flex-grow: 1;
-            }
-
-            #print-date-display {
-                display: block !important;
-                position: absolute;
-                right: 0;
-                top: 0;
-                font-size: 10pt;
-                font-weight: bold;
-            }
-
-            /* --------------------------- */
-            /* CABECERA DE INFORMACIÓN  */
-            /* --------------------------- */
-            .header-info {
-                grid-template-columns: 1fr 1fr 1fr;
-                gap: 5px;
-                border: 1px solid #000;
-                padding: 8px;
-                margin-bottom: 15px;
-                background: #fff !important;
-            }
-
-            .header-info label {
-                color: #000 !important;
-                font-size: 10pt;
-                font-weight: bold;
-                margin-bottom: 2px;
-            }
-
-            /* --------------------------- */
-            /* SECCIONES           */
-            /* --------------------------- */
-            .section {
-                border: 1px solid #000 !important;
-                margin-bottom: 12px;
-                page-break-inside: avoid;
-                background: #fff !important;
-            }
-
-            .section-header {
-                border-bottom: 1px solid #000;
-                padding: 8px 10px;
-                background: #e0e0e0 !important;
-                font-size: 12pt;
-                font-weight: bold;
-                color: #000 !important;
-            }
-
-            .section-header.completed { 
-                /* --- CAMBIO SOLICITADO: COLOR GRIS EN VEZ DE VERDE --- */
-                background: #e0e0e0 !important;
-                color: #000 !important;
-            }
-
-            .status-indicator {
-                display: none !important;
-            }
-
-            /* --------------------------- */
-            /* ADMIN             */
-            /* --------------------------- */
-            .admin-row { 
-                border-bottom: 1px solid #bbb;
-                padding: 8px 10px;
-                background: #fff !important;
-            }
-
-            .admin-question {
-                font-weight: bold;
-                color: #000 !important;
-                margin-bottom: 4px;
-                font-size: 10pt;
-            }
-
-            #devolucion-block, #corregido-block {
-                border: 1px solid #000 !important;
-                background: #fff !important;
-                padding: 5px;
-                margin-top: 6px;
-            }
-
-            /* --------------------------- */
-            /* CHECKLIST          */
-            /* --------------------------- */
-            .checklist {
-                padding: 8px 12px;
-            }
-
-            /* Ocultamos los checkboxes reales */
-            .check-item input[type="checkbox"] {
-                display: none !important;
-            }
-
-            /* Ocultamos todos los items */
-            .check-item {
-                display: none !important;
-                border-bottom: 1px dotted #ccc;
-                padding: 4px 0;
-                font-size: 10pt;
-            }
-
-            /* Solo mostramos los marcados */
-            .check-item.is-checked-print {
-                display: block !important;
-            }
-
-            .check-item.is-checked-print label {
-                color: #000 !important;
-                font-weight: bold;
-            }
-
-            /* Icono estilo viejo pero limpio */
-            .check-item.is-checked-print label::before {
-                content: "☑ ";
-                font-size: 12pt;
-                margin-right: 4px;
-                font-weight: bold;
-            }
-
-            /* --------------------------- */
-            /* ÁREA OBSERVACIONES    */
-            /* --------------------------- */
-            .obs-area {
-                border-top: 1px solid #000;
-                padding: 10px;
-                background: #fff !important;
-            }
-
-            .obs-area textarea {
-                border: 1px solid #000 !important;
-                padding: 5px;
-                min-height: 40px;
-                resize: none !important;
-                font-size: 10pt;
-                color: #000 !important;
-            }
-
-            .obs-area label {
-                font-size: 10pt;
-                font-weight: bold;
-                color: #000 !important;
-            }
-
-            /* Ocultar secciones vacías */
-            .obs-area.empty-print,
-            .section.empty-print {
-                display: none !important;
-            }
-
-            /* --------------------------- */
-            /* FIRMA DIGITAL IMPRESIÓN   */
-            /* --------------------------- */
-            .signature-pad-wrapper {
-                border: none;
-                background: transparent;
-                padding: 0;
-                margin: 0;
-                display: block !important; /* Forzar que se vea */
-                page-break-inside: avoid;
-            }
-            .signature-pad-body {
-                box-shadow: none;
-                border: 1px solid #000; /* Borde simple para impresión */
-            }
-            .signature-actions { display: none !important; }
-            .signature-label { display: none !important; }
+            .responsible-name-container { text-align: center; margin: 20px auto 40px auto !important; width: 300px; display: block !important; page-break-inside: avoid; }
+            .responsible-name-container label { display: none !important; }
+            .responsible-name-container input#responsibleName { display: block !important; border: none !important; text-align: center; padding: 0 !important; margin: 0 auto; font-size: 11pt !important; font-weight: bold; color: #000 !important; background-color: transparent !important; box-shadow: none !important; border-bottom: 1px solid #000 !important; width: 100%; padding-bottom: 5px !important; margin-bottom: 5px !important; }
+            .responsible-name-container::after { content: "Nombre del Responsable"; display: block; text-align: center; font-size: 9pt; font-style: italic; color: #555; margin-top: 2px; }
         }
-
     </style>
 </head>
 <body>
@@ -1078,9 +328,7 @@
     
 <div class="logo-container">
     <img src="assets/logo.png" class="logo-screen" alt="GAS Paint & Detail Logo" onerror="this.style.display='none'">
-    
     <img src="assets/logo.jpeg" class="logo-print" alt="GAS Paint & Detail Logo (Impresión)" onerror="this.style.display='none'">
-    
     <div id="print-date-display"></div>
 </div>
     
@@ -1115,8 +363,8 @@
                     <option value="SI">SÍ</option>
                     <option value="NO">NO</option>
                 </select>
-                <input type="text" id="sys-finalizada-date" class="flat-date" title="Fecha" placeholder="DD/MM/YYYY" aria-label="Fecha finalización">
-                <input type="text" id="sys-finalizada-time" class="flat-time" title="Hora" placeholder="HH:MM" aria-label="Hora finalización">
+                <input type="text" id="sys-finalizada-date" class="flat-date" title="Fecha" placeholder="DD/MM/YYYY">
+                <input type="text" id="sys-finalizada-time" class="flat-time" title="Hora" placeholder="HH:MM">
             </div>
         </div>
 
@@ -1128,16 +376,16 @@
                     <option value="SI">SÍ</option>
                     <option value="NO">NO</option>
                 </select>
-                <input type="text" id="sys-ejecutados-date" class="flat-date" title="Fecha" placeholder="DD/MM/YYYY" aria-label="Fecha ejecución">
-                <input type="text" id="sys-ejecutados-time" class="flat-time" title="Hora" placeholder="HH:MM" aria-label="Hora ejecución">
+                <input type="text" id="sys-ejecutados-date" class="flat-date" title="Fecha" placeholder="DD/MM/YYYY">
+                <input type="text" id="sys-ejecutados-time" class="flat-time" title="Hora" placeholder="HH:MM">
             </div>
             
             <div id="devolucion-block" class="highlight-box">
                 <span class="sub-note">2.b. En caso negativo, devolver a Operaciones el vehículo y este Formulario.</span>
                 <div class="input-cluster" style="margin-top:5px;">
                     <label>Devuelto:</label>
-                    <input type="text" id="devuelto-date" class="flat-date" title="Fecha Devolución" placeholder="DD/MM/YYYY" aria-label="Fecha de devolución">
-                    <input type="text" id="devuelto-time" class="flat-time" title="Hora Devolución" placeholder="HH:MM" aria-label="Hora de devolución">
+                    <input type="text" id="devuelto-date" class="flat-date" title="Fecha Devolución" placeholder="DD/MM/YYYY">
+                    <input type="text" id="devuelto-time" class="flat-time" title="Hora Devolución" placeholder="HH:MM">
                 </div>
             </div>
 
@@ -1145,8 +393,8 @@
                 <span class="sub-note">3. Revisado por Operaciones y debidamente corregidos los servicios incompletos.</span>
                 <div class="input-cluster" style="margin-top:5px;">
                     <label>Corregido:</label>
-                    <input type="text" id="corregido-date" class="flat-date" title="Fecha Corrección" placeholder="DD/MM/YYYY" aria-label="Fecha de corrección" aria-describedby="corregido-error">
-                    <input type="text" id="corregido-time" class="flat-time" title="Hora Corrección" placeholder="HH:MM" aria-label="Hora de corrección" aria-describedby="corregido-error">
+                    <input type="text" id="corregido-date" class="flat-date" title="Fecha Corrección" placeholder="DD/MM/YYYY">
+                    <input type="text" id="corregido-time" class="flat-time" title="Hora Corrección" placeholder="HH:MM">
                 </div>
                 <div id="corregido-error" class="error-text">La fecha/hora de corrección no puede ser anterior a la fecha/hora de devolución.</div>
             </div>
@@ -1165,132 +413,422 @@
     </div>
 
     <div class="section" id="sec-pintura">
-        <div class="section-header">
-            <span><span class="print-hidden-icon">🖌️</span> <span class="section-index">B.</span> PINTURA</span>
-            <span class="status-indicator">PENDIENTE</span>
-        </div>
+        <div class="section-header"><span><span class="print-hidden-icon">🖌️</span> <span class="section-index">B.</span> PINTURA</span><span class="status-indicator">PENDIENTE</span></div>
         <div class="checklist">
-            <div class="check-item"><input type="checkbox" id="p1" onchange="checkSection('sec-pintura'); saveForm();"><label for="p1">La textura del transparente es la adecuada conforme con la originalidad del vehículo</label></div>
-            <div class="check-item"><input type="checkbox" id="p2" onchange="checkSection('sec-pintura'); saveForm();"><label for="p2">Los bordes, filos y líneas repasadas están libres de excesos de transparente o pintura</label></div>
-            <div class="check-item"><input type="checkbox" id="p3" onchange="checkSection('sec-pintura'); saveForm();"><label for="p3">Las líneas de las piezas repintadas son idénticas a las originales</label></div>
-            <div class="check-item"><input type="checkbox" id="p4" onchange="checkSection('sec-pintura'); saveForm();"><label for="p4">Las superficies pintadas están libres de defectos de repintado (rayas, opacamiento, manchas)</label></div>
-            <div class="check-item"><input type="checkbox" id="p5" onchange="checkSection('sec-pintura'); saveForm();"><label for="p5">Los empaques externos están libres de residuos de pintura, pulimento, o cualquier suciedad</label></div>
-            <div class="check-item"><input type="checkbox" id="p6" onchange="checkSection('sec-pintura'); saveForm();"><label for="p6">En caso negativo, revisar contra la Recepción del Auto por daños que debieron eliminarse en el taller</label></div>
-            <div class="check-item"><input type="checkbox" id="p7" onchange="checkSection('sec-pintura'); saveForm();"><label for="p7">En caso de Corrección de Pintura Total: verificar si los servicios incompletos fueron corregidos</label></div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="p1" class="check-pass" onchange="handleCheckPair('p1', 'p1-fail', 'p1-obs-box'); checkSection('sec-pintura'); saveForm();">
+                    <input type="checkbox" id="p1-fail" class="check-fail" title="Marcar defecto" onchange="handleCheckPair('p1-fail', 'p1', 'p1-obs-box'); checkSection('sec-pintura'); saveForm();">
+                    <label for="p1">La textura del transparente es la adecuada conforme con la originalidad del vehículo</label>
+                </div>
+                <div id="p1-obs-box" class="specific-obs"><input type="text" id="p1-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="p2" class="check-pass" onchange="handleCheckPair('p2', 'p2-fail', 'p2-obs-box'); checkSection('sec-pintura'); saveForm();">
+                    <input type="checkbox" id="p2-fail" class="check-fail" title="Marcar defecto" onchange="handleCheckPair('p2-fail', 'p2', 'p2-obs-box'); checkSection('sec-pintura'); saveForm();">
+                    <label for="p2">Los bordes, filos y líneas repasadas están libres de excesos de transparente o pintura</label>
+                </div>
+                <div id="p2-obs-box" class="specific-obs"><input type="text" id="p2-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="p3" class="check-pass" onchange="handleCheckPair('p3', 'p3-fail', 'p3-obs-box'); checkSection('sec-pintura'); saveForm();">
+                    <input type="checkbox" id="p3-fail" class="check-fail" title="Marcar defecto" onchange="handleCheckPair('p3-fail', 'p3', 'p3-obs-box'); checkSection('sec-pintura'); saveForm();">
+                    <label for="p3">Las líneas de las piezas repintadas son idénticas a las originales</label>
+                </div>
+                <div id="p3-obs-box" class="specific-obs"><input type="text" id="p3-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="p4" class="check-pass" onchange="handleCheckPair('p4', 'p4-fail', 'p4-obs-box'); checkSection('sec-pintura'); saveForm();">
+                    <input type="checkbox" id="p4-fail" class="check-fail" title="Marcar defecto" onchange="handleCheckPair('p4-fail', 'p4', 'p4-obs-box'); checkSection('sec-pintura'); saveForm();">
+                    <label for="p4">Las superficies pintadas están libres de defectos de repintado (rayas, opacamiento, manchas)</label>
+                </div>
+                <div id="p4-obs-box" class="specific-obs"><input type="text" id="p4-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="p5" class="check-pass" onchange="handleCheckPair('p5', 'p5-fail', 'p5-obs-box'); checkSection('sec-pintura'); saveForm();">
+                    <input type="checkbox" id="p5-fail" class="check-fail" title="Marcar defecto" onchange="handleCheckPair('p5-fail', 'p5', 'p5-obs-box'); checkSection('sec-pintura'); saveForm();">
+                    <label for="p5">Los empaques externos están libres de residuos de pintura, pulimento, o cualquier suciedad</label>
+                </div>
+                <div id="p5-obs-box" class="specific-obs"><input type="text" id="p5-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="p6" class="check-pass" onchange="handleCheckPair('p6', 'p6-fail', 'p6-obs-box'); checkSection('sec-pintura'); saveForm();">
+                    <input type="checkbox" id="p6-fail" class="check-fail" title="Marcar defecto" onchange="handleCheckPair('p6-fail', 'p6', 'p6-obs-box'); checkSection('sec-pintura'); saveForm();">
+                    <label for="p6">En caso negativo, revisar contra la Recepción del Auto por daños que debieron eliminarse en el taller</label>
+                </div>
+                <div id="p6-obs-box" class="specific-obs"><input type="text" id="p6-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="p7" class="check-pass" onchange="handleCheckPair('p7', 'p7-fail', 'p7-obs-box'); checkSection('sec-pintura'); saveForm();">
+                    <input type="checkbox" id="p7-fail" class="check-fail" title="Marcar defecto" onchange="handleCheckPair('p7-fail', 'p7', 'p7-obs-box'); checkSection('sec-pintura'); saveForm();">
+                    <label for="p7">En caso de Corrección de Pintura Total: verificar si los servicios incompletos fueron corregidos</label>
+                </div>
+                <div id="p7-obs-box" class="specific-obs"><input type="text" id="p7-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
         </div>
-        <div class="obs-area">
-            <label class="form-group">Observaciones:</label>
-            <textarea id="obs-pintura" placeholder="Defectos encontrados, correcciones pendientes..."></textarea>
-        </div>
+        <div class="obs-area"><label class="form-group">Observaciones:</label><textarea id="obs-pintura" placeholder="Defectos encontrados, correcciones pendientes..."></textarea></div>
     </div>
 
     <div class="section" id="sec-armado">
-        <div class="section-header">
-            <span><span class="print-hidden-icon">🔩</span> <span class="section-index">C.</span> ARMADO Y AJUSTE DE PIEZAS</span>
-            <span class="status-indicator">PENDIENTE</span>
-        </div>
+        <div class="section-header"><span><span class="print-hidden-icon">🔩</span> <span class="section-index">C.</span> ARMADO Y AJUSTE DE PIEZAS</span><span class="status-indicator">PENDIENTE</span></div>
         <div class="checklist">
-            <div class="check-item"><input type="checkbox" id="a1" onchange="checkSection('sec-armado'); saveForm();"><label for="a1">El interior de las piezas reparadas está libre de residuos de pulimento o suciedad</label></div>
-            <div class="check-item"><input type="checkbox" id="a2" onchange="checkSection('sec-armado'); saveForm();"><label for="a2">Las piezas reparadas y aledañas son móviles, abren y cierran con la suavidad original y sin golpes</label></div>
-            <div class="check-item"><input type="checkbox" id="a3" onchange="checkSection('sec-armado'); saveForm();"><label for="a3">Las piezas ajustan correctamente y no presentan levantamientos o desalineaciones</label></div>
-            <div class="check-item"><input type="checkbox" id="a4" onchange="checkSection('sec-armado'); saveForm();"><label for="a4">Los niveles de aceite, líquido de frenos y refrigerante son los adecuados</label></div>
-            <div class="check-item"><input type="checkbox" id="a5" onchange="checkSection('sec-armado'); saveForm();"><label for="a5">Las luces y testigos funcionan correctamente</label></div>
-            <div class="check-item"><input type="checkbox" id="a6" onchange="checkSection('sec-armado'); saveForm();"><label for="a6">Las molduras, parrillas, empaques, escobillas u otras piezas están limpias y sin daños</label></div>
-            <div class="check-item"><input type="checkbox" id="a7" onchange="checkSection('sec-armado'); saveForm();"><label for="a7">Los vidrios no presentan daños derivados del proceso de reparación</label></div>
-            <div class="check-item"><input type="checkbox" id="a8" onchange="checkSection('sec-armado'); saveForm();"><label for="a8">El exterior del auto está libre de suciedad producida por el proceso de reparación (polvo, cinta, residuos)</label></div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="a1" class="check-pass" onchange="handleCheckPair('a1', 'a1-fail', 'a1-obs-box'); checkSection('sec-armado'); saveForm();">
+                    <input type="checkbox" id="a1-fail" class="check-fail" onchange="handleCheckPair('a1-fail', 'a1', 'a1-obs-box'); checkSection('sec-armado'); saveForm();">
+                    <label for="a1">El interior de las piezas reparadas está libre de residuos de pulimento o suciedad</label>
+                </div>
+                <div id="a1-obs-box" class="specific-obs"><input type="text" id="a1-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="a2" class="check-pass" onchange="handleCheckPair('a2', 'a2-fail', 'a2-obs-box'); checkSection('sec-armado'); saveForm();">
+                    <input type="checkbox" id="a2-fail" class="check-fail" onchange="handleCheckPair('a2-fail', 'a2', 'a2-obs-box'); checkSection('sec-armado'); saveForm();">
+                    <label for="a2">Las piezas reparadas y aledañas son móviles, abren y cierran con la suavidad original y sin golpes</label>
+                </div>
+                <div id="a2-obs-box" class="specific-obs"><input type="text" id="a2-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="a3" class="check-pass" onchange="handleCheckPair('a3', 'a3-fail', 'a3-obs-box'); checkSection('sec-armado'); saveForm();">
+                    <input type="checkbox" id="a3-fail" class="check-fail" onchange="handleCheckPair('a3-fail', 'a3', 'a3-obs-box'); checkSection('sec-armado'); saveForm();">
+                    <label for="a3">Las piezas ajustan correctamente y no presentan levantamientos o desalineaciones</label>
+                </div>
+                <div id="a3-obs-box" class="specific-obs"><input type="text" id="a3-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="a4" class="check-pass" onchange="handleCheckPair('a4', 'a4-fail', 'a4-obs-box'); checkSection('sec-armado'); saveForm();">
+                    <input type="checkbox" id="a4-fail" class="check-fail" onchange="handleCheckPair('a4-fail', 'a4', 'a4-obs-box'); checkSection('sec-armado'); saveForm();">
+                    <label for="a4">Los niveles de aceite, líquido de frenos y refrigerante son los adecuados</label>
+                </div>
+                <div id="a4-obs-box" class="specific-obs"><input type="text" id="a4-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="a5" class="check-pass" onchange="handleCheckPair('a5', 'a5-fail', 'a5-obs-box'); checkSection('sec-armado'); saveForm();">
+                    <input type="checkbox" id="a5-fail" class="check-fail" onchange="handleCheckPair('a5-fail', 'a5', 'a5-obs-box'); checkSection('sec-armado'); saveForm();">
+                    <label for="a5">Las luces y testigos funcionan correctamente</label>
+                </div>
+                <div id="a5-obs-box" class="specific-obs"><input type="text" id="a5-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="a6" class="check-pass" onchange="handleCheckPair('a6', 'a6-fail', 'a6-obs-box'); checkSection('sec-armado'); saveForm();">
+                    <input type="checkbox" id="a6-fail" class="check-fail" onchange="handleCheckPair('a6-fail', 'a6', 'a6-obs-box'); checkSection('sec-armado'); saveForm();">
+                    <label for="a6">Las molduras, parrillas, empaques, escobillas u otras piezas están limpias y sin daños</label>
+                </div>
+                <div id="a6-obs-box" class="specific-obs"><input type="text" id="a6-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="a7" class="check-pass" onchange="handleCheckPair('a7', 'a7-fail', 'a7-obs-box'); checkSection('sec-armado'); saveForm();">
+                    <input type="checkbox" id="a7-fail" class="check-fail" onchange="handleCheckPair('a7-fail', 'a7', 'a7-obs-box'); checkSection('sec-armado'); saveForm();">
+                    <label for="a7">Los vidrios no presentan daños derivados del proceso de reparación</label>
+                </div>
+                <div id="a7-obs-box" class="specific-obs"><input type="text" id="a7-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="a8" class="check-pass" onchange="handleCheckPair('a8', 'a8-fail', 'a8-obs-box'); checkSection('sec-armado'); saveForm();">
+                    <input type="checkbox" id="a8-fail" class="check-fail" onchange="handleCheckPair('a8-fail', 'a8', 'a8-obs-box'); checkSection('sec-armado'); saveForm();">
+                    <label for="a8">El exterior del auto está libre de suciedad producida por el proceso de reparación (polvo, cinta, residuos)</label>
+                </div>
+                <div id="a8-obs-box" class="specific-obs"><input type="text" id="a8-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
         </div>
-        <div class="obs-area">
-            <label class="form-group">Observaciones Armado/Ajuste:</label>
-            <textarea id="obs-armado" placeholder="Observaciones"></textarea>
-        </div>
+        <div class="obs-area"><label class="form-group">Observaciones Armado/Ajuste:</label><textarea id="obs-armado" placeholder="Observaciones"></textarea></div>
     </div>
 
     <div class="section" id="sec-pulido">
-        <div class="section-header">
-            <span><span class="print-hidden-icon">✨</span> <span class="section-index">D.</span> PULIDO Y EXTERIOR</span>
-            <span class="status-indicator">PENDIENTE</span>
-        </div>
+        <div class="section-header"><span><span class="print-hidden-icon">✨</span> <span class="section-index">D.</span> PULIDO Y EXTERIOR</span><span class="status-indicator">PENDIENTE</span></div>
         <div class="checklist">
-            <div class="check-item"><input type="checkbox" id="pu1" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu1">Sin rayas, manchas u opacamiento por pulido</label></div>
-            <div class="check-item"><input type="checkbox" id="pu2" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu2">Vidrios pulidos (sin manchas ni marcas de agua)</label></div>
-            <div class="check-item"><input type="checkbox" id="pu3" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu3">Partes negras acondicionadas</label></div>
-            <div class="check-item"><input type="checkbox" id="pu4" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu4">Manillas de puertas limpias (interior y exterior)</label></div>
-            <div class="check-item"><input type="checkbox" id="pu5" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu5">Torpedo y escobillas detallados correctamente</label></div>
-            <div class="check-item"><input type="checkbox" id="pu6" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu6">Bordes del vehículo sin residuos (polish/cera)</label></div>
-            <div class="check-item"><input type="checkbox" id="pu7" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu7">Superficies externas sin residuos de pulimento</label></div>
-            <div class="check-item"><input type="checkbox" id="pu8" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu8">Capó, guardabarros, tapa motor, y superficies externas limpias</label></div>
-            <div class="check-item"><input type="checkbox" id="pu9" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu9">Superficies lavadas correctamente y sin suciedad posterior al proceso</label></div>
-            <div class="check-item"><input type="checkbox" id="pu10" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu10">Las superficies exteriores están libres de rayas superficiales o daños que debieron eliminarse</label></div>
-            <div class="check-item"><input type="checkbox" id="pu11" onchange="checkSection('sec-pulido'); saveForm();"><label for="pu11">En caso negativo, finalizar en el taller y corregir antes de la entrega</label></div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="pu1" class="check-pass" onchange="handleCheckPair('pu1', 'pu1-fail', 'pu1-obs-box'); checkSection('sec-pulido'); saveForm();">
+                    <input type="checkbox" id="pu1-fail" class="check-fail" onchange="handleCheckPair('pu1-fail', 'pu1', 'pu1-obs-box'); checkSection('sec-pulido'); saveForm();">
+                    <label for="pu1">Sin rayas, manchas u opacamiento por pulido</label>
+                </div>
+                <div id="pu1-obs-box" class="specific-obs"><input type="text" id="pu1-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="pu2" class="check-pass" onchange="handleCheckPair('pu2', 'pu2-fail', 'pu2-obs-box'); checkSection('sec-pulido'); saveForm();">
+                    <input type="checkbox" id="pu2-fail" class="check-fail" onchange="handleCheckPair('pu2-fail', 'pu2', 'pu2-obs-box'); checkSection('sec-pulido'); saveForm();">
+                    <label for="pu2">Vidrios pulidos (sin manchas ni marcas de agua)</label>
+                </div>
+                <div id="pu2-obs-box" class="specific-obs"><input type="text" id="pu2-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="pu3" class="check-pass" onchange="handleCheckPair('pu3', 'pu3-fail', 'pu3-obs-box'); checkSection('sec-pulido'); saveForm();">
+                    <input type="checkbox" id="pu3-fail" class="check-fail" onchange="handleCheckPair('pu3-fail', 'pu3', 'pu3-obs-box'); checkSection('sec-pulido'); saveForm();">
+                    <label for="pu3">Partes negras acondicionadas</label>
+                </div>
+                <div id="pu3-obs-box" class="specific-obs"><input type="text" id="pu3-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="pu4" class="check-pass" onchange="handleCheckPair('pu4', 'pu4-fail', 'pu4-obs-box'); checkSection('sec-pulido'); saveForm();">
+                    <input type="checkbox" id="pu4-fail" class="check-fail" onchange="handleCheckPair('pu4-fail', 'pu4', 'pu4-obs-box'); checkSection('sec-pulido'); saveForm();">
+                    <label for="pu4">Manillas de puertas limpias (interior y exterior)</label>
+                </div>
+                <div id="pu4-obs-box" class="specific-obs"><input type="text" id="pu4-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="pu5" class="check-pass" onchange="handleCheckPair('pu5', 'pu5-fail', 'pu5-obs-box'); checkSection('sec-pulido'); saveForm();">
+                    <input type="checkbox" id="pu5-fail" class="check-fail" onchange="handleCheckPair('pu5-fail', 'pu5', 'pu5-obs-box'); checkSection('sec-pulido'); saveForm();">
+                    <label for="pu5">Torpedo y escobillas detallados correctamente</label>
+                </div>
+                <div id="pu5-obs-box" class="specific-obs"><input type="text" id="pu5-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="pu6" class="check-pass" onchange="handleCheckPair('pu6', 'pu6-fail', 'pu6-obs-box'); checkSection('sec-pulido'); saveForm();">
+                    <input type="checkbox" id="pu6-fail" class="check-fail" onchange="handleCheckPair('pu6-fail', 'pu6', 'pu6-obs-box'); checkSection('sec-pulido'); saveForm();">
+                    <label for="pu6">Bordes del vehículo sin residuos (polish/cera)</label>
+                </div>
+                <div id="pu6-obs-box" class="specific-obs"><input type="text" id="pu6-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="pu7" class="check-pass" onchange="handleCheckPair('pu7', 'pu7-fail', 'pu7-obs-box'); checkSection('sec-pulido'); saveForm();">
+                    <input type="checkbox" id="pu7-fail" class="check-fail" onchange="handleCheckPair('pu7-fail', 'pu7', 'pu7-obs-box'); checkSection('sec-pulido'); saveForm();">
+                    <label for="pu7">Superficies externas sin residuos de pulimento</label>
+                </div>
+                <div id="pu7-obs-box" class="specific-obs"><input type="text" id="pu7-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="pu8" class="check-pass" onchange="handleCheckPair('pu8', 'pu8-fail', 'pu8-obs-box'); checkSection('sec-pulido'); saveForm();">
+                    <input type="checkbox" id="pu8-fail" class="check-fail" onchange="handleCheckPair('pu8-fail', 'pu8', 'pu8-obs-box'); checkSection('sec-pulido'); saveForm();">
+                    <label for="pu8">Capó, guardabarros, tapa motor, y superficies externas limpias</label>
+                </div>
+                <div id="pu8-obs-box" class="specific-obs"><input type="text" id="pu8-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="pu9" class="check-pass" onchange="handleCheckPair('pu9', 'pu9-fail', 'pu9-obs-box'); checkSection('sec-pulido'); saveForm();">
+                    <input type="checkbox" id="pu9-fail" class="check-fail" onchange="handleCheckPair('pu9-fail', 'pu9', 'pu9-obs-box'); checkSection('sec-pulido'); saveForm();">
+                    <label for="pu9">Superficies lavadas correctamente y sin suciedad posterior al proceso</label>
+                </div>
+                <div id="pu9-obs-box" class="specific-obs"><input type="text" id="pu9-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="pu10" class="check-pass" onchange="handleCheckPair('pu10', 'pu10-fail', 'pu10-obs-box'); checkSection('sec-pulido'); saveForm();">
+                    <input type="checkbox" id="pu10-fail" class="check-fail" onchange="handleCheckPair('pu10-fail', 'pu10', 'pu10-obs-box'); checkSection('sec-pulido'); saveForm();">
+                    <label for="pu10">Las superficies exteriores están libres de rayas superficiales o daños que debieron eliminarse</label>
+                </div>
+                <div id="pu10-obs-box" class="specific-obs"><input type="text" id="pu10-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="pu11" class="check-pass" onchange="handleCheckPair('pu11', 'pu11-fail', 'pu11-obs-box'); checkSection('sec-pulido'); saveForm();">
+                    <input type="checkbox" id="pu11-fail" class="check-fail" onchange="handleCheckPair('pu11-fail', 'pu11', 'pu11-obs-box'); checkSection('sec-pulido'); saveForm();">
+                    <label for="pu11">En caso negativo, finalizar en el taller y corregir antes de la entrega</label>
+                </div>
+                <div id="pu11-obs-box" class="specific-obs"><input type="text" id="pu11-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
         </div>
-        <div class="obs-area">
-            <label class="form-group">Observaciones Exterior/Pulido:</label>
-            <textarea id="obs-pulido" placeholder="Observaciones"></textarea>
-        </div>
+        <div class="obs-area"><label class="form-group">Observaciones Exterior/Pulido:</label><textarea id="obs-pulido" placeholder="Observaciones"></textarea></div>
     </div>
 
     <div class="section" id="sec-tapiceria">
-        <div class="section-header">
-            <span><span class="print-hidden-icon">🧼</span> <span class="section-index">E.</span> TAPICERÍA E INTERIOR</span>
-            <span class="status-indicator">PENDIENTE</span>
-        </div>
+        <div class="section-header"><span><span class="print-hidden-icon">🧼</span> <span class="section-index">E.</span> TAPICERÍA E INTERIOR</span><span class="status-indicator">PENDIENTE</span></div>
         <div class="checklist"> 
-            <div class="check-item"><input type="checkbox" id="t1" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t1">Aspirado de piso y alfombras detallado</label></div>
-            <div class="check-item"><input type="checkbox" id="t2" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t2">Tapicería aspirada y detallada correctamente</label></div>
-            <div class="check-item"><input type="checkbox" id="t3" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t3">Rejillas de ventilación limpias y detalladas</label></div>
-            <div class="check-item"><input type="checkbox" id="t4" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t4">Dash limpio y detallado</label></div>
-            <div class="check-item"><input type="checkbox" id="t5" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t5">Guarda soles limpios y detallados</label></div>
-            <div class="check-item"><input type="checkbox" id="t6" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t6">Consola central limpia y detallada</label></div>
-            <div class="check-item"><input type="checkbox" id="t7" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t7">Guantera y compartimientos limpios</label></div>
-            <div class="check-item"><input type="checkbox" id="t8" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t8">Cielo (techo) detallado y limpio</label></div>
-            <div class="check-item"><input type="checkbox" id="t9" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t9">Asientos detallados y limpios</label></div>
-            <div class="check-item"><input type="checkbox" id="t10" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t10">Empaques externos limpios y detallados</label></div>
-            <div class="check-item"><input type="checkbox" id="t11" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t11">Empaques internos limpios y detallados</label></div>
-            <div class="check-item"><input type="checkbox" id="t12" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t12">Empaque del capó limpio y detallado</label></div>
-            <div class="check-item"><input type="checkbox" id="t13" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t13">Empaque de la cajuela limpio y detallado</label></div>
-            <div class="check-item"><input type="checkbox" id="t14" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t14">Pantallas y espejos limpios</label></div>
-            <div class="check-item"><input type="checkbox" id="t15" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t15">Pedales correctamente limpios y detallados</label></div>
-            <div class="check-item"><input type="checkbox" id="t16" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t16">Cajuela aspirada y limpia</label></div>
-            <div class="check-item"><input type="checkbox" id="t17" onchange="checkSection('sec-tapiceria'); saveForm();"><label for="t17">Habitáculo/cajuela/batea limpio y detallado (según tipo de vehículo)</label></div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="t1" class="check-pass" onchange="handleCheckPair('t1','t1-fail','t1-obs-box'); checkSection('sec-tapiceria'); saveForm();">
+                    <input type="checkbox" id="t1-fail" class="check-fail" onchange="handleCheckPair('t1-fail','t1','t1-obs-box'); checkSection('sec-tapiceria'); saveForm();">
+                    <label for="t1">Aspirado de piso y alfombras detallado</label>
+                </div>
+                <div id="t1-obs-box" class="specific-obs"><input type="text" id="t1-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="t2" class="check-pass" onchange="handleCheckPair('t2','t2-fail','t2-obs-box'); checkSection('sec-tapiceria'); saveForm();">
+                    <input type="checkbox" id="t2-fail" class="check-fail" onchange="handleCheckPair('t2-fail','t2','t2-obs-box'); checkSection('sec-tapiceria'); saveForm();">
+                    <label for="t2">Tapicería aspirada y detallada correctamente</label>
+                </div>
+                <div id="t2-obs-box" class="specific-obs"><input type="text" id="t2-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="t3" class="check-pass" onchange="handleCheckPair('t3','t3-fail','t3-obs-box'); checkSection('sec-tapiceria'); saveForm();">
+                    <input type="checkbox" id="t3-fail" class="check-fail" onchange="handleCheckPair('t3-fail','t3','t3-obs-box'); checkSection('sec-tapiceria'); saveForm();">
+                    <label for="t3">Rejillas de ventilación limpias y detalladas</label>
+                </div>
+                <div id="t3-obs-box" class="specific-obs"><input type="text" id="t3-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="t4" class="check-pass" onchange="handleCheckPair('t4','t4-fail','t4-obs-box'); checkSection('sec-tapiceria'); saveForm();">
+                    <input type="checkbox" id="t4-fail" class="check-fail" onchange="handleCheckPair('t4-fail','t4','t4-obs-box'); checkSection('sec-tapiceria'); saveForm();">
+                    <label for="t4">Dash limpio y detallado</label>
+                </div>
+                <div id="t4-obs-box" class="specific-obs"><input type="text" id="t4-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="t5" class="check-pass" onchange="handleCheckPair('t5','t5-fail','t5-obs-box'); checkSection('sec-tapiceria'); saveForm();">
+                    <input type="checkbox" id="t5-fail" class="check-fail" onchange="handleCheckPair('t5-fail','t5','t5-obs-box'); checkSection('sec-tapiceria'); saveForm();">
+                    <label for="t5">Guarda soles limpios y detallados</label>
+                </div>
+                <div id="t5-obs-box" class="specific-obs"><input type="text" id="t5-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="t6" class="check-pass" onchange="handleCheckPair('t6','t6-fail','t6-obs-box'); checkSection('sec-tapiceria'); saveForm();">
+                    <input type="checkbox" id="t6-fail" class="check-fail" onchange="handleCheckPair('t6-fail','t6','t6-obs-box'); checkSection('sec-tapiceria'); saveForm();">
+                    <label for="t6">Consola central limpia y detallada</label>
+                </div>
+                <div id="t6-obs-box" class="specific-obs"><input type="text" id="t6-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="t7" class="check-pass" onchange="handleCheckPair('t7','t7-fail','t7-obs-box'); checkSection('sec-tapiceria'); saveForm();">
+                    <input type="checkbox" id="t7-fail" class="check-fail" onchange="handleCheckPair('t7-fail','t7','t7-obs-box'); checkSection('sec-tapiceria'); saveForm();">
+                    <label for="t7">Guantera y compartimientos limpios</label>
+                </div>
+                <div id="t7-obs-box" class="specific-obs"><input type="text" id="t7-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="t8" class="check-pass" onchange="handleCheckPair('t8','t8-fail','t8-obs-box'); checkSection('sec-tapiceria'); saveForm();">
+                    <input type="checkbox" id="t8-fail" class="check-fail" onchange="handleCheckPair('t8-fail','t8','t8-obs-box'); checkSection('sec-tapiceria'); saveForm();">
+                    <label for="t8">Cielo (techo) detallado y limpio</label>
+                </div>
+                <div id="t8-obs-box" class="specific-obs"><input type="text" id="t8-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="t9" class="check-pass" onchange="handleCheckPair('t9','t9-fail','t9-obs-box'); checkSection('sec-tapiceria'); saveForm();">
+                    <input type="checkbox" id="t9-fail" class="check-fail" onchange="handleCheckPair('t9-fail','t9','t9-obs-box'); checkSection('sec-tapiceria'); saveForm();">
+                    <label for="t9">Asientos detallados y limpios</label>
+                </div>
+                <div id="t9-obs-box" class="specific-obs"><input type="text" id="t9-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="t10" class="check-pass" onchange="handleCheckPair('t10','t10-fail','t10-obs-box'); checkSection('sec-tapiceria'); saveForm();">
+                    <input type="checkbox" id="t10-fail" class="check-fail" onchange="handleCheckPair('t10-fail','t10','t10-obs-box'); checkSection('sec-tapiceria'); saveForm();">
+                    <label for="t10">Empaques externos limpios y detallados</label>
+                </div>
+                <div id="t10-obs-box" class="specific-obs"><input type="text" id="t10-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="t11" class="check-pass" onchange="handleCheckPair('t11','t11-fail','t11-obs-box'); checkSection('sec-tapiceria'); saveForm();">
+                    <input type="checkbox" id="t11-fail" class="check-fail" onchange="handleCheckPair('t11-fail','t11','t11-obs-box'); checkSection('sec-tapiceria'); saveForm();">
+                    <label for="t11">Empaques internos limpios y detallados</label>
+                </div>
+                <div id="t11-obs-box" class="specific-obs"><input type="text" id="t11-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="t12" class="check-pass" onchange="handleCheckPair('t12','t12-fail','t12-obs-box'); checkSection('sec-tapiceria'); saveForm();">
+                    <input type="checkbox" id="t12-fail" class="check-fail" onchange="handleCheckPair('t12-fail','t12','t12-obs-box'); checkSection('sec-tapiceria'); saveForm();">
+                    <label for="t12">Empaque del capó limpio y detallado</label>
+                </div>
+                <div id="t12-obs-box" class="specific-obs"><input type="text" id="t12-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="t13" class="check-pass" onchange="handleCheckPair('t13','t13-fail','t13-obs-box'); checkSection('sec-tapiceria'); saveForm();">
+                    <input type="checkbox" id="t13-fail" class="check-fail" onchange="handleCheckPair('t13-fail','t13','t13-obs-box'); checkSection('sec-tapiceria'); saveForm();">
+                    <label for="t13">Empaque de la cajuela limpio y detallado</label>
+                </div>
+                <div id="t13-obs-box" class="specific-obs"><input type="text" id="t13-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="t14" class="check-pass" onchange="handleCheckPair('t14','t14-fail','t14-obs-box'); checkSection('sec-tapiceria'); saveForm();">
+                    <input type="checkbox" id="t14-fail" class="check-fail" onchange="handleCheckPair('t14-fail','t14','t14-obs-box'); checkSection('sec-tapiceria'); saveForm();">
+                    <label for="t14">Pantallas y espejos limpios</label>
+                </div>
+                <div id="t14-obs-box" class="specific-obs"><input type="text" id="t14-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="t15" class="check-pass" onchange="handleCheckPair('t15','t15-fail','t15-obs-box'); checkSection('sec-tapiceria'); saveForm();">
+                    <input type="checkbox" id="t15-fail" class="check-fail" onchange="handleCheckPair('t15-fail','t15','t15-obs-box'); checkSection('sec-tapiceria'); saveForm();">
+                    <label for="t15">Pedales correctamente limpios y detallados</label>
+                </div>
+                <div id="t15-obs-box" class="specific-obs"><input type="text" id="t15-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="t16" class="check-pass" onchange="handleCheckPair('t16','t16-fail','t16-obs-box'); checkSection('sec-tapiceria'); saveForm();">
+                    <input type="checkbox" id="t16-fail" class="check-fail" onchange="handleCheckPair('t16-fail','t16','t16-obs-box'); checkSection('sec-tapiceria'); saveForm();">
+                    <label for="t16">Cajuela aspirada y limpia</label>
+                </div>
+                <div id="t16-obs-box" class="specific-obs"><input type="text" id="t16-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="t17" class="check-pass" onchange="handleCheckPair('t17','t17-fail','t17-obs-box'); checkSection('sec-tapiceria'); saveForm();">
+                    <input type="checkbox" id="t17-fail" class="check-fail" onchange="handleCheckPair('t17-fail','t17','t17-obs-box'); checkSection('sec-tapiceria'); saveForm();">
+                    <label for="t17">Habitáculo/cajuela/batea limpio y detallado (según tipo de vehículo)</label>
+                </div>
+                <div id="t17-obs-box" class="specific-obs"><input type="text" id="t17-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
         </div>
-        <div class="obs-area">
-            <label class="form-group">Observaciones Interior:</label>
-            <textarea id="obs-interior" placeholder="Observaciones"></textarea>
-        </div>
+        <div class="obs-area"><label class="form-group">Observaciones Interior:</label><textarea id="obs-interior" placeholder="Observaciones"></textarea></div>
     </div>
 
     <div class="section" id="sec-control">
-        <div class="section-header">
-            <span><span class="print-hidden-icon">⚙️</span> <span class="section-index">F.</span> CONTROL MECÁNICO BÁSICO</span>
-            <span class="status-indicator">PENDIENTE</span>
-        </div>
+        <div class="section-header"><span><span class="print-hidden-icon">⚙️</span> <span class="section-index">F.</span> CONTROL MECÁNICO BÁSICO</span><span class="status-indicator">PENDIENTE</span></div>
         <div class="checklist">
-            <div class="check-item"><input type="checkbox" id="m1" onchange="checkSection('sec-control'); saveForm();"><label for="m1">Niveles de líquidos adecuados (aceite, frenos, refrigerante)</label></div>
-            <div class="check-item"><input type="checkbox" id="m2" onchange="checkSection('sec-control'); saveForm();"><label for="m2">Luces y testigos funcionando</label></div>
-            <div class="check-item"><input type="checkbox" id="m3" onchange="checkSection('sec-control'); saveForm();"><label for="m3">Vehículo listo para la entrega sin reportes pendientes</label></div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="m1" class="check-pass" onchange="handleCheckPair('m1','m1-fail','m1-obs-box'); checkSection('sec-control'); saveForm();">
+                    <input type="checkbox" id="m1-fail" class="check-fail" onchange="handleCheckPair('m1-fail','m1','m1-obs-box'); checkSection('sec-control'); saveForm();">
+                    <label for="m1">Niveles de líquidos adecuados (aceite, frenos, refrigerante)</label>
+                </div>
+                <div id="m1-obs-box" class="specific-obs"><input type="text" id="m1-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="m2" class="check-pass" onchange="handleCheckPair('m2','m2-fail','m2-obs-box'); checkSection('sec-control'); saveForm();">
+                    <input type="checkbox" id="m2-fail" class="check-fail" onchange="handleCheckPair('m2-fail','m2','m2-obs-box'); checkSection('sec-control'); saveForm();">
+                    <label for="m2">Luces y testigos funcionando</label>
+                </div>
+                <div id="m2-obs-box" class="specific-obs"><input type="text" id="m2-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
+            <div class="check-item">
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="m3" class="check-pass" onchange="handleCheckPair('m3','m3-fail','m3-obs-box'); checkSection('sec-control'); saveForm();">
+                    <input type="checkbox" id="m3-fail" class="check-fail" onchange="handleCheckPair('m3-fail','m3','m3-obs-box'); checkSection('sec-control'); saveForm();">
+                    <label for="m3">Vehículo listo para la entrega sin reportes pendientes</label>
+                </div>
+                <div id="m3-obs-box" class="specific-obs"><input type="text" id="m3-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            </div>
         </div>
-        <div class="obs-area">
-            <label class="form-group">Observaciones Control Mecánico:</label>
-            <textarea id="obs-control" placeholder="Observaciones"></textarea>
-        </div>
+        <div class="obs-area"><label class="form-group">Observaciones Control Mecánico:</label><textarea id="obs-control" placeholder="Observaciones"></textarea></div>
     </div>
 
     
-<div class="form-group responsible-name-container">
-            <label>Nombre del Responsable:</label>
-            <input type="text" id="responsibleName" class="uppercase-input" placeholder="Nombre y Apellido">
-        </div>
+    <div class="form-group responsible-name-container">
+        <label>Nombre del Responsable:</label>
+        <input type="text" id="responsibleName" class="uppercase-input" placeholder="Nombre y Apellido">
+    </div>
 
-                <div class="signature-pad-wrapper">
+    <div class="signature-pad-wrapper">
         <div style="width: 100%; max-width: 600px; margin-bottom:5px; display:flex; justify-content:space-between;">
             <label>Firma del Responsable:</label>
         </div>
-        
         <div class="signature-pad-body">
             <canvas id="signature-pad"></canvas>
             <span class="signature-label">Firmar aquí</span>
         </div>
-        
         <div class="signature-actions">
             <button class="btn-small" onclick="borrarFirma()">Borrar Firma</button>
         </div>
@@ -1299,38 +837,85 @@
         <button class="btn-clear" onclick="limpiarFormulario()">Limpiar</button>
         <button id="btn-print" class="btn-submit" onclick="generarReporte()">Finalizar e Imprimir Reporte</button>
     </div>
-    
-
 
     <div class="footer-info">
-        <span class="hover-underline" id="version-link">Versión 1.2.0 - Control de Calidad GAS</span>
+        <span class="hover-underline" id="version-link">Versión 1.3.0 - Control de Calidad GAS</span>
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 <script>
-    const STORAGE_KEY = "form-calidad-gas";
+    const STORAGE_KEY = "form-calidad-gas-v2";
     const HISTORY_KEY = "form-calidad-history";
     const MAX_HISTORY = 5;
 
-    // Variables para instancias de flatpickr (se inicializan en initFlatpickr)
     let datePickers = [];
     let timePickers = [];
 
+    // --- NUEVA FUNCIÓN: MANEJO DE PARES (CHECK VERDE / CHECK ROJO) ---
+    function handleCheckPair(clickedId, otherId, obsBoxId) {
+        const clicked = document.getElementById(clickedId);
+        const other = document.getElementById(otherId);
+        const obsBox = document.getElementById(obsBoxId);
+        
+        if (!clicked || !other) return;
+
+        // Exclusividad: Si marcas uno, se desmarca el otro
+        if (clicked.checked) {
+            other.checked = false;
+        }
+
+        // Visibilidad de la caja de observación
+        if (obsBox) {
+            // Si el que se marcó es el FAIL (contiene 'fail')
+            if (clickedId.includes('fail') && clicked.checked) {
+                obsBox.classList.add('visible');
+                // Auto-focus para escribir rápido
+                const input = obsBox.querySelector('input');
+                if(input) setTimeout(() => input.focus(), 100);
+            } 
+            // Si se marcó el PASS (OK)
+            else if (!clickedId.includes('fail') && clicked.checked) {
+                obsBox.classList.remove('visible');
+            }
+            // Si ninguno está marcado
+            else if (!clicked.checked && !other.checked) {
+                obsBox.classList.remove('visible');
+            }
+        }
+    }
+
+    // --- MODIFICADA: VERIFICACIÓN DE SECCIÓN ---
     function checkSection(sectionId) {
         const section = document.getElementById(sectionId);
         const header = section.querySelector('.section-header');
         const indicator = section.querySelector('.status-indicator');
-        const checkboxes = section.querySelectorAll('input[type="checkbox"]');
+        
+        // Obtenemos solo los checkboxes "PASS" (los verdes) para iterar
+        // Si no hay clase 'check-pass' (ej. admin), fallback a querySelectorAll normal
+        const passCheckboxes = Array.from(section.querySelectorAll('.check-pass'));
         
         let allChecked = true;
-        
-        checkboxes.forEach(box => {
-            if (!box.checked) {
-                allChecked = false;
-            }
-        });
+
+        if (passCheckboxes.length > 0) {
+            // Lógica nueva: Está completo si (pass está checked) O (fail está checked)
+            passCheckboxes.forEach(passBox => {
+                const failBoxId = passBox.id + '-fail';
+                const failBox = document.getElementById(failBoxId);
+                
+                // Si pass NO está marcado Y (no existe failBox O failBox no está marcado)
+                if (!passBox.checked && (!failBox || !failBox.checked)) {
+                    allChecked = false;
+                }
+            });
+        } else {
+            // Lógica antigua (para la sección Admin que no tiene pares)
+            const checkboxes = section.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(box => {
+                if (!box.checked) allChecked = false;
+            });
+        }
 
         if (allChecked) {
             header.classList.add('completed');
@@ -1339,59 +924,86 @@
             header.classList.remove('completed');
             indicator.textContent = "PENDIENTE";
         }
+        
+        updateSectionProgress(sectionId);
     }
 
-    // Inicializa flatpickr en los inputs con clase .flat-date y .flat-time
+    // --- MODIFICADA: PROGRESO DE SECCIÓN ---
+    function updateSectionProgress(sectionId) {
+        const section = document.getElementById(sectionId);
+        if (!section) return;
+
+        // Intentar usar lógica de pares primero
+        const passCheckboxes = Array.from(section.querySelectorAll('.check-pass'));
+        let total = passCheckboxes.length;
+        let checkedCount = 0;
+
+        if (total > 0) {
+            passCheckboxes.forEach(passBox => {
+                const failBox = document.getElementById(passBox.id + '-fail');
+                if (passBox.checked || (failBox && failBox.checked)) {
+                    checkedCount++;
+                }
+            });
+        } else {
+            // Fallback lógica simple
+            const allChecks = Array.from(section.querySelectorAll('input[type="checkbox"]'))
+                .filter(cb => !cb.id.includes('-ok'));
+            total = allChecks.length;
+            if (total === 0) return;
+            checkedCount = allChecks.filter(cb => cb.checked).length;
+        }
+
+        const progress = (checkedCount / total) * 100;
+
+        let progressBar = section.querySelector('.section-progress-bar');
+        if (!progressBar) {
+            progressBar = document.createElement('div');
+            progressBar.className = 'section-progress-bar';
+            const obs = section.querySelector('.obs-area');
+            if (obs) obs.insertAdjacentElement('beforebegin', progressBar);
+            else section.appendChild(progressBar);
+        }
+
+        let fill = progressBar.querySelector('.section-progress-fill');
+        if (!fill) {
+            fill = document.createElement('div');
+            fill.className = 'section-progress-fill';
+            progressBar.appendChild(fill);
+        }
+        fill.style.width = progress + '%';
+    }
+
+    function updateAllSectionProgress() {
+        ["sec-sistema", "sec-pintura", "sec-armado", "sec-pulido", "sec-tapiceria", "sec-control"].forEach(id => {
+             if(document.getElementById(id)) checkSection(id);
+        });
+    }
+
     function initFlatpickr() {
-        // Fecha -> guardamos en Y-m-d (ISO) pero mostramos en d/m/Y
         datePickers = Array.from(document.querySelectorAll(".flat-date")).map(el => flatpickr(el, {
-            dateFormat: "Y-m-d",      // valor real que se guarda en el input (facil para parsear)
-            altInput: true,
-            altFormat: "d/m/Y",       // formato visible para el usuario
-            allowInput: true,
-            clickOpens: true,
-            onChange: function(selectedDates, dateStr, instance) { 
-                saveForm(); 
-                validateCorrectionAfterReturn();
-            }
+            dateFormat: "Y-m-d", altInput: true, altFormat: "d/m/Y", allowInput: true, clickOpens: true,
+            onChange: function(selectedDates, dateStr, instance) { saveForm(); validateCorrectionAfterReturn(); }
         }));
-
-        // Hora -> usamos formato 12h con AM/PM, guardamos en H:i (24h internamente) pero mostramos h:i K (12h)
         timePickers = Array.from(document.querySelectorAll(".flat-time")).map(el => flatpickr(el, {
-            enableTime: true,
-            noCalendar: true,
-            dateFormat: "H:i",    // valor real guardado en el input (formato 24h)
-            altInput: true,
-            altFormat: "h:i K",   // formato mostrado: 12h con AM/PM
-            time_24hr: false,     // modo 12 horas
-            allowInput: true,
-            clickOpens: true,
-            minuteIncrement: 1,
-            onChange: function(selectedDates, dateStr, instance) {
-                saveForm();
-                validateCorrectionAfterReturn();
-            }
+            enableTime: true, noCalendar: true, dateFormat: "H:i", altInput: true, altFormat: "h:i K",
+            time_24hr: false, allowInput: true, clickOpens: true, minuteIncrement: 1,
+            onChange: function(selectedDates, dateStr, instance) { saveForm(); validateCorrectionAfterReturn(); }
         }));
     }
 
-    // Helper: devuelve un objeto Date combinado desde inputs de fecha (Y-m-d) y hora (H:i).
-    // Si falta fecha, retorna null. Si falta hora, se asume 00:00.
     function getDateTimeFromInputs(dateId, timeId) {
         const dateEl = document.getElementById(dateId);
-        if (!dateEl || !dateEl.value) return null; // fecha obligatoria para construir
+        if (!dateEl || !dateEl.value) return null;
         const timeEl = document.getElementById(timeId);
-        const dateStr = dateEl.value; // YYYY-MM-DD (flatpickr dateFormat)
-        const timeStr = (timeEl && timeEl.value) ? timeEl.value : "00:00"; // HH:MM
-
-        // Construir ISO string: YYYY-MM-DDTHH:MM:00
+        const dateStr = dateEl.value; 
+        const timeStr = (timeEl && timeEl.value) ? timeEl.value : "00:00";
         const iso = dateStr + "T" + timeStr + ":00";
         const dt = new Date(iso);
         if (isNaN(dt.getTime())) return null;
         return dt;
     }
 
-    // Valida que la fecha/hora de corrección no sea anterior a la de devolución.
-    // Muestra mensaje y marca inputs si hay un problema; también deshabilita el botón de imprimir.
     function validateCorrectionAfterReturn() {
         const devuelto = getDateTimeFromInputs("devuelto-date", "devuelto-time");
         const corregido = getDateTimeFromInputs("corregido-date", "corregido-time");
@@ -1400,9 +1012,7 @@
         const corregidoTimeEl = document.getElementById("corregido-time");
         const btnPrint = document.getElementById("btn-print");
 
-        // Si no hay fecha de devolución, no aplicamos validación
         if (!devuelto || !corregido) {
-            // limpiar estados
             if (errorEl) errorEl.classList.remove("visible");
             if (corregidoDateEl) corregidoDateEl.classList.remove("input-invalid");
             if (corregidoTimeEl) corregidoTimeEl.classList.remove("input-invalid");
@@ -1411,14 +1021,12 @@
         }
 
         if (corregido < devuelto) {
-            // invalid
             if (errorEl) errorEl.classList.add("visible");
             if (corregidoDateEl) corregidoDateEl.classList.add("input-invalid");
             if (corregidoTimeEl) corregidoTimeEl.classList.add("input-invalid");
             if (btnPrint) btnPrint.setAttribute("disabled", "true");
             return false;
         } else {
-            // valid
             if (errorEl) errorEl.classList.remove("visible");
             if (corregidoDateEl) corregidoDateEl.classList.remove("input-invalid");
             if (corregidoTimeEl) corregidoTimeEl.classList.remove("input-invalid");
@@ -1427,78 +1035,53 @@
         }
     }
 
-    // 👉 Guarda todos los campos en localStorage
     function saveForm() {
         const data = {};
-
         document.querySelectorAll("input, select, textarea").forEach(el => {
             if (!el.id) return; 
-
             if (el.type === "checkbox") {
                 data[el.id] = el.checked;
             } else {
                 data[el.id] = el.value;
             }
         });
-
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-        
-        // MOSTRAR INDICADOR DE GUARDADO
         const indicator = document.getElementById('save-indicator');
         indicator.style.opacity = 1;
-        setTimeout(() => {
-            indicator.style.opacity = 0;
-        }, 900); // Ocultar después de 0.9 segundos
+        setTimeout(() => { indicator.style.opacity = 0; }, 900);
     }
 
-    // 👉 Carga los datos desde localStorage
     function loadForm() {
         const raw = localStorage.getItem(STORAGE_KEY);
         if (!raw) return;
-
         const data = JSON.parse(raw);
 
         for (let id in data) {
             const el = document.getElementById(id);
             if (!el) continue;
-
             if (el.type === "checkbox") {
                 el.checked = data[id];
+                // LÓGICA DE RECUPERACIÓN PARA CAJAS DE TEXTO OCULTAS
+                if (data[id] === true && id.includes('fail')) {
+                    const baseId = id.split('-fail')[0];
+                    const obsBox = document.getElementById(baseId + '-obs-box');
+                    if (obsBox) obsBox.classList.add('visible');
+                }
             } else {
                 el.value = data[id];
             }
         }
 
-        // Si hay pickers inicializados, sincronizarlos con los valores cargados
         if (datePickers && datePickers.length) {
-            datePickers.forEach(inst => {
-                try {
-                    if (inst.input && inst.input.value) {
-                        // inst.setDate acepta el valor real (Y-m-d)
-                        inst.setDate(inst.input.value, false, "Y-m-d");
-                    }
-                } catch (e) { /* ignore invalid dates */ }
-            });
+            datePickers.forEach(inst => { try { if (inst.input && inst.input.value) inst.setDate(inst.input.value, false, "Y-m-d"); } catch (e) {} });
         }
         if (timePickers && timePickers.length) {
-            timePickers.forEach(inst => {
-                try {
-                    if (inst.input && inst.input.value) {
-                        inst.setDate(inst.input.value, false, "H:i");
-                    }
-                } catch (e) { /* ignore invalid times */ }
-            });
+            timePickers.forEach(inst => { try { if (inst.input && inst.input.value) inst.setDate(inst.input.value, false, "H:i"); } catch (e) {} });
         }
 
-        // Actualizar estados de secciones después de cargar
-        ["sec-sistema", "sec-pintura", "sec-armado", "sec-pulido", "sec-tapiceria", "sec-control"].forEach(id => {
-            if (document.getElementById(id)) {
-                checkSection(id);
-            }
-        });
-
-        // Ejecutar validaciones iniciales
+        updateAllSectionProgress();
         validateCorrectionAfterReturn();
+        actualizarBloquesAdmin();
     }
 
     // --- Funciones de Historial Local ---
@@ -1506,22 +1089,14 @@
         const current = localStorage.getItem(STORAGE_KEY);
         if (!current) return;
         let history = [];
-        try {
-            const stored = localStorage.getItem(HISTORY_KEY);
-            history = stored ? JSON.parse(stored) : [];
-        } catch (e) {}
+        try { const stored = localStorage.getItem(HISTORY_KEY); history = stored ? JSON.parse(stored) : []; } catch (e) {}
         history.push({ data: current, timestamp: new Date().toLocaleString('es-ES') });
         if (history.length > MAX_HISTORY) history.shift();
         localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
     }
 
     function getHistory() {
-        try {
-            const stored = localStorage.getItem(HISTORY_KEY);
-            return stored ? JSON.parse(stored) : [];
-        } catch (e) {
-            return [];
-        }
+        try { const stored = localStorage.getItem(HISTORY_KEY); return stored ? JSON.parse(stored) : []; } catch (e) { return []; }
     }
 
     function restoreFromHistory(index) {
@@ -1534,69 +1109,30 @@
 
     function showHistoryModal() {
         const history = getHistory();
-        if (!history || !history.length) {
-            showRichToast('', 'No hay historial guardado', 'info', 3000);
-            return;
-        }
-
-        const overlay = document.createElement('div');
-        overlay.className = 'modal-overlay';
-        overlay.tabIndex = -1;
-
-        const dialog = document.createElement('div');
-        dialog.className = 'history-modal';
-        dialog.setAttribute('role', 'dialog');
-        dialog.setAttribute('aria-modal', 'true');
-
-        const title = document.createElement('div');
-        title.className = 'hm-title';
-        title.textContent = 'Historial de Cambios';
-
-        const list = document.createElement('ul');
-        list.className = 'hm-list';
-
+        if (!history || !history.length) { showRichToast('', 'No hay historial guardado', 'info', 3000); return; }
+        const overlay = document.createElement('div'); overlay.className = 'modal-overlay'; overlay.tabIndex = -1;
+        const dialog = document.createElement('div'); dialog.className = 'history-modal';
+        const title = document.createElement('div'); title.className = 'hm-title'; title.textContent = 'Historial de Cambios';
+        const list = document.createElement('ul'); list.className = 'hm-list';
         history.forEach((entry, idx) => {
             const li = document.createElement('li');
-            const label = document.createElement('span');
-            label.textContent = entry.timestamp;
-            const btn = document.createElement('button');
-            btn.className = 'hm-restore';
-            btn.textContent = 'Restaurar';
+            const label = document.createElement('span'); label.textContent = entry.timestamp;
+            const btn = document.createElement('button'); btn.className = 'hm-restore'; btn.textContent = 'Restaurar';
             btn.addEventListener('click', () => restoreFromHistory(idx));
-            li.appendChild(label);
-            li.appendChild(btn);
-            list.appendChild(li);
+            li.appendChild(label); li.appendChild(btn); list.appendChild(li);
         });
-
-        const closeDiv = document.createElement('div');
-        closeDiv.className = 'hm-close';
-        const closeBtn = document.createElement('button');
-        closeBtn.className = 'btn-close-history';
-        closeBtn.textContent = 'Cerrar';
+        const closeDiv = document.createElement('div'); closeDiv.className = 'hm-close';
+        const closeBtn = document.createElement('button'); closeBtn.className = 'btn-close-history'; closeBtn.textContent = 'Cerrar';
         closeDiv.appendChild(closeBtn);
-
-        dialog.appendChild(title);
-        dialog.appendChild(list);
-        dialog.appendChild(closeDiv);
-        overlay.appendChild(dialog);
-        document.body.appendChild(overlay);
-
-        function closeModal() {
-            try { dialog.classList.add('animate-out'); } catch (e) {}
-            setTimeout(() => {
-                if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
-            }, 180);
-        }
-
+        dialog.appendChild(title); dialog.appendChild(list); dialog.appendChild(closeDiv);
+        overlay.appendChild(dialog); document.body.appendChild(overlay);
+        function closeModal() { try { dialog.classList.add('animate-out'); } catch (e) {} setTimeout(() => { if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay); }, 180); }
         closeBtn.addEventListener('click', closeModal);
-        overlay.addEventListener('click', (ev) => {
-            if (ev.target === overlay) closeModal();
-        });
+        overlay.addEventListener('click', (ev) => { if (ev.target === overlay) closeModal(); });
     }
 
-    // --- Diálogo de confirmación visual (reemplaza confirm()) ---
+    // --- Diálogo de confirmación visual ---
     function showConfirm(options) {
-        // options: { title, message, confirmText, cancelText, onConfirm, onCancel }
         const title = options.title || 'Confirmar';
         const message = options.message || '';
         const confirmText = options.confirmText || 'Confirmar';
@@ -1604,190 +1140,62 @@
         const onConfirm = typeof options.onConfirm === 'function' ? options.onConfirm : () => {};
         const onCancel = typeof options.onCancel === 'function' ? options.onCancel : () => {};
 
-        // Prevent multiple dialogs
         if (document.querySelector('.modal-overlay')) return;
 
-        const overlay = document.createElement('div');
-        overlay.className = 'modal-overlay';
-        overlay.tabIndex = -1;
+        const overlay = document.createElement('div'); overlay.className = 'modal-overlay'; overlay.tabIndex = -1;
+        const dialog = document.createElement('div'); dialog.className = 'confirm-dialog';
+        const titleEl = document.createElement('div'); titleEl.className = 'cd-title'; titleEl.textContent = title;
+        const msgEl = document.createElement('div'); msgEl.className = 'cd-message'; msgEl.textContent = message;
+        const actions = document.createElement('div'); actions.className = 'cd-actions';
+        const btnCancel = document.createElement('button'); btnCancel.className = 'btn-cancel'; btnCancel.textContent = cancelText;
+        const btnConfirm = document.createElement('button'); btnConfirm.className = 'btn-confirm btn-clear'; btnConfirm.textContent = confirmText;
 
-        const dialog = document.createElement('div');
-        dialog.className = 'confirm-dialog';
-        dialog.setAttribute('role', 'dialog');
-        dialog.setAttribute('aria-modal', 'true');
-        dialog.setAttribute('aria-labelledby', 'cd-title');
-        dialog.setAttribute('aria-describedby', 'cd-message');
+        actions.appendChild(btnCancel); actions.appendChild(btnConfirm);
+        dialog.appendChild(titleEl); dialog.appendChild(msgEl); dialog.appendChild(actions);
+        overlay.appendChild(dialog); document.body.appendChild(overlay);
 
-        const titleEl = document.createElement('div');
-        titleEl.className = 'cd-title';
-        titleEl.id = 'cd-title';
-        titleEl.textContent = title;
-
-        const msgEl = document.createElement('div');
-        msgEl.className = 'cd-message';
-        msgEl.id = 'cd-message';
-        msgEl.textContent = message;
-
-        const actions = document.createElement('div');
-        actions.className = 'cd-actions';
-
-        const btnCancel = document.createElement('button');
-        btnCancel.className = 'btn-cancel';
-        btnCancel.textContent = cancelText;
-
-        const btnConfirm = document.createElement('button');
-        // Use existing btn-clear class for consistency (red destructive button)
-        btnConfirm.className = 'btn-confirm btn-clear';
-        btnConfirm.textContent = confirmText;
-
-        actions.appendChild(btnCancel);
-        actions.appendChild(btnConfirm);
-
-        dialog.appendChild(titleEl);
-        dialog.appendChild(msgEl);
-        dialog.appendChild(actions);
-        overlay.appendChild(dialog);
-        document.body.appendChild(overlay);
-
-        // Save previously focused element
         const previousActive = document.activeElement;
-
-        // Focus management
         btnCancel.focus();
 
         function closeDialog(result) {
-            // play exit animation then remove
             try { dialog.classList.add('animate-out'); } catch (e) {}
-            setTimeout(() => {
-                if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
-                try { if (previousActive) previousActive.focus(); } catch (e) {}
-                if (result) onConfirm(); else onCancel();
-            }, 180);
+            setTimeout(() => { if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay); try { if (previousActive) previousActive.focus(); } catch (e) {} if (result) onConfirm(); else onCancel(); }, 180);
         }
 
         btnCancel.addEventListener('click', () => closeDialog(false));
         btnConfirm.addEventListener('click', () => closeDialog(true));
-
-        // Close when clicking outside dialog
-        overlay.addEventListener('click', (ev) => {
-            if (ev.target === overlay) closeDialog(false);
-        });
-
-        // Keyboard handling: Esc to cancel, Enter to confirm when focused inside
-        function keyHandler(e) {
-            if (e.key === 'Escape') { e.preventDefault(); closeDialog(false); }
-            if (e.key === 'Enter') {
-                // if focus inside overlay, treat as confirm
-                if (overlay.contains(document.activeElement)) { e.preventDefault(); closeDialog(true); }
-            }
-            // trap Tab inside the dialog (basic)
-            if (e.key === 'Tab') {
-                const focusables = [btnCancel, btnConfirm];
-                const idx = focusables.indexOf(document.activeElement);
-                if (e.shiftKey) {
-                    // move backward
-                    const next = (idx <= 0) ? focusables[focusables.length - 1] : focusables[idx - 1];
-                    next.focus();
-                    e.preventDefault();
-                } else {
-                    const next = (idx === -1 || idx === focusables.length - 1) ? focusables[0] : focusables[idx + 1];
-                    next.focus();
-                    e.preventDefault();
-                }
-            }
-        }
-
-        document.addEventListener('keydown', keyHandler);
-
-        // Ensure cleanup of listener on close
-        const origOnConfirm = onConfirm;
-        const origOnCancel = onCancel;
-        const wrappedConfirm = () => { document.removeEventListener('keydown', keyHandler); origOnConfirm(); };
-        const wrappedCancel = () => { document.removeEventListener('keydown', keyHandler); origOnCancel(); };
-
-        // Replace handlers to ensure key listener removed
-        onConfirm = wrappedConfirm;
-        onCancel = wrappedCancel;
-
-        // Also remove key listener if overlay removed by other means
-        overlay.addEventListener('remove', () => document.removeEventListener('keydown', keyHandler));
+        overlay.addEventListener('click', (ev) => { if (ev.target === overlay) closeDialog(false); });
     }
 
-    // 👉 Limpia todo: pantalla + almacenamiento local (usa diálogo visual)
     function limpiarFormulario() {
-        // Check if there's any data to clear
         const hasData = localStorage.getItem(STORAGE_KEY) !== null;
-        
-        if (!hasData) {
-            showRichToast(
-                'Formulario vacío',
-                'No hay datos para limpiar.',
-                'info',
-                3000
-            );
-            return;
-        }
+        if (!hasData) { showRichToast('Formulario vacío', 'No hay datos para limpiar.', 'info', 3000); return; }
 
         showConfirm({
             title: 'Limpiar formulario',
             message: '¿Está seguro que desea limpiar todo el formulario? Se perderán todos los datos guardados.',
-            confirmText: 'Limpiar',
-            cancelText: 'Cancelar',
+            confirmText: 'Limpiar', cancelText: 'Cancelar',
             onConfirm: () => {
-                // Save current state to history before clearing
                 saveToHistory();
                 localStorage.removeItem(STORAGE_KEY);
-                
-                // Limpiar también la firma
                 localStorage.removeItem(STORAGE_KEY + "_sig");
                 if(signaturePad) signaturePad.clear();
                 
-                // Limpiar todos los inputs, selects y textareas inmediatamente
-                document.querySelectorAll('input[type="text"], input[type="date"], input[type="time"], input[type="number"], select, textarea').forEach(el => {
-                    el.value = '';
-                });
+                document.querySelectorAll('input[type="text"], input[type="date"], input[type="time"], input[type="number"], select, textarea').forEach(el => { el.value = ''; });
+                document.querySelectorAll('input[type="checkbox"]').forEach(el => { el.checked = false; });
+                document.querySelectorAll('.specific-obs').forEach(el => el.classList.remove('visible')); // Ocultar cajas
 
-                // Limpiar y desmarcar todos los checkboxes
-                document.querySelectorAll('input[type="checkbox"]').forEach(el => {
-                    el.checked = false;
-                });
-
-                // Actualizar estado de secciones y progreso
-                ["sec-sistema", "sec-pintura", "sec-armado", "sec-pulido", "sec-tapiceria", "sec-control"].forEach(id => {
-                    checkSection(id);
-                    updateSectionProgress(id);
-                });
+                updateAllSectionProgress();
                 
-                // Show undo toast with action
-                showRichToast(
-                    'Formulario limpiado',
-                    'Los datos han sido borrados. Tienes 30 segundos para deshacer.',
-                    'info',
-                    30000,
-                    [{
-                        label: 'Deshacer',
-                        className: '',
-                        onClick: () => {
-                            const history = getHistory();
-                            if (history.length > 0) {
-                                restoreFromHistory(history.length - 1);
-                            }
-                        }
-                    }]
-                );
-                
-                // Reload after delay
+                showRichToast('Formulario limpiado', 'Los datos han sido borrados. Tienes 30 segundos para deshacer.', 'info', 30000, [{
+                    label: 'Deshacer', className: '', onClick: () => { const history = getHistory(); if (history.length > 0) restoreFromHistory(history.length - 1); }
+                }]);
                 setTimeout(() => { window.location.reload(); }, 32000);
-            },
-            onCancel: () => {
-                // no-op
             }
         });
     }
 
-    // --- FUNCIONES PARA INSERTAR / REMOVER FECHA EN LA ESQUINA SUPERIOR DERECHA AL IMPRIMIR ---
     function formatDateForPrint(d = new Date()) {
-        // Formato dd/mm/yyyy
         const dd = String(d.getDate()).padStart(2, '0');
         const mm = String(d.getMonth() + 1).padStart(2, '0');
         const yyyy = d.getFullYear();
@@ -1795,308 +1203,97 @@
     }
 
     function addPrintDate() {
-        // Si ya existe, actualizarla
         let el = document.querySelector('.print-date');
-        if (!el) {
-            el = document.createElement('div');
-            el.className = 'print-date';
-            el.setAttribute('aria-hidden', 'true');
-            document.body.appendChild(el);
-        }
-   
+        if (!el) { el = document.createElement('div'); el.className = 'print-date'; el.setAttribute('aria-hidden', 'true'); document.body.appendChild(el); }
     }
-
     function removePrintDate() {
-        const el = document.querySelector('.print-date');
-        if (el && el.parentNode) el.parentNode.removeChild(el);
+        const el = document.querySelector('.print-date'); if (el && el.parentNode) el.parentNode.removeChild(el);
     }
 
-    // --- Toast helper and compatibility wrapper for existing calls ---
-    // Basic legacy toast (kept for compatibility) — uses plain message text
-    function showToast(message, kind = 'success', duration = 2800) {
-        showRichToast('', message, kind, duration);
-    }
+    function showToast(message, kind = 'success', duration = 2800) { showRichToast('', message, kind, duration); }
 
-    // Rich toast: title + message + kind + duration. Adds accessible attributes, pause-on-hover, close button, swipe-to-dismiss, and action buttons.
     function showRichToast(title, message, kind = 'success', duration = 3000, actions = []) {
-        // Ensure container exists
         let container = document.querySelector('.toast-container');
-        if (!container) {
-            container = document.createElement('div');
-            container.className = 'toast-container';
-            container.setAttribute('aria-live', 'polite');
-            container.setAttribute('role', 'status');
-            document.body.appendChild(container);
+        if (!container) { container = document.createElement('div'); container.className = 'toast-container'; document.body.appendChild(container); }
 
-                
-        }
-
-        // Normalize inputs when building a dedupe key so small differences
-        // (extra spaces, newlines) don't produce different keys.
         const normalize = s => (s || '').toString().replace(/\s+/g, ' ').trim();
         const keyRaw = (kind || '') + '|' + normalize(title) + '|' + normalize(message);
         const key = encodeURIComponent(keyRaw);
 
-        // Ensure we have a global set of active toast keys to prevent race-created duplicates
         if (!window.__activeToastKeys) window.__activeToastKeys = new Set();
-
-        // If a toast with this key is already being displayed/created, pulse it and return
         const existingToasts = Array.from(container.querySelectorAll('.toast'));
         const matching = existingToasts.find(ex => ex.dataset && ex.dataset.toastKey === key);
         if (matching || window.__activeToastKeys.has(key)) {
-            // If we have DOM element, pulse visually (but don't restart timer)
-            if (matching) {
-                // Temporarily lock the toast so mouseleave/focusout don't restart the timer during pulse
-                matching.__pulseActive = true;
-                try { matching.style.animation = 'toastPulse .28s ease'; } catch (e) {}
-                setTimeout(() => { 
-                    try { matching.style.animation = ''; } catch (e) {} 
-                    matching.__pulseActive = false;
-                }, 300);
-            }
+            if (matching) { matching.__pulseActive = true; try { matching.style.animation = 'toastPulse .28s ease'; } catch (e) {} setTimeout(() => { try { matching.style.animation = ''; } catch (e) {} matching.__pulseActive = false; }, 300); }
             return matching || null;
         }
-
-        // Reserve the key immediately to avoid concurrent creators from both inserting
         window.__activeToastKeys.add(key);
 
-        // Otherwise remove/animate other toasts before showing new one
-        if (existingToasts.length) {
-            existingToasts.forEach((ex) => { try { ex.style.animation = 'toastOut 0.35s cubic-bezier(0.4, 0, 1, 1) forwards'; } catch (e) {} });
-            setTimeout(() => { existingToasts.forEach((ex) => { try { if (ex && ex.parentNode) ex.parentNode.removeChild(ex); } catch (e) {} }); }, 360);
-        }
+        if (existingToasts.length) { existingToasts.forEach((ex) => { try { ex.style.animation = 'toastOut 0.35s cubic-bezier(0.4, 0, 1, 1) forwards'; } catch (e) {} }); setTimeout(() => { existingToasts.forEach((ex) => { try { if (ex && ex.parentNode) ex.parentNode.removeChild(ex); } catch (e) {} }); }, 360); }
 
-        const t = document.createElement('div');
-        t.dataset.toastKey = key;
-        t.className = 'toast ' + (kind || 'success');
-        t.setAttribute('tabindex', '0');
-
-        // Icon map (simple emoji for now)
+        const t = document.createElement('div'); t.dataset.toastKey = key; t.className = 'toast ' + (kind || 'success'); t.setAttribute('tabindex', '0');
         const icons = { success: '✔️', error: '⛔', info: 'ℹ️', warning: '⚠️' };
-
-        const iconEl = document.createElement('div');
-        iconEl.className = 'icon';
-        iconEl.textContent = icons[kind] || '';
-
-        const content = document.createElement('div');
-        content.className = 'content';
-
-        if (title) {
-            const titleEl = document.createElement('div');
-            titleEl.className = 'title';
-            titleEl.textContent = title;
-            content.appendChild(titleEl);
-        }
-
-        if (message) {
-            const msgEl = document.createElement('div');
-            msgEl.className = 'message';
-            msgEl.textContent = message;
-            content.appendChild(msgEl);
-        }
-
-        const closeBtn = document.createElement('button');
-        closeBtn.className = 'close';
-        closeBtn.setAttribute('aria-label', 'Cerrar aviso');
-        closeBtn.innerHTML = '✕';
-
-        // Actions container (optional buttons like 'Deshacer' or 'Ir al campo')
+        const iconEl = document.createElement('div'); iconEl.className = 'icon'; iconEl.textContent = icons[kind] || '';
+        const content = document.createElement('div'); content.className = 'content';
+        if (title) { const titleEl = document.createElement('div'); titleEl.className = 'title'; titleEl.textContent = title; content.appendChild(titleEl); }
+        if (message) { const msgEl = document.createElement('div'); msgEl.className = 'message'; msgEl.textContent = message; content.appendChild(msgEl); }
+        
+        const closeBtn = document.createElement('button'); closeBtn.className = 'close'; closeBtn.innerHTML = '✕';
         let actionsContainer = null;
         if (Array.isArray(actions) && actions.length) {
-            actionsContainer = document.createElement('div');
-            actionsContainer.className = 'toast-actions';
+            actionsContainer = document.createElement('div'); actionsContainer.className = 'toast-actions';
             actions.forEach(act => {
-                const b = document.createElement('button');
-                b.className = 'toast-action-btn ' + (act.className || '');
-                b.textContent = act.label || 'Acción';
-                b.addEventListener('click', (ev) => {
-                    ev.stopPropagation();
-                    try { if (typeof act.onClick === 'function') act.onClick(ev, t); } catch (e) { console.error(e); }
-                    // remove toast after action
-                    removeToast(true);
-                });
+                const b = document.createElement('button'); b.className = 'toast-action-btn ' + (act.className || ''); b.textContent = act.label || 'Acción';
+                b.addEventListener('click', (ev) => { ev.stopPropagation(); try { if (typeof act.onClick === 'function') act.onClick(ev, t); } catch (e) { console.error(e); } removeToast(true); });
                 actionsContainer.appendChild(b);
             });
         }
 
-        // Append children
-        t.appendChild(iconEl);
-        t.appendChild(content);
-        if (actionsContainer) t.appendChild(actionsContainer);
-        t.appendChild(closeBtn);
-
-        // Insert at top for newest on top
+        t.appendChild(iconEl); t.appendChild(content); if (actionsContainer) t.appendChild(actionsContainer); t.appendChild(closeBtn);
         container.insertBefore(t, container.firstChild);
 
-        // Accessibility: announce
-        t.setAttribute('role', 'alert');
-
-        // Auto-remove with pause-on-hover/focus
-        let removed = false;
-        let timeoutId = null;
-        const startTimer = (ms) => {
-            // Don't restart timer if a pulse animation is active
-            if (t.__pulseActive) return;
-            clearTimer();
-            timeoutId = setTimeout(() => removeToast(true), ms);
-        };
+        let removed = false; let timeoutId = null;
+        const startTimer = (ms) => { if (t.__pulseActive) return; clearTimer(); timeoutId = setTimeout(() => removeToast(true), ms); };
         const clearTimer = () => { if (timeoutId) { clearTimeout(timeoutId); timeoutId = null; } };
-
         function removeToast(animated) {
-            if (removed) return;
-            removed = true;
-            clearTimer();
+            if (removed) return; removed = true; clearTimer();
             t.style.animation = 'toastOut 0.4s cubic-bezier(0.4, 0, 1, 1) forwards';
             setTimeout(() => { if (t && t.parentNode) t.parentNode.removeChild(t); }, 300);
-            // free reserved key so future toasts can be created
             try { if (t && t.dataset && t.dataset.toastKey) window.__activeToastKeys && window.__activeToastKeys.delete(t.dataset.toastKey); } catch (e) {}
         }
 
-        // Pause on hover/focus
-        t.addEventListener('mouseenter', () => clearTimer());
-        t.addEventListener('mouseleave', () => startTimer(duration));
-        t.addEventListener('focusin', () => clearTimer());
-        t.addEventListener('focusout', () => startTimer(duration));
-
-        // Close button
+        t.addEventListener('mouseenter', () => clearTimer()); t.addEventListener('mouseleave', () => startTimer(duration));
         closeBtn.addEventListener('click', (e) => { e.stopPropagation(); removeToast(true); });
-
-        // Ensure action buttons are keyboard accessible
-        if (actionsContainer) {
-            actionsContainer.querySelectorAll('button').forEach(btn => {
-                btn.setAttribute('tabindex','0');
-            });
-        }
-
-        // Touch: basic swipe-to-dismiss (horizontal)
-        let startX = null;
-        let currentX = 0;
-        let swiping = false;
-        t.addEventListener('touchstart', (ev) => {
-            if (!ev.touches || !ev.touches.length) return;
-            startX = ev.touches[0].clientX;
-            swiping = true;
-            clearTimer();
-            t.style.transition = '';
-        }, { passive: true });
-
-        t.addEventListener('touchmove', (ev) => {
-            if (!swiping || !ev.touches || !ev.touches.length) return;
-            currentX = ev.touches[0].clientX - startX;
-            // translate only horizontally
-            t.style.transform = `translateX(${currentX}px)`;
-            t.style.opacity = `${Math.max(0.25, 1 - Math.abs(currentX) / 240)}`;
-        }, { passive: true });
-
-        t.addEventListener('touchend', (ev) => {
-            swiping = false;
-            t.style.transition = 'transform 0.18s ease, opacity 0.18s ease';
-            if (Math.abs(currentX) > 80) {
-                // dismiss
-                t.style.transform = `translateX(${currentX > 0 ? 1000 : -1000}px)`;
-                t.style.opacity = '0';
-                setTimeout(() => removeToast(true), 160);
-            } else {
-                // reset
-                t.style.transform = '';
-                t.style.opacity = '';
-                startTimer(duration);
-            }
-            startX = null; currentX = 0;
-        }, { passive: true });
-
-        // Start timer
         startTimer(duration);
-
         return t;
     }
 
-    // Keep existing API name so callers don't need changes.
     function showCustomAlert(title, message, listItems = [], type = 'warning', duration = null, actions = []) {
-        // type: 'error' | 'warning' | 'info' | 'success'
         const kind = (type === 'error') ? 'error' : (type === 'warning' ? 'warning' : (type === 'info' ? 'info' : 'success'));
-
-        // Compose a multiline message for toasts (title on first line, message next, then list)
-        const parts = [];
-        if (title) parts.push(title);
-        if (message) parts.push(message);
-        if (Array.isArray(listItems) && listItems.length) {
-            parts.push(listItems.map(i => '• ' + i).join('\n'));
-        }
-        const text = parts.join('\n\n');
-
-        // Decide a sensible default duration when none provided (longer for info so users notice it)
-        let finalDuration = duration;
-        if (!finalDuration) {
-            finalDuration = (kind === 'info') ? 6000 : 3000;
-        }
-
-        // Use rich toast: pass title separately when available
-        const composedTitle = title || '';
-        const composedMessage = [];
-        if (message) composedMessage.push(message);
+        let finalDuration = duration; if (!finalDuration) finalDuration = (kind === 'info') ? 6000 : 3000;
+        const composedMessage = []; if (message) composedMessage.push(message);
         if (Array.isArray(listItems) && listItems.length) composedMessage.push(listItems.map(i => '• ' + i).join('\n'));
-
-        // If actions provided, map them to toast actions; otherwise default behavior
-        const toastActions = Array.isArray(actions) && actions.length ? actions : [];
-        showRichToast(composedTitle, composedMessage.join('\n\n'), kind, finalDuration, toastActions);
+        showRichToast(title || '', composedMessage.join('\n\n'), kind, finalDuration, actions);
     }
 
-    function closeCustomAlert(event) {
-        // no-op for toast-based alerts; kept for compatibility
-        return;
-    }
-
-    // Integrar con generarReporte: insertamos la fecha justo antes de imprimir y la removemos después.
     function generarReporte() {
-        // --- VALIDACIONES ANTES DE IMPRIMIR ---
+        // --- VALIDACIONES ---
+        const algunaMarcada = [...document.querySelectorAll('input[type="checkbox"]')].some(cb => cb.checked);
+        if (!algunaMarcada) { showToast("Debes marcar al menos un punto del checklist.", "warning"); return; }
 
+        const responsable = document.getElementById("responsibleName").value.trim();
+        const firmaVacia = signaturePad.isEmpty();
+        if (responsable === "" && firmaVacia) { showToast("Falta el nombre del responsable y la firma.", "warning"); return; }
+        if (responsable === "") { showToast("Falta el nombre del responsable.", "warning"); return; }
+        if (firmaVacia) { showToast("Falta la firma del responsable.", "warning"); return; }
 
-// 1. ¿Hay al menos un checkbox marcado?
-const algunaMarcada = [...document.querySelectorAll('input[type="checkbox"]')]
-    .some(cb => cb.checked);
-
-if (!algunaMarcada) {
-    showToast("Debes marcar al menos un punto del checklist.", "warning");
-    return;
-}
-
-// 2. Obtener nombre y firma
-const responsable = document.getElementById("responsibleName").value.trim();
-const firmaVacia = signaturePad.isEmpty();
-
-// 3. Si faltan ambos → un solo aviso
-if (responsable === "" && firmaVacia) {
-    showToast("Falta el nombre del responsable y la firma.", "warning");
-    return;
-}
-
-// 4. Si falta solo el nombre
-if (responsable === "") {
-    showToast("Falta el nombre del responsable.", "warning");
-    return;
-}
-
-// 5. Si falta solo la firma
-if (firmaVacia) {
-    showToast("Falta la firma del responsable.", "warning");
-
-    return;
-}
- // --- FIN VALIDACIONES ---
-        
-        // 1. Poner fecha de impresión
         const today = new Date();
-        const dateStr = today.toLocaleDateString('es-ES', { 
-            day: '2-digit', month: '2-digit', year: 'numeric' 
-        });
+        const dateStr = today.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
         document.getElementById('print-date-display').textContent = dateStr;
 
-        // Deshabilitar botón temporalmente
         const btnPrint = document.getElementById('btn-print');
         if (btnPrint) btnPrint.setAttribute('disabled', 'true');
 
-        // 2. Validaciones (Igual que antes)
         const valid = validateCorrectionAfterReturn();
         if (!valid) {
             showCustomAlert("Fechas incorrectas", "La fecha de corrección no puede ser anterior a la fecha de devolución.", [], "error");
@@ -2104,396 +1301,155 @@ if (firmaVacia) {
             return;
         }
 
-        const requiredFields = [
-            { id: 'plate', name: 'Placa', critical: true },
-            { id: 'orderNum', name: 'Nº Orden de Trabajo', critical: true }
-        ];
-
+        const requiredFields = [{ id: 'plate', name: 'Placa', critical: true }, { id: 'orderNum', name: 'Nº Orden de Trabajo', critical: true }];
         let stop = false;
         requiredFields.forEach(f => {
             const el = document.getElementById(f.id);
-            if (!el || !el.value.trim()) {
-                showCustomAlert('Campo obligatorio', 'Falta: ' + f.name, [], 'error');
-                stop = true;
+            if (!el || !el.value.trim()) { showCustomAlert('Campo obligatorio', 'Falta: ' + f.name, [], 'error'); stop = true; }
+        });
+        if (stop) { if(btnPrint) btnPrint.removeAttribute('disabled'); return; }
+
+        // --- PREPARAR IMPRESIÓN (LOGICA NUEVA) ---
+        // 1. Limpiar clases viejas
+        document.querySelectorAll('.check-item').forEach(item => {
+            item.classList.remove('is-checked-print', 'is-pass-print', 'is-fail-print');
+            const pass = item.querySelector('.check-pass');
+            const fail = item.querySelector('.check-fail');
+            const simple = item.querySelector('input[type="checkbox"]:not(.check-pass):not(.check-fail)'); // Admin
+
+            if (pass && pass.checked) {
+                item.classList.add('is-checked-print', 'is-pass-print');
+            } else if (fail && fail.checked) {
+                item.classList.add('is-checked-print', 'is-fail-print');
+            } else if (simple && simple.checked) {
+                item.classList.add('is-checked-print', 'is-pass-print');
             }
         });
-        if (stop) {
-            if(btnPrint) btnPrint.removeAttribute('disabled');
-            return;
-        }
 
-        // 3. APLICAR FILTROS (Lógica de ocultar lo vacío)
-        
-        // A. Lógica Admin
+        // 2. Ocultar observaciones vacías
+        document.querySelectorAll('.obs-area').forEach(obsArea => {
+            const textarea = obsArea.querySelector('textarea');
+            if (textarea && textarea.value.trim() === '') obsArea.classList.add('empty-print');
+        });
+
+        // 3. Ocultar secciones vacías
+        document.querySelectorAll('.section').forEach(sec => {
+            sec.classList.remove('empty-print');
+            const hasChecked = sec.querySelectorAll('.is-checked-print').length > 0;
+            const obsVal = sec.querySelector('textarea') ? sec.querySelector('textarea').value.trim() : "";
+            if (!hasChecked && !obsVal) sec.classList.add('empty-print');
+        });
+
         const ejecutadosSelect = document.getElementById('sys-ejecutados').value;
         const devolucion = document.getElementById('devolucion-block');
         const corregido = document.getElementById('corregido-block');
-        
-        if (ejecutadosSelect === 'SI') {
-            devolucion.classList.add('ocultar-admin-print');
-            corregido.classList.add('ocultar-admin-print');
-        }
-
-        // B. Sección Sistema
-        const secSistema = document.getElementById('sec-sistema');
-        const adminOkChecked = document.getElementById('admin-ok').checked;
-        const obsSistemaVacia = document.getElementById('obs-sistema').value.trim() === '';
-        
-        if (!adminOkChecked && obsSistemaVacia) {
-            if(document.getElementById('sys-finalizada').value === '' && document.getElementById('sys-ejecutados').value === '') {
-                 secSistema.classList.add('empty-print');
-            }
-        }
-
-        // C. Checklist (Marcar los seleccionados para CSS)
-        document.querySelectorAll('.check-item').forEach(item => {
-            const checkbox = item.querySelector('input[type="checkbox"]');
-            if (checkbox && checkbox.checked) {
-                item.classList.add('is-checked-print');
-            }
-        });
-        
-        // D. Observaciones vacías
-        document.querySelectorAll('.obs-area').forEach(obsArea => {
-            const textarea = obsArea.querySelector('textarea');
-            if (textarea && textarea.value.trim() === '') {
-                obsArea.classList.add('empty-print');
-            }
-        });
-
-        // E. Ocultar SECCIONES enteras si no tienen nada marcado
-        const sectionsToEvaluate = ["sec-pintura","sec-armado","sec-pulido","sec-tapiceria","sec-control"];
-        sectionsToEvaluate.forEach(secId => {
-            const sec = document.getElementById(secId);
-            if (!sec) return;
-            const checkboxes = Array.from(sec.querySelectorAll('input[type="checkbox"]'));
-            const anyChecked = checkboxes.some(cb => cb.checked);
-            const obs = sec.querySelector('.obs-area');
-            const obsHasText = obs && obs.querySelector('textarea') && obs.querySelector('textarea').value.trim() !== '';
-            
-            // Si NO hay checks Y NO hay texto en observaciones -> OCULTAR
-            if (!anyChecked && !obsHasText) {
-                sec.classList.add('empty-print');
-            }
-        });
+        if (ejecutadosSelect === 'SI') { devolucion.classList.add('ocultar-admin-print'); corregido.classList.add('ocultar-admin-print'); }
 
         addPrintDate();
 
-        // 4. RETRASO CRÍTICO PARA ANDROID (Esperar a que el DOM se actualice antes de imprimir)
         setTimeout(() => {
             window.print();
-            
-            // 5. LIMPIEZA DIFERIDA
-            // No limpiamos inmediatamente. Esperamos 2 segundos para dar tiempo al sistema de generar el PDF.
-            // Solo después de 2 segundos activamos la limpieza al tocar la pantalla.
             setTimeout(() => {
-                const cleanup = () => {
-                    if (btnPrint) btnPrint.removeAttribute('disabled');
-                    document.querySelectorAll('.check-item').forEach(i => i.classList.remove('is-checked-print'));
-                    document.querySelectorAll('.obs-area').forEach(i => i.classList.remove('empty-print'));
-                    document.querySelectorAll('.section').forEach(i => i.classList.remove('empty-print'));
-                    if(devolucion) devolucion.classList.remove('ocultar-admin-print');
-                    if(corregido) corregido.classList.remove('ocultar-admin-print');
-                    if(secSistema) secSistema.classList.remove('empty-print');
-                    removePrintDate();
-
-                    // Remover listeners para que no se ejecute más veces
-                    window.removeEventListener('focus', cleanup);
-                    document.removeEventListener('click', cleanup);
-                    document.removeEventListener('touchstart', cleanup);
-                };
-
-                // Añadimos los eventos de limpieza AHORA, no antes.
-                window.addEventListener('focus', cleanup);
-                document.addEventListener('touchstart', cleanup);
-                document.addEventListener('click', cleanup);
-
-            }, 2000); // Esperar 2 segundos antes de permitir la limpieza
-
-        }, 500); // Esperar 0.5 segundos antes de lanzar la orden de imprimir
+                if (btnPrint) btnPrint.removeAttribute('disabled');
+                document.querySelectorAll('.check-item').forEach(i => i.classList.remove('is-checked-print', 'is-pass-print', 'is-fail-print'));
+                document.querySelectorAll('.obs-area').forEach(i => i.classList.remove('empty-print'));
+                document.querySelectorAll('.section').forEach(i => i.classList.remove('empty-print'));
+                if(devolucion) devolucion.classList.remove('ocultar-admin-print');
+                if(corregido) corregido.classList.remove('ocultar-admin-print');
+                removePrintDate();
+            }, 2000);
+        }, 500);
     }
     
-    // Registrar eventos beforeprint/afterprint y matchMedia para compatibilidad
-    if (window.matchMedia) {
-        const mql = window.matchMedia('print');
-        mql.addListener((m) => {
-            if (m.matches) {
-                addPrintDate();
-            } else {
-                removePrintDate();
-            }
-        });
-    }
+    if (window.matchMedia) { const mql = window.matchMedia('print'); mql.addListener((m) => { if (m.matches) addPrintDate(); else removePrintDate(); }); }
     window.addEventListener('beforeprint', addPrintDate);
     window.addEventListener('afterprint', removePrintDate);
 
-    // Configura los listeners para el resaltado de sección
     function setupFocusListeners() {
         const sectionIds = ["sec-sistema", "sec-pintura", "sec-armado", "sec-pulido", "sec-tapiceria", "sec-control"];
-
         sectionIds.forEach(sectionId => {
             const section = document.getElementById(sectionId);
             if (!section) return;
-
             section.querySelectorAll('input, select, textarea').forEach(input => {
-                input.addEventListener('focus', () => {
-                    section.classList.add('active-section');
-                });
-
-                input.addEventListener('blur', () => {
-                    setTimeout(() => {
-                        if (!section.contains(document.activeElement)) {
-                            section.classList.remove('active-section');
-                        }
-                    }, 100); 
-                });
+                input.addEventListener('focus', () => { section.classList.add('active-section'); });
+                input.addEventListener('blur', () => { setTimeout(() => { if (!section.contains(document.activeElement)) section.classList.remove('active-section'); }, 100); });
             });
         });
-    }
-
-    // Función para actualizar la barra de progreso por sección
-    function updateSectionProgress(sectionId) {
-        const section = document.getElementById(sectionId);
-        if (!section) return;
-
-        // Obtener todos los checkboxes de la sección (excluyendo el de confirmación final)
-        const checkboxes = Array.from(section.querySelectorAll('input[type="checkbox"]'))
-            .filter(cb => !cb.id.includes('-ok')); // Excluir el checkbox de confirmación
-        
-        if (checkboxes.length === 0) return;
-
-        const checkedCount = checkboxes.filter(cb => cb.checked).length;
-        const progress = (checkedCount / checkboxes.length) * 100;
-
-        // Crear o actualizar barra de progreso
-        let progressBar = section.querySelector('.section-progress-bar');
-        if (!progressBar) {
-            progressBar = document.createElement('div');
-            progressBar.className = 'section-progress-bar';
-            const obs = section.querySelector('.obs-area');
-            if (obs) {
-                obs.insertAdjacentElement('beforebegin', progressBar);
-            } else {
-                section.appendChild(progressBar);
-            }
-        }
-
-        const fill = progressBar.querySelector('.section-progress-fill');
-        if (fill) {
-            fill.style.width = progress + '%';
-        } else {
-            const fillEl = document.createElement('div');
-            fillEl.className = 'section-progress-fill';
-            fillEl.style.width = progress + '%';
-            progressBar.appendChild(fillEl);
-        }
-    }
-
-    // Función para actualizar todas las barras de progreso
-    function updateAllSectionProgress() {
-        const sectionIds = ["sec-sistema", "sec-pintura", "sec-armado", "sec-pulido", "sec-tapiceria", "sec-control"];
-        sectionIds.forEach(id => updateSectionProgress(id));
     }
 
     function configurarInputOrden() {
-    const input = document.getElementById('orderNum');
-    if (!input) return;
-
-    // Función principal de formateo, limpieza Y notificación
-    const formatearOrden = (mostrarToast) => {
-        const originalValor = input.value;
-        const prefijo = 'OT-'; 
-        
-        // 1. Extraer la parte que debería ser numérica, eliminando el prefijo si existe
-        let parteNumerica = originalValor.startsWith(prefijo) ? originalValor.substring(prefijo.length) : originalValor;
-
-        // 2. Lógica de Detección y Aviso (Toast)
-        // Verificamos si la parte numérica original contiene no-dígitos
-        if (mostrarToast && /[^0-9]/.test(parteNumerica)) {
-            // Mostrar el aviso (toast) si se encontró un caracter no válido
-            showRichToast(
-                'Entrada no válida',
-                'Solo se permiten dígitos para el número de Orden de Trabajo (máximo 4).',
-                'warning', // Usa el mismo tipo de aviso 'warning' que el resto del formulario
-                3000 // Duración en ms
-            );
-        }
-
-        // 3. Lógica de Limpieza: Eliminar todo lo que NO sea un número
-        let numerosLimpios = parteNumerica.replace(/[^0-9]/g, '');
-
-        // 4. Aplicar límite de 4 dígitos máximo
-        if (numerosLimpios.length > 4) {
-            numerosLimpios = numerosLimpios.slice(0, 4);
-        }
-
-        // 5. Asignar el valor final limpio: Prefijo + Números
-        input.value = prefijo + numerosLimpios;
-    };
-
-    // ---------------- EVENTOS ----------------
-    // Evento al escribir (incluye formateo y el aviso toast)
-    input.addEventListener('input', function(e) {
-        // Al escribir, llamamos a formatearOrden con 'true' para activar la lógica del toast
-        formatearOrden(true);
-        saveForm(); // Guardamos cambios en localStorage
-    });
-
-    // Evento al hacer clic o enfocar (para asegurar que aparezca el OT-)
-    input.addEventListener('focus', function() {
-        if (this.value === '' || this.value === 'OT-') {
-            this.value = 'OT-';
-        }
-    });
-
-    // Validación extra: Impedir borrar el "OT-" con la tecla de borrar
-    input.addEventListener('keydown', function(e) {
-        // Si el cursor está en las primeras 3 posiciones y pulsan borrar/backspace
-        if ((e.key === 'Backspace' || e.key === 'Delete') && this.selectionStart <= 3) {
-            e.preventDefault();
-        }
-    });
-
-    // Inicialización: Si está vacío al cargar, poner formato base
-    if (!input.value) {
-        input.value = 'OT-';
+        const input = document.getElementById('orderNum');
+        if (!input) return;
+        const formatearOrden = (mostrarToast) => {
+            const originalValor = input.value;
+            const prefijo = 'OT-'; 
+            let parteNumerica = originalValor.startsWith(prefijo) ? originalValor.substring(prefijo.length) : originalValor;
+            if (mostrarToast && /[^0-9]/.test(parteNumerica)) {
+                showRichToast('Entrada no válida', 'Solo se permiten dígitos para el número de Orden de Trabajo (máximo 4).', 'warning', 3000);
+            }
+            let numerosLimpios = parteNumerica.replace(/[^0-9]/g, '');
+            if (numerosLimpios.length > 4) numerosLimpios = numerosLimpios.slice(0, 4);
+            input.value = prefijo + numerosLimpios;
+        };
+        input.addEventListener('input', function(e) { formatearOrden(true); saveForm(); });
+        input.addEventListener('focus', function() { if (this.value === '' || this.value === 'OT-') this.value = 'OT-'; });
+        input.addEventListener('keydown', function(e) { if ((e.key === 'Backspace' || e.key === 'Delete') && this.selectionStart <= 3) e.preventDefault(); });
+        if (!input.value) input.value = 'OT-';
     }
-}
 
-    // --- LÓGICA DE FIRMA DIGITAL ---
     let signaturePad;
-
     function initSignaturePad() {
         const canvas = document.getElementById('signature-pad');
         if (!canvas) return;
-
-        // Inicializar SignaturePad con opciones para que se vea real
-        signaturePad = new SignaturePad(canvas, {
-            minWidth: 1,
-            maxWidth: 2.5, // Simula presión de bolígrafo
-            penColor: "black", // Tinta negra (mejor para impresión)
-            backgroundColor: "white" // Fondo blanco
-        });
-
-        // FUNCIÓN CRÍTICA: Ajustar resolución para pantallas retina/móviles
-        // Si no haces esto, la firma se ve borrosa en celulares
+        signaturePad = new SignaturePad(canvas, { minWidth: 1, maxWidth: 2.5, penColor: "black", backgroundColor: "white" });
         function resizeCanvas() {
             const ratio = Math.max(window.devicePixelRatio || 1, 1);
-            
-            // Guardar imagen actual si existe para no perderla al redimensionar
             let data = null;
             if(!signaturePad.isEmpty()) data = signaturePad.toDataURL();
-
-            canvas.width = canvas.offsetWidth * ratio;
-            canvas.height = canvas.offsetHeight * ratio;
+            canvas.width = canvas.offsetWidth * ratio; canvas.height = canvas.offsetHeight * ratio;
             canvas.getContext("2d").scale(ratio, ratio);
-
-            // Restaurar firma si había
             if(data) signaturePad.fromDataURL(data);
         }
-
         window.addEventListener("resize", resizeCanvas);
-        resizeCanvas(); // Llamar al inicio
-
-        // Guardar firma cada vez que se termina un trazo
-        signaturePad.addEventListener("endStroke", () => {
-            localStorage.setItem(STORAGE_KEY + "_sig", signaturePad.toDataURL());
-        });
+        resizeCanvas();
+        signaturePad.addEventListener("endStroke", () => { localStorage.setItem(STORAGE_KEY + "_sig", signaturePad.toDataURL()); });
     }
     
-    // Función global para el botón de borrar
-    window.borrarFirma = function() {
-        if(signaturePad) {
-            signaturePad.clear();
-            localStorage.removeItem(STORAGE_KEY + "_sig");
-        }
-    };
+    window.borrarFirma = function() { if(signaturePad) { signaturePad.clear(); localStorage.removeItem(STORAGE_KEY + "_sig"); } };
+    function loadSignature() { const savedSig = localStorage.getItem(STORAGE_KEY + "_sig"); if (savedSig && signaturePad) signaturePad.fromDataURL(savedSig); }
 
-    // Función para cargar la firma guardada
-    function loadSignature() {
-        const savedSig = localStorage.getItem(STORAGE_KEY + "_sig");
-        if (savedSig && signaturePad) {
-            signaturePad.fromDataURL(savedSig);
-        }
+    function actualizarBloquesAdmin() {
+        const valor = document.getElementById("sys-ejecutados").value;
+        const devolucion = document.getElementById("devolucion-block");
+        const corregido = document.getElementById("corregido-block");
+        if (valor === "SI") { devolucion.style.display = "none"; corregido.style.display = "none"; } 
+        else if (valor === "NO") { devolucion.style.display = "block"; corregido.style.display = "block"; } 
+        else { devolucion.style.display = "none"; corregido.style.display = "none"; }
     }
 
-    // 👉 Al cargar la página: inicializar pickers, cargar datos y activar autosave
     window.addEventListener("DOMContentLoaded", () => {
-        // 1) Inicializa flatpickr en los inputs (antes de cargar valores)
         initFlatpickr();
-
-        // 2) Carga valores guardados en localStorage y sincroniza con los pickers
         loadForm();
-        
         configurarInputOrden();
-
-        // 3) Firma Digital
         initSignaturePad();
         loadSignature();
-
         actualizarBloquesAdmin();
-
-        // 4) Resto de listeners y comportamiento
         setupFocusListeners(); 
-        updateAllSectionProgress(); // Inicializar barras de progreso
+        updateAllSectionProgress();
 
-        document.getElementById("sys-ejecutados")
-            .addEventListener("change", actualizarBloquesAdmin);
-
+        document.getElementById("sys-ejecutados").addEventListener("change", actualizarBloquesAdmin);
         document.querySelectorAll("input, select, textarea").forEach(el => {
-            el.addEventListener("input", (e) => {
-                saveForm();
-                updateAllSectionProgress(); // Actualizar progreso al cambiar
-            });
-            el.addEventListener("change", (e) => {
-                saveForm();
-                updateAllSectionProgress();
-            });
+            el.addEventListener("input", (e) => { saveForm(); updateAllSectionProgress(); });
+            el.addEventListener("change", (e) => { saveForm(); updateAllSectionProgress(); });
         });
-        
-
-        function actualizarBloquesAdmin() {
-            const valor = document.getElementById("sys-ejecutados").value;
-
-            const devolucion = document.getElementById("devolucion-block");
-            const corregido = document.getElementById("corregido-block");
-
-            if (valor === "SI") {
-                // Ocultar ambos bloques
-                devolucion.style.display = "none";
-                corregido.style.display = "none";
-            } else if (valor === "NO") {
-                // Mostrar ambos bloques
-                devolucion.style.display = "block";
-                corregido.style.display = "block";
-            } else {
-                // Estado inicial (ni SI ni NO aún)
-                devolucion.style.display = "none";
-                corregido.style.display = "none";
-            }
-        }
-
-        // Ejecutar validación cada vez que los campos de devolución/corrección cambian
-        ["devuelto-date","devuelto-time","corregido-date","corregido-time"].forEach(id => {
-            const el = document.getElementById(id);
-            if (el) {
-                el.addEventListener("blur", validateCorrectionAfterReturn);
-            }
-        });
-
-
-
         document.querySelectorAll('.uppercase-input').forEach(input => {
             input.addEventListener('input', (e) => {
-                const start = input.selectionStart;
-                const end = input.selectionEnd;
-                input.value = input.value.toUpperCase();
-                input.setSelectionRange(start, end);
+                const start = input.selectionStart; const end = input.selectionEnd;
+                input.value = input.value.toUpperCase(); input.setSelectionRange(start, end);
             });
         });
     });
 </script>
 
 </body>
-
 </html>
