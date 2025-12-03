@@ -781,9 +781,9 @@
     margin-bottom: 5px !important;
 }
 
-/* Título / Rol del responsable bajo la línea de firma */
+/* Nombre del responsable */
 .responsible-name-container::after {
-    content: "Nombre del Responsable / Título"; /* Texto fijo para el título */
+    content: "Nombre del Responsable"; 
     display: block;
     text-align: center;
     font-size: 9pt;
@@ -2081,7 +2081,6 @@ if (responsable === "") {
 if (firmaVacia) {
     showToast("Falta la firma del responsable.", "warning");
 
-    
     return;
 }
  // --- FIN VALIDACIONES ---
