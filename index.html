@@ -2049,6 +2049,43 @@
 
     // Integrar con generarReporte: insertamos la fecha justo antes de imprimir y la removemos después.
     function generarReporte() {
+        // --- VALIDACIONES ANTES DE IMPRIMIR ---
+
+
+// 1. ¿Hay al menos un checkbox marcado?
+const algunaMarcada = [...document.querySelectorAll('input[type="checkbox"]')]
+    .some(cb => cb.checked);
+
+if (!algunaMarcada) {
+    showToast("Debes marcar al menos un punto del checklist.", "warning");
+    return;
+}
+
+// 2. Obtener nombre y firma
+const responsable = document.getElementById("responsibleName").value.trim();
+const firmaVacia = signaturePad.isEmpty();
+
+// 3. Si faltan ambos → un solo aviso
+if (responsable === "" && firmaVacia) {
+    showToast("Falta el nombre del responsable y la firma.", "warning");
+    return;
+}
+
+// 4. Si falta solo el nombre
+if (responsable === "") {
+    showToast("Falta el nombre del responsable.", "warning");
+    return;
+}
+
+// 5. Si falta solo la firma
+if (firmaVacia) {
+    showToast("Falta la firma del responsable.", "warning");
+
+    
+    return;
+}
+ // --- FIN VALIDACIONES ---
+        
         // 1. Poner fecha de impresión
         const today = new Date();
         const dateStr = today.toLocaleDateString('es-ES', { 
@@ -2414,6 +2451,7 @@
                 updateAllSectionProgress();
             });
         });
+        
 
         function actualizarBloquesAdmin() {
             const valor = document.getElementById("sys-ejecutados").value;
@@ -2443,6 +2481,8 @@
                 el.addEventListener("blur", validateCorrectionAfterReturn);
             }
         });
+
+
 
         document.querySelectorAll('.uppercase-input').forEach(input => {
             input.addEventListener('input', (e) => {
