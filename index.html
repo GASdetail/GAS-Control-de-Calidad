@@ -114,6 +114,7 @@
         .flatpickr-months, .flatpickr-weekdays { background: var(--primary-dark) !important; }
         .flatpickr-day { color: var(--text-light) !important; }
         .flatpickr-day.selected { background: var(--primary-blue) !important; border-color: var(--primary-blue) !important; color: white !important; }
+        
         /* Iconos Flatpickr Mobile */
         .flat-date, .flat-date + input { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23bdc3c7' viewBox='0 0 24 24'%3E%3Cpath d='M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm-8 4H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z'/%3E%3C/svg%3E") !important; background-repeat: no-repeat !important; background-position: right 15px center !important; background-size: 20px !important; padding-right: 35px !important; }
         .flat-time, .flat-time + input { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23bdc3c7' viewBox='0 0 24 24'%3E%3Cpath d='M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z'/%3E%3C/svg%3E") !important; background-repeat: no-repeat !important; background-position: right 15px center !important; background-size: 20px !important; padding-right: 35px !important; }
@@ -140,7 +141,7 @@
         /* Wrapper para la fila de checkboxes y label */
         .check-row-wrapper { display: flex; align-items: center; width: 100%; }
 
-        /* Estilo base checkboxes */
+        /* Estilo base checkboxes (para todos, incluyendo admin) */
         .check-item input[type="checkbox"] {
             width: 22px; height: 22px; min-width: 22px;
             border: 2px solid var(--border-dark); border-radius: 6px; margin-right: 10px;
@@ -158,8 +159,8 @@
         }
         .check-pass:checked::after { content: "✔"; color: white; font-size: 14px; font-weight: bold; }
 
-        /* CHECKBOX ROJO (FAIL) - NUEVO */
-        .check-fail { border-color: #7f8c8d !important; margin-right: 15px !important; } /* Gris por defecto para diferenciar */
+        /* CHECKBOX ROJO (FAIL) */
+        .check-fail { border-color: #7f8c8d !important; margin-right: 15px !important; }
         .check-fail:hover { border-color: var(--error) !important; box-shadow: 0 0 8px rgba(231, 76, 60, 0.4); }
         .check-fail:checked {
             background: linear-gradient(135deg, var(--error) 0%, #c0392b 100%);
@@ -172,7 +173,7 @@
 
         /* CAJA DE OBSERVACIÓN ESPECÍFICA (Oculta por defecto) */
         .specific-obs {
-            display: none; width: 100%; margin-top: 8px; padding-left: 65px; /* Sangría */
+            display: none; width: 100%; margin-top: 8px; padding-left: 65px; 
             box-sizing: border-box; animation: slideDown 0.2s ease-out;
         }
         .specific-obs.visible { display: block; }
@@ -372,7 +373,7 @@
             <span class="admin-question">2.a. ¿Todos los servicios en la Orden verificables, se ejecutaron?</span>
             <div class="input-cluster">
                 <select id="sys-ejecutados" onchange="saveForm()">
-                    <option value="" selected disabled hidden>Seleccione...</option>>
+                    <option value="" selected disabled hidden>Seleccione...</option>
                     <option value="SI">SÍ</option>
                     <option value="NO">NO</option>
                 </select>
@@ -402,8 +403,10 @@
 
         <div class="checklist">
             <div class="check-item" style="background-color: var(--input-bg); padding: 10px;">
-                <input type="checkbox" id="admin-ok" onchange="checkSection('sec-sistema'); saveForm();">
-                <label for="admin-ok"><strong>CONFIRMAR:</strong> La revisión administrativa está completa.</label>
+                <div class="check-row-wrapper">
+                    <input type="checkbox" id="admin-ok" class="check-pass" onchange="checkSection('sec-sistema'); saveForm();">
+                    <label for="admin-ok"><strong>CONFIRMAR:</strong> La revisión administrativa está completa.</label>
+                </div>
             </div>
         </div>
         <div class="obs-area">
@@ -423,6 +426,7 @@
                 </div>
                 <div id="p1-obs-box" class="specific-obs"><input type="text" id="p1-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
             </div>
+
             <div class="check-item">
                 <div class="check-row-wrapper">
                     <input type="checkbox" id="p2" class="check-pass" onchange="handleCheckPair('p2', 'p2-fail', 'p2-obs-box'); checkSection('sec-pintura'); saveForm();">
@@ -431,6 +435,7 @@
                 </div>
                 <div id="p2-obs-box" class="specific-obs"><input type="text" id="p2-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
             </div>
+
             <div class="check-item">
                 <div class="check-row-wrapper">
                     <input type="checkbox" id="p3" class="check-pass" onchange="handleCheckPair('p3', 'p3-fail', 'p3-obs-box'); checkSection('sec-pintura'); saveForm();">
@@ -439,6 +444,7 @@
                 </div>
                 <div id="p3-obs-box" class="specific-obs"><input type="text" id="p3-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
             </div>
+
             <div class="check-item">
                 <div class="check-row-wrapper">
                     <input type="checkbox" id="p4" class="check-pass" onchange="handleCheckPair('p4', 'p4-fail', 'p4-obs-box'); checkSection('sec-pintura'); saveForm();">
@@ -447,6 +453,7 @@
                 </div>
                 <div id="p4-obs-box" class="specific-obs"><input type="text" id="p4-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
             </div>
+
             <div class="check-item">
                 <div class="check-row-wrapper">
                     <input type="checkbox" id="p5" class="check-pass" onchange="handleCheckPair('p5', 'p5-fail', 'p5-obs-box'); checkSection('sec-pintura'); saveForm();">
@@ -455,6 +462,7 @@
                 </div>
                 <div id="p5-obs-box" class="specific-obs"><input type="text" id="p5-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
             </div>
+
             <div class="check-item">
                 <div class="check-row-wrapper">
                     <input type="checkbox" id="p6" class="check-pass" onchange="handleCheckPair('p6', 'p6-fail', 'p6-obs-box'); checkSection('sec-pintura'); saveForm();">
@@ -463,6 +471,7 @@
                 </div>
                 <div id="p6-obs-box" class="specific-obs"><input type="text" id="p6-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
             </div>
+            
             <div class="check-item">
                 <div class="check-row-wrapper">
                     <input type="checkbox" id="p7" class="check-pass" onchange="handleCheckPair('p7', 'p7-fail', 'p7-obs-box'); checkSection('sec-pintura'); saveForm();">
@@ -871,7 +880,6 @@
             // Si el que se marcó es el FAIL (contiene 'fail')
             if (clickedId.includes('fail') && clicked.checked) {
                 obsBox.classList.add('visible');
-                // Auto-focus para escribir rápido
                 const input = obsBox.querySelector('input');
                 if(input) setTimeout(() => input.focus(), 100);
             } 
@@ -893,7 +901,6 @@
         const indicator = section.querySelector('.status-indicator');
         
         // Obtenemos solo los checkboxes "PASS" (los verdes) para iterar
-        // Si no hay clase 'check-pass' (ej. admin), fallback a querySelectorAll normal
         const passCheckboxes = Array.from(section.querySelectorAll('.check-pass'));
         
         let allChecked = true;
@@ -910,7 +917,7 @@
                 }
             });
         } else {
-            // Lógica antigua (para la sección Admin que no tiene pares)
+            // Lógica antigua (para secciones sin .check-pass, si las hubiera)
             const checkboxes = section.querySelectorAll('input[type="checkbox"]');
             checkboxes.forEach(box => {
                 if (!box.checked) allChecked = false;
@@ -1183,7 +1190,7 @@
                 
                 document.querySelectorAll('input[type="text"], input[type="date"], input[type="time"], input[type="number"], select, textarea').forEach(el => { el.value = ''; });
                 document.querySelectorAll('input[type="checkbox"]').forEach(el => { el.checked = false; });
-                document.querySelectorAll('.specific-obs').forEach(el => el.classList.remove('visible')); // Ocultar cajas
+                document.querySelectorAll('.specific-obs').forEach(el => el.classList.remove('visible'));
 
                 updateAllSectionProgress();
                 
