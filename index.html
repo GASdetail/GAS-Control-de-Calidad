@@ -87,64 +87,7 @@
             font-family: inherit;
             line-height: 1.5;
         }
-        /* Touch-friendly tap targets on mobile */
-        @media (max-width: 900px), (max-height: 700px) {
-            input[type="text"], input[type="number"], select, input[type="date"], input[type="time"], textarea {
-                min-height: 44px;
-                padding: 12px;
-                font-size: 16px;
-                line-height: 1.6;
-            }
-        }
         
-        .uppercase-input { text-transform: uppercase; } 
-        textarea { resize: vertical; min-height: 60px; } 
-        select option { background: var(--input-bg); color: var(--text-light); }
-
-        .header-info {
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
-            gap: 15px; 
-            margin-bottom: 20px;
-            background: var(--input-bg);
-            padding: 15px; 
-            border-radius: 5px;
-            border: 1px solid var(--border-dark);
-        }
-        .header-info label {
-            color: var(--text-light) !important;
-            font-weight: 600;
-        }
-        .section {
-            border: 1px solid var(--border-dark); 
-            border-radius: 8px; 
-            margin-bottom: 25px; 
-            overflow: hidden;
-            background: var(--input-bg);
-            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            position: relative;
-        }
-        .section::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: var(--border-dark);
-            transition: background 0.3s ease;
-        }
-        .section:hover { 
-            box-shadow: 0 8px 24px rgba(0, 123, 255, 0.2);
-            border-color: var(--primary-blue);
-            transform: translateY(-2px);
-        }
-        .section:hover::before {
-            background: var(--primary-blue);
-        }
-        .section.active-section::before {
-            background: var(--success);
-        }
         
         /* Resaltado de la sección activa */
         .section.active-section {
