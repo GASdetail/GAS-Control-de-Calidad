@@ -87,7 +87,64 @@
             font-family: inherit;
             line-height: 1.5;
         }
+        /* Touch-friendly tap targets on mobile */
+        @media (max-width: 900px), (max-height: 700px) {
+            input[type="text"], input[type="number"], select, input[type="date"], input[type="time"], textarea {
+                min-height: 44px;
+                padding: 12px;
+                font-size: 16px;
+                line-height: 1.6;
+            }
+        }
         
+        .uppercase-input { text-transform: uppercase; } 
+        textarea { resize: vertical; min-height: 60px; } 
+        select option { background: var(--input-bg); color: var(--text-light); }
+
+        .header-info {
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+            gap: 15px; 
+            margin-bottom: 20px;
+            background: var(--input-bg);
+            padding: 15px; 
+            border-radius: 5px;
+            border: 1px solid var(--border-dark);
+        }
+        .header-info label {
+            color: var(--text-light) !important;
+            font-weight: 600;
+        }
+        .section {
+            border: 1px solid var(--border-dark); 
+            border-radius: 8px; 
+            margin-bottom: 25px; 
+            overflow: hidden;
+            background: var(--input-bg);
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+        }
+        .section::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: var(--border-dark);
+            transition: background 0.3s ease;
+        }
+        .section:hover { 
+            box-shadow: 0 8px 24px rgba(0, 123, 255, 0.2);
+            border-color: var(--primary-blue);
+            transform: translateY(-2px);
+        }
+        .section:hover::before {
+            background: var(--primary-blue);
+        }
+        .section.active-section::before {
+            background: var(--success);
+        }
         
         /* Resaltado de la sección activa */
         .section.active-section {
@@ -642,7 +699,38 @@
         border: none !important;
     }
 
+    /* --- CORRECCIÓN CRÍTICA PARA ANDROID/MÓVIL --- */
+    /* Forzar que los inputs sean texto plano sin cajas ni fondo azul */
+    input[type="text"], 
+    input[type="date"], 
+    input[type="time"], 
+    input[type="number"],
+    select,
+    .flatpickr-input {
+        -webkit-appearance: none !important;
+        -moz-appearance: none !important;
+        appearance: none !important;
+        background-color: transparent !important;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        color: #000 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        font-weight: normal;
+        /* Eliminar iconos nativos de fecha/hora en la impresión */
+        background-image: none !important; 
+    }
 
+    select {
+        text-indent: 0.01px;
+        text-overflow: "";
+    }
+
+    ::placeholder {
+        color: transparent !important;
+        opacity: 0 !important;
+    }
 
     /* --------------------------- */
     /* ENCABEZADO        */
@@ -1833,7 +1921,6 @@
         const dateStr = today.toLocaleDateString('es-ES', { 
             day: '2-digit', month: '2-digit', year: 'numeric' 
         });
-        // Modificado: Solo asignamos dateStr (Ej: "28/11/2025")
         document.getElementById('print-date-display').textContent = dateStr;
 
         // Defensive UI: briefly disable the print button to avoid rapid repeated clicks
@@ -1841,11 +1928,9 @@
         if (btnPrint) {
             try {
                 btnPrint.setAttribute('disabled', 'true');
-                setTimeout(() => { try { btnPrint.removeAttribute('disabled'); } catch (e) {} }, 900);
             } catch (e) {}
         }
-        // --------------------------------------------------
-
+        
         // Re-ejecutar validación antes de imprimir
         const valid = validateCorrectionAfterReturn();
         if (!valid) {
@@ -1855,6 +1940,7 @@
                 [],
                 "error"
             );
+            if(btnPrint) btnPrint.removeAttribute('disabled');
             return;
         }
 
@@ -1906,17 +1992,17 @@
                 null,
                 goAction
             );
+            if(btnPrint) btnPrint.removeAttribute('disabled');
             return;
         }
 
         if (optionalMissing.length > 0) {
-            // Mostrar aviso informativo; en pantallas pequeñas aumentamos duración y
-            // usamos estilos responsivos para que el toast sea visible (no bloqueamos impresión).
+            // Mostrar aviso informativo; en pantallas pequeñas aumentamos duración
             const isSmall = (window.innerWidth && window.innerWidth < 900) || (window.innerHeight && window.innerHeight < 700);
             if (isSmall) {
                 showCustomAlert(
                     'Campos recomendados faltantes',
-                    'Faltan campos recomendados; el reporte se imprimirá igual. Recomendado: revisar antes de imprimir en pantallas pequeñas.',
+                    'Faltan campos recomendados; el reporte se imprimirá igual.',
                     optionalMissing,
                     'info',
                     7000
@@ -1953,6 +2039,7 @@
         const sysFinalizadaVacia = document.getElementById('sys-finalizada').value === '';
         const sysEjecutadosVacia = document.getElementById('sys-ejecutados').value === '';
         
+        // Si no está checkeado y no hay observaciones y no hay datos clave, ocultar sección
         if (!adminOkChecked && obsSistemaVacia && sysFinalizadaVacia && sysEjecutadosVacia) {
             secSistema.classList.add('empty-print');
         } else {
@@ -1979,14 +2066,13 @@
             }
         });
 
-        // 4.b Ocultar secciones enteras si no tienen items marcados (las secciones que quieres ocultar en la impresión)
+        // 4.b Ocultar secciones enteras si no tienen items marcados
         const sectionsToEvaluate = ["sec-pintura","sec-armado","sec-pulido","sec-tapiceria","sec-control"];
         sectionsToEvaluate.forEach(secId => {
             const sec = document.getElementById(secId);
             if (!sec) return;
             // buscar checkboxes dentro de la sección
             const checkboxes = Array.from(sec.querySelectorAll('input[type="checkbox"]'));
-            // si no hay checkboxes marcados y no hay observaciones visibles -> ocultar sección en impresión
             const anyChecked = checkboxes.some(cb => cb.checked);
             const obs = sec.querySelector('.obs-area');
             const obsHasText = obs && obs.querySelector('textarea') && obs.querySelector('textarea').value.trim() !== '';
@@ -1997,33 +2083,43 @@
             }
         });
 
-        // Insertar fecha antes de imprimir (dinámico)
         addPrintDate();
 
         // 5. Imprimir
         window.print();
         
-        // 6. Restaurar la vista del formulario después de imprimir (QUITAR TODAS LAS CLASES TEMPORALES)
-        setTimeout(() => {
-            document.querySelectorAll('.check-item').forEach(item => {
-                item.classList.remove('is-checked-print');
-            });
-            document.querySelectorAll('.obs-area').forEach(obsArea => {
-                obsArea.classList.remove('empty-print');
-            });
-            devolucion.classList.remove('ocultar-admin-print');
-            corregido.classList.remove('ocultar-admin-print');
-            secSistema.classList.remove('empty-print'); // Restaurar la sección A
+        // 6. LIMPIEZA ASÍNCRONA ROBUSTA PARA MÓVIL (CORRECCIÓN PRINCIPAL)
+        // En lugar de un setTimeout corto, esperamos interacción del usuario.
+        
+        const cleanup = () => {
+            // Restaurar botón
+            if (btnPrint) btnPrint.removeAttribute('disabled');
 
-            // Restaurar las secciones evaluadas
-            sectionsToEvaluate.forEach(secId => {
-                const sec = document.getElementById(secId);
-                if (sec) sec.classList.remove('empty-print');
-            });
-
-            // Remover la fecha por seguridad (en caso afterprint no se dispare)
+            // Quitar clases de impresión
+            document.querySelectorAll('.check-item').forEach(i => i.classList.remove('is-checked-print'));
+            document.querySelectorAll('.obs-area').forEach(i => i.classList.remove('empty-print'));
+            document.querySelectorAll('.section').forEach(i => i.classList.remove('empty-print'));
+            if(devolucion) devolucion.classList.remove('ocultar-admin-print');
+            if(corregido) corregido.classList.remove('ocultar-admin-print');
+            if(secSistema) secSistema.classList.remove('empty-print');
+            
             removePrintDate();
-        }, 1000);
+
+            // Quitar listeners para que no se ejecute múltiples veces
+            window.removeEventListener('focus', cleanup);
+            document.removeEventListener('click', cleanup);
+            document.removeEventListener('touchstart', cleanup);
+        };
+
+        // Método 1: Si el usuario vuelve a la pestaña (PC/Android Chrome tras cerrar dialog)
+        window.addEventListener('focus', cleanup);
+        
+        // Método 2: Si el usuario toca la pantalla (Móvil)
+        document.addEventListener('touchstart', cleanup);
+        document.addEventListener('click', cleanup);
+
+        // Método 3: Fallback de seguridad (1 minuto)
+        setTimeout(cleanup, 60000); 
     }
     
     // Registrar eventos beforeprint/afterprint y matchMedia para compatibilidad
