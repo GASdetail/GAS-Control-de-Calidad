@@ -671,10 +671,26 @@
     .section-index {
         display: none !important;
     }
-
+.flatpickr-input,
+    input.flatpickr-input,
+    .flatpickr-alt-input,
+    input, select, textarea {
+        background-color: #ffffff !important; /* Fuerza el fondo blanco */
+        background: #ffffff !important;
+        color: #000000 !important;            /* Fuerza texto negro */
+        border: 1px solid #ccc !important;    /* Borde gris fino para ver la caja */
+        
+        /* Trucos para obligar a Chrome Móvil y Safari a obedecer */
+        -webkit-text-fill-color: #000000 !important;
+        -webkit-print-color-adjust: exact !important;
+        color-adjust: exact !important;
+        -webkit-appearance: none !important;  /* Quita el estilo nativo de iOS/Android */
+        appearance: none !important;
+        box-shadow: none !important;
+    }
     /* Alto contraste pero sin romper padding */
     body, .container, .section, .header-info,
-    input, select, textarea, label, span, div, p {
+    input, .flatpickr-calendar,.flat-date,.flat-time,.flatpickr-alt-input, select, textarea, label, span, div, p {
         background: #fff !important;
         color: #000 !important;
         box-shadow: none !important;
@@ -2212,5 +2228,6 @@ document.getElementById("sys-ejecutados")
 </script>
 
 </body>
+
 
 </html>
