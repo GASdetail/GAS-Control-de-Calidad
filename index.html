@@ -688,6 +688,8 @@
 
     body {
         padding: 0;
+        /* --- CAMBIO CRITICO: MARGEN INFERIOR PARA PIE DE PAGINA --- */
+        margin-bottom: 3cm !important; /* Espacio reservado para la firma al final */
         font-size: 11pt;
         font-family: Arial, Helvetica, sans-serif;
     }
@@ -943,16 +945,30 @@
     .signature-box {
         display: flex !important;
         justify-content: space-between;
-        margin-top: 40px;
-        margin-bottom: 20px;
-        padding: 0 10px;
-        page-break-inside: avoid;
+        
+        /* --- POSICION FIJA AL FONDO (FOOTER) --- */
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        
+        /* Estilos visuales del footer */
+        background-color: #fff !important; 
+        padding: 10px 20px 20px 20px;
+        margin: 0;
+        z-index: 9999;
+        box-sizing: border-box; /* Asegurar que el padding no rompa el ancho */
     }
 
     .signature-box div {
-        font-size: 14pt;
+        font-size: 11pt;
         font-weight: bold;
         color: #000 !important;
+        /* Linea superior para firmar */
+        border-top: 1px solid #000; 
+        padding-top: 5px;
+        width: 40%;
+        text-align: center;
     }
 
 }
@@ -1169,8 +1185,8 @@
     </div>
     
     <div class="signature-box">
-        <div>Nombre: __________________________</div>
-        <div>Firma: __________________________</div>
+        <div>Nombre del Responsable</div>
+        <div>Firma</div>
     </div>
 
     <div class="footer-info">
