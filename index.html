@@ -653,12 +653,10 @@
         }
 
         @media print {
-            
     @page { 
         margin: 1cm;
         size: auto;
     }
-    
 
     /* Ocultar lo que ya ocultabas */
     .print-hidden-icon,
@@ -701,10 +699,41 @@
         border: none !important;
     }
 
+    /* --- CORRECCIÓN CRÍTICA PARA ANDROID/MÓVIL --- */
+    /* Forzar que los inputs sean texto plano sin cajas ni fondo azul */
+    input[type="text"], 
+    input[type="date"], 
+    input[type="time"], 
+    input[type="number"],
+    select,
+    .flatpickr-input {
+        -webkit-appearance: none !important;
+        -moz-appearance: none !important;
+        appearance: none !important;
+        background-color: transparent !important;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        color: #000 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        font-weight: normal;
+        /* Eliminar iconos nativos de fecha/hora en la impresión */
+        background-image: none !important; 
+    }
 
+    select {
+        text-indent: 0.01px;
+        text-overflow: "";
+    }
+
+    ::placeholder {
+        color: transparent !important;
+        opacity: 0 !important;
+    }
 
     /* --------------------------- */
-    /*          ENCABEZADO        */
+    /* ENCABEZADO        */
     /* --------------------------- */
 
     .logo-container {
@@ -752,7 +781,7 @@
 
 
     /* --------------------------- */
-    /*   CABECERA DE INFORMACIÓN  */
+    /* CABECERA DE INFORMACIÓN  */
     /* --------------------------- */
 
     .header-info {
@@ -774,7 +803,7 @@
 
 
     /* --------------------------- */
-    /*         SECCIONES           */
+    /* SECCIONES           */
     /* --------------------------- */
 
     .section {
@@ -794,7 +823,8 @@
     }
 
     .section-header.completed { 
-        background: #c8e6c9 !important;
+        /* --- CAMBIO SOLICITADO: COLOR GRIS EN VEZ DE VERDE --- */
+        background: #e0e0e0 !important;
         color: #000 !important;
     }
 
@@ -805,7 +835,7 @@
 
 
     /* --------------------------- */
-    /*           ADMIN             */
+    /* ADMIN             */
     /* --------------------------- */
 
     .admin-row { 
@@ -831,7 +861,7 @@
 
 
     /* --------------------------- */
-    /*          CHECKLIST          */
+    /* CHECKLIST          */
     /* --------------------------- */
 
     .checklist {
@@ -872,7 +902,7 @@
 
 
     /* --------------------------- */
-    /*       ÁREA OBSERVACIONES    */
+    /* ÁREA OBSERVACIONES    */
     /* --------------------------- */
 
     .obs-area {
@@ -907,7 +937,7 @@
 
 
     /* --------------------------- */
-    /*        NOMBRE / FIRMA       */
+    /* NOMBRE / FIRMA       */
     /* --------------------------- */
 
     .signature-box {
@@ -942,7 +972,7 @@
     <div id="print-date-display"></div>
 </div>
     
-    <h1>Control de Calidad - GAS Paint</h1>
+    <h1>Control de Calidad</h1>
 
     <div class="header-info">
         <div class="form-group">
@@ -951,7 +981,7 @@
         </div>
         <div class="form-group">
             <label>Placa:</label>
-            <input type="text" id="plate" class="uppercase-input" maxlength="9" placeholder="Ej: ABC-1234">
+            <input type="text" id="plate" class="uppercase-input" maxlength="9" placeholder="Ej: XYZ-1234">
         </div>
         <div class="form-group">
             <label>Marca del Vehículo:</label>
@@ -1018,7 +1048,7 @@
         </div>
         <div class="obs-area">
             <label class="form-group">Observaciones:</label>
-            <textarea id="obs-sistema" placeholder="Detalles administrativos adicionales..."></textarea>
+            <textarea id="obs-sistema" placeholder="Observaciones"></textarea>
         </div>
     </div>
 
@@ -1037,14 +1067,14 @@
             <div class="check-item"><input type="checkbox" id="p7" onchange="checkSection('sec-pintura'); saveForm();"><label for="p7">En caso de Corrección de Pintura Total: verificar si los servicios incompletos fueron corregidos</label></div>
         </div>
         <div class="obs-area">
-            <label class="form-group">Observaciones Pintura:</label>
+            <label class="form-group">Observaciones:</label>
             <textarea id="obs-pintura" placeholder="Defectos encontrados, correcciones pendientes..."></textarea>
         </div>
     </div>
 
     <div class="section" id="sec-armado">
         <div class="section-header">
-            <span><span class="print-hidden-icon">🔩</span> <span class="section-index">B.</span> ARMADO Y AJUSTE DE PIEZAS</span>
+            <span><span class="print-hidden-icon">🔩</span> <span class="section-index">C.</span> ARMADO Y AJUSTE DE PIEZAS</span>
             <span class="status-indicator">PENDIENTE</span>
         </div>
         <div class="checklist">
@@ -1059,13 +1089,13 @@
         </div>
         <div class="obs-area">
             <label class="form-group">Observaciones Armado/Ajuste:</label>
-            <textarea id="obs-armado" placeholder="Detalles de ajuste y piezas..."></textarea>
+            <textarea id="obs-armado" placeholder="Observaciones"></textarea>
         </div>
     </div>
 
     <div class="section" id="sec-pulido">
         <div class="section-header">
-            <span><span class="print-hidden-icon">✨</span> <span class="section-index">C.</span> PULIDO Y EXTERIOR</span>
+            <span><span class="print-hidden-icon">✨</span> <span class="section-index">D.</span> PULIDO Y EXTERIOR</span>
             <span class="status-indicator">PENDIENTE</span>
         </div>
         <div class="checklist">
@@ -1083,13 +1113,13 @@
         </div>
         <div class="obs-area">
             <label class="form-group">Observaciones Exterior/Pulido:</label>
-            <textarea id="obs-pulido" placeholder="Detalles de corrección..."></textarea>
+            <textarea id="obs-pulido" placeholder="Observaciones"></textarea>
         </div>
     </div>
 
     <div class="section" id="sec-tapiceria">
         <div class="section-header">
-            <span><span class="print-hidden-icon">🧼</span> <span class="section-index">D.</span> TAPICERÍA E INTERIOR</span>
+            <span><span class="print-hidden-icon">🧼</span> <span class="section-index">E.</span> TAPICERÍA E INTERIOR</span>
             <span class="status-indicator">PENDIENTE</span>
         </div>
         <div class="checklist"> 
@@ -1113,13 +1143,13 @@
         </div>
         <div class="obs-area">
             <label class="form-group">Observaciones Interior:</label>
-            <textarea id="obs-interior" placeholder="Detalles de tapicería..."></textarea>
+            <textarea id="obs-interior" placeholder="Observaciones"></textarea>
         </div>
     </div>
 
     <div class="section" id="sec-control">
         <div class="section-header">
-            <span><span class="print-hidden-icon">⚙️</span> <span class="section-index">E.</span> CONTROL MECÁNICO BÁSICO</span>
+            <span><span class="print-hidden-icon">⚙️</span> <span class="section-index">F.</span> CONTROL MECÁNICO BÁSICO</span>
             <span class="status-indicator">PENDIENTE</span>
         </div>
         <div class="checklist">
@@ -1129,7 +1159,7 @@
         </div>
         <div class="obs-area">
             <label class="form-group">Observaciones Control Mecánico:</label>
-            <textarea id="obs-control" placeholder="Notas mecánicas..."></textarea>
+            <textarea id="obs-control" placeholder="Observaciones"></textarea>
         </div>
     </div>
 
@@ -1886,112 +1916,46 @@
 
     // Integrar con generarReporte: insertamos la fecha justo antes de imprimir y la removemos después.
     function generarReporte() {
-        // --- CÓDIGO NUEVO: INSERTAR SOLO FECHA (SIN HORA, SIN TITULO) ---
+        // 1. Poner fecha de impresión
         const today = new Date();
         const dateStr = today.toLocaleDateString('es-ES', { 
             day: '2-digit', month: '2-digit', year: 'numeric' 
         });
-        // Modificado: Solo asignamos dateStr (Ej: "28/11/2025")
         document.getElementById('print-date-display').textContent = dateStr;
 
-        // Defensive UI: briefly disable the print button to avoid rapid repeated clicks
+        // Deshabilitar botón temporalmente
         const btnPrint = document.getElementById('btn-print');
-        if (btnPrint) {
-            try {
-                btnPrint.setAttribute('disabled', 'true');
-                setTimeout(() => { try { btnPrint.removeAttribute('disabled'); } catch (e) {} }, 900);
-            } catch (e) {}
-        }
-        // --------------------------------------------------
+        if (btnPrint) btnPrint.setAttribute('disabled', 'true');
 
-        // Re-ejecutar validación antes de imprimir
+        // 2. Validaciones (Igual que antes)
         const valid = validateCorrectionAfterReturn();
         if (!valid) {
-            showCustomAlert(
-                "Fechas incorrectas",
-                "La fecha de corrección no puede ser anterior a la fecha de devolución.",
-                [],
-                "error"
-            );
+            showCustomAlert("Fechas incorrectas", "La fecha de corrección no puede ser anterior a la fecha de devolución.", [], "error");
+            if(btnPrint) btnPrint.removeAttribute('disabled');
             return;
         }
 
-        // Validación de campos críticos vs opcionales
         const requiredFields = [
             { id: 'plate', name: 'Placa', critical: true },
-            { id: 'orderNum', name: 'Nº Orden de Trabajo', critical: true },
-            { id: 'brand', name: 'Marca del Vehículo', critical: false }
+            { id: 'orderNum', name: 'Nº Orden de Trabajo', critical: true }
         ];
 
-        const criticalMissing = [];
-        const criticalMissingIds = [];
-        const optionalMissing = [];
-
+        let stop = false;
         requiredFields.forEach(f => {
             const el = document.getElementById(f.id);
-            const val = el ? (el.value || '').toString().trim() : '';
-            if (!val) {
-                if (f.critical) {
-                    criticalMissing.push(f.name);
-                    criticalMissingIds.push(f.id);
-                }
-                else optionalMissing.push(f.name);
+            if (!el || !el.value.trim()) {
+                showCustomAlert('Campo obligatorio', 'Falta: ' + f.name, [], 'error');
+                stop = true;
             }
         });
-
-        if (criticalMissing.length > 0) {
-            const firstMissingId = criticalMissingIds.length > 0 ? criticalMissingIds[0] : null;
-            const goAction = [];
-            if (firstMissingId) {
-                goAction.push({
-                    label: 'Ir al campo',
-                    className: '',
-                    onClick: () => {
-                        const el = document.getElementById(firstMissingId);
-                        if (el) {
-                            el.focus();
-                            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        }
-                    }
-                });
-            }
-
-            showCustomAlert(
-                'Faltan campos obligatorios',
-                'Por favor complete los siguientes campos antes de imprimir:',
-                criticalMissing,
-                'error',
-                null,
-                goAction
-            );
+        if (stop) {
+            if(btnPrint) btnPrint.removeAttribute('disabled');
             return;
         }
 
-        if (optionalMissing.length > 0) {
-            // Mostrar aviso informativo; en pantallas pequeñas aumentamos duración y
-            // usamos estilos responsivos para que el toast sea visible (no bloqueamos impresión).
-            const isSmall = (window.innerWidth && window.innerWidth < 900) || (window.innerHeight && window.innerHeight < 700);
-            if (isSmall) {
-                showCustomAlert(
-                    'Campos recomendados faltantes',
-                    'Faltan campos recomendados; el reporte se imprimirá igual. Recomendado: revisar antes de imprimir en pantallas pequeñas.',
-                    optionalMissing,
-                    'info',
-                    7000
-                );
-            } else {
-                showCustomAlert(
-                    'Campos recomendados faltantes',
-                    'Faltan campos recomendados; el reporte se imprimirá igual:',
-                    optionalMissing,
-                    'info'
-                );
-            }
-        }
-
-        // --- LÓGICA CONDICIONAL SÓLO PARA IMPRESIÓN ---
-
-        // 1. Bloques Administrativos (Devolución/Corrección)
+        // 3. APLICAR FILTROS (Lógica de ocultar lo vacío)
+        
+        // A. Lógica Admin
         const ejecutadosSelect = document.getElementById('sys-ejecutados').value;
         const devolucion = document.getElementById('devolucion-block');
         const corregido = document.getElementById('corregido-block');
@@ -1999,96 +1963,85 @@
         if (ejecutadosSelect === 'SI') {
             devolucion.classList.add('ocultar-admin-print');
             corregido.classList.add('ocultar-admin-print');
-        } else {
-            devolucion.classList.remove('ocultar-admin-print');
-            corregido.classList.remove('ocultar-admin-print');
         }
-        
-        // 2. LÓGICA CONDICIONAL PARA SECCIÓN A. SISTEMA (QUITAR SECCIÓN VACÍA)
+
+        // B. Sección Sistema
         const secSistema = document.getElementById('sec-sistema');
         const adminOkChecked = document.getElementById('admin-ok').checked;
         const obsSistemaVacia = document.getElementById('obs-sistema').value.trim() === '';
-        const sysFinalizadaVacia = document.getElementById('sys-finalizada').value === '';
-        const sysEjecutadosVacia = document.getElementById('sys-ejecutados').value === '';
         
-        if (!adminOkChecked && obsSistemaVacia && sysFinalizadaVacia && sysEjecutadosVacia) {
-            secSistema.classList.add('empty-print');
-        } else {
-            secSistema.classList.remove('empty-print');
+        if (!adminOkChecked && obsSistemaVacia) {
+            if(document.getElementById('sys-finalizada').value === '' && document.getElementById('sys-ejecutados').value === '') {
+                 secSistema.classList.add('empty-print');
+            }
         }
 
-        // 3. Checklist (Solo mostrar marcados)
+        // C. Checklist (Marcar los seleccionados para CSS)
         document.querySelectorAll('.check-item').forEach(item => {
             const checkbox = item.querySelector('input[type="checkbox"]');
             if (checkbox && checkbox.checked) {
                 item.classList.add('is-checked-print');
-            } else {
-                item.classList.remove('is-checked-print');
             }
         });
         
-        // 4. Observaciones (Ocultar si están vacías)
+        // D. Observaciones vacías
         document.querySelectorAll('.obs-area').forEach(obsArea => {
             const textarea = obsArea.querySelector('textarea');
             if (textarea && textarea.value.trim() === '') {
                 obsArea.classList.add('empty-print');
-            } else {
-                obsArea.classList.remove('empty-print');
             }
         });
 
-        // 4.b Ocultar secciones enteras si no tienen items marcados (las secciones que quieres ocultar en la impresión)
+        // E. Ocultar SECCIONES enteras si no tienen nada marcado
         const sectionsToEvaluate = ["sec-pintura","sec-armado","sec-pulido","sec-tapiceria","sec-control"];
         sectionsToEvaluate.forEach(secId => {
             const sec = document.getElementById(secId);
             if (!sec) return;
-            // buscar checkboxes dentro de la sección
             const checkboxes = Array.from(sec.querySelectorAll('input[type="checkbox"]'));
-            // si no hay checkboxes marcados y no hay observaciones visibles -> ocultar sección en impresión
             const anyChecked = checkboxes.some(cb => cb.checked);
             const obs = sec.querySelector('.obs-area');
             const obsHasText = obs && obs.querySelector('textarea') && obs.querySelector('textarea').value.trim() !== '';
+            
+            // Si NO hay checks Y NO hay texto en observaciones -> OCULTAR
             if (!anyChecked && !obsHasText) {
                 sec.classList.add('empty-print');
-            } else {
-                sec.classList.remove('empty-print');
             }
         });
-// ... (código anterior de validación y añadir clases) ...
 
-        // Insertar fecha
         addPrintDate();
 
-        // RETRASO PARA MÓVIL: Esperar 100ms para asegurar que el DOM se actualice antes de abrir el diálogo
+        // 4. RETRASO CRÍTICO PARA ANDROID (Esperar a que el DOM se actualice antes de imprimir)
         setTimeout(() => {
             window.print();
             
-            // Restaurar después de imprimir (dentro de otro timeout para no borrar antes de que el móvil procese)
+            // 5. LIMPIEZA DIFERIDA
+            // No limpiamos inmediatamente. Esperamos 2 segundos para dar tiempo al sistema de generar el PDF.
+            // Solo después de 2 segundos activamos la limpieza al tocar la pantalla.
             setTimeout(() => {
-                document.querySelectorAll('.check-item').forEach(item => {
-                    item.classList.remove('is-checked-print');
-                });
-                document.querySelectorAll('.obs-area').forEach(obsArea => {
-                    obsArea.classList.remove('empty-print');
-                });
-                
-                // Restaurar Admin y Secciones
-                if (devolucion) devolucion.classList.remove('ocultar-admin-print');
-                if (corregido) corregido.classList.remove('ocultar-admin-print');
-                if (secSistema) secSistema.classList.remove('empty-print');
-                
-                sectionsToEvaluate.forEach(secId => {
-                    const sec = document.getElementById(secId);
-                    if (sec) sec.classList.remove('empty-print');
-                });
+                const cleanup = () => {
+                    if (btnPrint) btnPrint.removeAttribute('disabled');
+                    document.querySelectorAll('.check-item').forEach(i => i.classList.remove('is-checked-print'));
+                    document.querySelectorAll('.obs-area').forEach(i => i.classList.remove('empty-print'));
+                    document.querySelectorAll('.section').forEach(i => i.classList.remove('empty-print'));
+                    if(devolucion) devolucion.classList.remove('ocultar-admin-print');
+                    if(corregido) corregido.classList.remove('ocultar-admin-print');
+                    if(secSistema) secSistema.classList.remove('empty-print');
+                    removePrintDate();
 
-                removePrintDate();
-                
-                // Rehabilitar botón
-                if (btnPrint) btnPrint.removeAttribute('disabled');
+                    // Remover listeners para que no se ejecute más veces
+                    window.removeEventListener('focus', cleanup);
+                    document.removeEventListener('click', cleanup);
+                    document.removeEventListener('touchstart', cleanup);
+                };
 
-            }, 500); // Esperar medio segundo antes de limpiar
-        }, 100); // Esperar 0.1 segundos antes de imprimir
+                // Añadimos los eventos de limpieza AHORA, no antes.
+                window.addEventListener('focus', cleanup);
+                document.addEventListener('touchstart', cleanup);
+                document.addEventListener('click', cleanup);
+
+            }, 2000); // Esperar 2 segundos antes de permitir la limpieza
+
+        }, 500); // Esperar 0.5 segundos antes de lanzar la orden de imprimir
     }
     
     // Registrar eventos beforeprint/afterprint y matchMedia para compatibilidad
@@ -2243,4 +2196,5 @@ document.getElementById("sys-ejecutados")
 </script>
 
 </body>
+
 </html>
