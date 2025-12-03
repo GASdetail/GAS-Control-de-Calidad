@@ -956,43 +956,6 @@
     }
 
 }
-.ot-container {
-    display: flex; /* Alinea el prefijo y el input */
-    align-items: center;
-    border: 1px solid var(--border-dark); /* Borde que envuelve todo */
-    background-color: var(--input-bg);
-    border-radius: 4px; /* Bordes suaves */
-}
-
-.ot-prefix {
-    padding: 8px 5px 8px 10px;
-    background-color: var(--container-bg); /* Fondo un poco diferente para el prefijo */
-    border-right: 1px solid var(--border-dark);
-    color: var(--text-muted);
-    font-weight: bold;
-}
-
-.ot-container input {
-    flex-grow: 1; /* El input ocupa el resto del espacio */
-    border: none; /* Quitamos el borde del input para que el borde del contenedor funcione */
-    background-color: var(--input-bg);
-    color: var(--text-light);
-    padding: 8px 10px;
-    text-align: right; /* Opcional: Centrar u alinear a la derecha los números */
-    width: 100px; /* Asegura un ancho mínimo en pantalla */
-}
-
-/* Quitar el borde de foco del input para que solo se vea el del contenedor */
-.ot-container input:focus {
-    box-shadow: none;
-    outline: none;
-}
-
-/* Efecto de foco para todo el contenedor */
-.form-group:focus-within .ot-container {
-    border-color: var(--primary-blue);
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-}
 
     </style>
 </head>
@@ -1012,16 +975,10 @@
     <h1>Control de Calidad</h1>
 
     <div class="header-info">
-        <div class="form-group input-cluster">
-    <label for="ot-number">Nº Orden de Trabajo:</label>
-    <div class="ot-container">
-        <span class="ot-prefix">OT-</span>
-        <input type="text" id="ot-number" name="ot-number" 
-               class="form-control" 
-               maxlength="4" pattern="\d{4}" 
-               required>
-    </div>
-</div>
+        <div class="form-group">
+            <label>Nº Orden de Trabajo:</label>
+            <input type="text" id="orderNum" placeholder="OT-0000" maxlength="7">
+        </div>
         <div class="form-group">
             <label>Placa:</label>
             <input type="text" id="plate" class="uppercase-input" maxlength="9" placeholder="Ej: XYZ-1234">
@@ -1382,7 +1339,6 @@
                 el.value = data[id];
             }
         }
-        
 
         // Si hay pickers inicializados, sincronizarlos con los valores cargados
         if (datePickers && datePickers.length) {
@@ -1959,60 +1915,43 @@
     }
 
     // Integrar con generarReporte: insertamos la fecha justo antes de imprimir y la removemos después.
-// Integrar con generarReporte: insertamos la fecha justo antes de imprimir y la removemos después.
-function generarReporte() {
-    // 1. Obtener el input de la Orden de Trabajo
-    const otInput = document.getElementById('ot-number');
-    const otValue = otInput ? otInput.value.trim() : '';
-    const isRequired = otInput && otInput.hasAttribute('required');
+    function generarReporte() {
+        // 1. Poner fecha de impresión
+        const today = new Date();
+        const dateStr = today.toLocaleDateString('es-ES', { 
+            day: '2-digit', month: '2-digit', year: 'numeric' 
+        });
+        document.getElementById('print-date-display').textContent = dateStr;
 
-    // ------------------------------------------------------------------
-    // 🔥 CORRECCIÓN CRÍTICA DE LÓGICA DE ORDEN DE TRABAJO
-    // Si el campo es requerido Y NO tiene valor (longitud 0), 
-    // mostramos el aviso (Toast) y detenemos el proceso (return).
-    // Esto arregla la impresión sin número y el aviso al cancelar/fallar.
-    if (isRequired && otValue.length === 0) {
-        showRichToast('Atención', 'Debe ingresar el Nº Orden de Trabajo para generar el reporte.', 'warning', 5000);
-        return; // Detiene la ejecución.
-    }
-    // ------------------------------------------------------------------
+        // Deshabilitar botón temporalmente
+        const btnPrint = document.getElementById('btn-print');
+        if (btnPrint) btnPrint.setAttribute('disabled', 'true');
 
-    let requiredWasRemoved = false;
-    // Si el campo es requerido y tiene valor pero no 4 dígitos (comportamiento original)
-    // Quitamos 'required' temporalmente para que la validación del navegador no impida window.print().
-    if (isRequired && otValue.length < 4) {
-        otInput.removeAttribute('required'); 
-        requiredWasRemoved = true;
-    }
+        // 2. Validaciones (Igual que antes)
+        const valid = validateCorrectionAfterReturn();
+        if (!valid) {
+            showCustomAlert("Fechas incorrectas", "La fecha de corrección no puede ser anterior a la fecha de devolución.", [], "error");
+            if(btnPrint) btnPrint.removeAttribute('disabled');
+            return;
+        }
 
-    // 1. Poner fecha de impresión
-    const today = new Date();
-    const dateStr = today.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
-    document.getElementById('print-date-display').textContent = dateStr;
+        const requiredFields = [
+            { id: 'plate', name: 'Placa', critical: true },
+            { id: 'orderNum', name: 'Nº Orden de Trabajo', critical: true }
+        ];
 
-    // Deshabilitar botón temporalmente 
-    const btnPrint = document.getElementById('btn-print');
-    if (btnPrint) btnPrint.setAttribute('disabled', 'true');
-
-    // 2. Validaciones (Fechas/Horas)
-    // Si esta validación falla, restauramos el 'required' y salimos.
-    const valid = validateCorrectionAfterReturn();
-    if (!valid) {
-         // Restaurar 'required' y habilitar botón si la validación falla
-         if (requiredWasRemoved) { otInput.setAttribute('required', 'required'); }
-         if (btnPrint) btnPrint.removeAttribute('disabled');
-         return;
-    }
-
-    // Ejecutar impresión
-    window.print();
-    
-    // Restaurar 'required' inmediatamente después de la impresión (en un timeout para seguridad)
-    if (requiredWasRemoved) {
-         setTimeout(() => {
-            otInput.setAttribute('required', 'required');
-        }, 500);
-    }
+        let stop = false;
+        requiredFields.forEach(f => {
+            const el = document.getElementById(f.id);
+            if (!el || !el.value.trim()) {
+                showCustomAlert('Campo obligatorio', 'Falta: ' + f.name, [], 'error');
+                stop = true;
+            }
+        });
+        if (stop) {
+            if(btnPrint) btnPrint.removeAttribute('disabled');
+            return;
+        }
 
         // 3. APLICAR FILTROS (Lógica de ocultar lo vacío)
         
@@ -2187,91 +2126,126 @@ function generarReporte() {
         sectionIds.forEach(id => updateSectionProgress(id));
     }
 
-window.addEventListener("DOMContentLoaded", () => {
-    
-    // 1) Inicializa flatpickr en los inputs (antes de cargar valores)
-    initFlatpickr();
+// --- FUNCIÓN PARA CONTROLAR EL FORMATO DE ORDEN DE TRABAJO ---
+function configurarInputOrden() {
+    const input = document.getElementById('orderNum');
+    if (!input) return;
 
-    // 2) Carga valores guardados en localStorage y sincroniza con los pickers
-    loadForm();
-    actualizarBloquesAdmin(); // Llamada inicial para establecer el estado de los bloques
+    // Función interna para formatear
+    const formatearOrden = () => {
+        let valor = input.value;
+        
+        // 1. Si no empieza con OT-, lo forzamos. 
+        // Usamos replace para limpiar y quedarnos solo con los números que haya escrito
+        // (La expresión regular [^0-9] elimina todo lo que NO sea un número)
+        let numeros = valor.replace(/[^0-9]/g, '');
 
-    // ===================================================================
-    // ✔️ CÓDIGO DE VALIDACIÓN OT- (Lugar correcto: Después de loadForm)
-    // ===================================================================
-    const otInput = document.getElementById('ot-number');
-    if (otInput) {
-        // Asegura que solo se ingresen dígitos (0-9) y hasta 4 caracteres.
-        otInput.addEventListener('input', (e) => {
-            // Elimina cualquier carácter que no sea un dígito
-            otInput.value = otInput.value.replace(/\D/g, ''); 
-        });
-    }
-    // ===================================================================
+        // 2. Limitamos a 4 dígitos máximo
+        if (numeros.length > 4) {
+            numeros = numeros.slice(0, 4);
+        }
 
-    // 3) Resto de listeners y comportamiento
-    setupFocusListeners(); 
-    updateAllSectionProgress(); // Inicializar barras de progreso
+        // 3. Asignamos el valor final: Prefijo + Números
+        input.value = 'OT-' + numeros;
+    };
 
-    // Listener para actualizar bloques de administrador al cambiar el dropdown
-    document.getElementById("sys-ejecutados")
-        .addEventListener("change", actualizarBloquesAdmin);
-
-    // Listeners para guardar y actualizar progreso automáticamente
-    document.querySelectorAll("input, select, textarea").forEach(el => {
-        el.addEventListener("input", (e) => {
-            saveForm();
-            updateAllSectionProgress(); 
-        });
-        el.addEventListener("change", (e) => {
-            saveForm();
-            updateAllSectionProgress();
-        });
+    // Evento al escribir
+    input.addEventListener('input', function(e) {
+        formatearOrden();
+        saveForm(); // Guardamos cambios en localStorage
     });
 
-    // Ejecutar validación cada vez que los campos de devolución/corrección cambian
-    ["devuelto-date","devuelto-time","corregido-date","corregido-time"].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) {
-            el.addEventListener("blur", validateCorrectionAfterReturn);
+    // Evento al hacer clic o enfocar (para asegurar que aparezca el OT-)
+    input.addEventListener('focus', function() {
+        if (this.value === '' || this.value === 'OT-') {
+            this.value = 'OT-';
         }
     });
 
-    // Forzar mayúsculas en ciertos campos
-    document.querySelectorAll('.uppercase-input').forEach(input => {
-        input.addEventListener('input', (e) => {
-            const start = input.selectionStart;
-            const end = input.selectionEnd;
-            input.value = input.value.toUpperCase();
-            input.setSelectionRange(start, end);
-        });
+    // Validación extra: Impedir borrar el "OT-" con la tecla de borrar
+    input.addEventListener('keydown', function(e) {
+        // Si el cursor está en las primeras 3 posiciones y pulsan borrar/backspace
+        if ((e.key === 'Backspace' || e.key === 'Delete') && this.selectionStart <= 3) {
+            e.preventDefault();
+        }
     });
+    
+    // Inicialización: Si está vacío al cargar, poner formato base
+    if (!input.value) {
+        input.value = 'OT-';
+    }
+}
 
-    // -------------------------------------------------------------------
-    // FUNCIÓN DE ADMINISTRACIÓN (Colocada aquí para evitar romper el flujo)
-    // -------------------------------------------------------------------
+    // 👉 Al cargar la página: inicializar pickers, cargar datos y activar autosave
+    window.addEventListener("DOMContentLoaded", () => {
+        // 1) Inicializa flatpickr en los inputs (antes de cargar valores)
+        initFlatpickr();
+
+        // 2) Carga valores guardados en localStorage y sincroniza con los pickers
+        loadForm();
+        
+        configurarInputOrden();
+
+        actualizarBloquesAdmin();
+
+        // 3) Resto de listeners y comportamiento
+        setupFocusListeners(); 
+        updateAllSectionProgress(); // Inicializar barras de progreso
+
+document.getElementById("sys-ejecutados")
+    .addEventListener("change", actualizarBloquesAdmin);
+
+        document.querySelectorAll("input, select, textarea").forEach(el => {
+            el.addEventListener("input", (e) => {
+                saveForm();
+                updateAllSectionProgress(); // Actualizar progreso al cambiar
+            });
+            el.addEventListener("change", (e) => {
+                saveForm();
+                updateAllSectionProgress();
+            });
+        });
+
+
     function actualizarBloquesAdmin() {
         const valor = document.getElementById("sys-ejecutados").value;
+
         const devolucion = document.getElementById("devolucion-block");
         const corregido = document.getElementById("corregido-block");
 
-        if (valor === "SI") {
-            // Ocultar ambos bloques
-            devolucion.style.display = "none";
-            corregido.style.display = "none";
-        } else if (valor === "NO") {
-            // Mostrar ambos bloques
-            devolucion.style.display = "block";
-            corregido.style.display = "block";
-        } else {
-            // Estado inicial (ni SI ni NO aún)
-            devolucion.style.display = "none";
-            corregido.style.display = "none";
-        }
+    if (valor === "SI") {
+        // Ocultar ambos bloques
+        devolucion.style.display = "none";
+        corregido.style.display = "none";
+    } else if (valor === "NO") {
+        // Mostrar ambos bloques
+        devolucion.style.display = "block";
+        corregido.style.display = "block";
+    } else {
+        // Estado inicial (ni SI ni NO aún)
+        devolucion.style.display = "none";
+        corregido.style.display = "none";
     }
-    // -------------------------------------------------------------------
+}
 
-}); // <-- Cierre del window.addEventListener
+
+        // Ejecutar validación cada vez que los campos de devolución/corrección cambian (cuando no hay picker events por alguna razón)
+        ["devuelto-date","devuelto-time","corregido-date","corregido-time"].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.addEventListener("blur", validateCorrectionAfterReturn);
+            }
+        });
+
+        document.querySelectorAll('.uppercase-input').forEach(input => {
+            input.addEventListener('input', (e) => {
+                const start = input.selectionStart;
+                const end = input.selectionEnd;
+                input.value = input.value.toUpperCase();
+                input.setSelectionRange(start, end);
+            });
+        });
+    });
 </script>
 
 </body>
