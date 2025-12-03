@@ -8,6 +8,9 @@
     <link rel="icon" type="image/jpeg" href="assets/logo2.JPG">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+
     <style>
         /* --- VARIABLES DE COLOR (Ajustadas para Dark Mode en Pantalla) --- */
         :root {
@@ -647,315 +650,348 @@
             transform: scaleX(1);
         }
         
-        /* --- ESTILO PARA FIRMA (OCULTO EN PANTALLA) --- */
-        .signature-box {
-            display: none; 
+        /* --- ESTILOS PARA FIRMA DIGITAL --- */
+        .signature-pad-wrapper {
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-dark);
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
+        .signature-pad-body {
+            position: relative;
+            width: 100%;
+            max-width: 600px; /* Ancho máximo de la firma */
+            height: 200px;
+            background-color: #fff; /* Fondo blanco para que se vea bien al imprimir */
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            touch-action: none; /* Importante: evita que el celular haga scroll al firmar */
+        }
+
+        canvas#signature-pad {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .signature-actions {
+            margin-top: 10px;
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .btn-small {
+            padding: 5px 10px;
+            font-size: 0.9em;
+            background-color: var(--border-dark);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .btn-small:hover { background-color: var(--error); }
+
+        .signature-label {
+            color: #000; /* Texto negro porque el fondo es blanco */
+            position: absolute;
+            bottom: 5px;
+            left: 10px;
+            font-size: 0.8em;
+            pointer-events: none; /* Para que no interfiera al dibujar */
+            opacity: 0.5;
+        }
+
+        /* --- MEDIA PRINT --- */
         @media print {
-    @page { 
-        margin: 1cm;
-        size: auto;
-    }
+            @page { 
+                margin: 1cm;
+                size: auto;
+            }
 
-    /* Ocultar lo que ya ocultabas */
-    .print-hidden-icon,
-    #save-indicator,
-    .button-group,
-    h1,
-    .footer-info {
-        display: none !important;
-    }
+            /* Ocultar lo que ya ocultabas */
+            .print-hidden-icon,
+            #save-indicator,
+            .button-group,
+            h1,
+            .footer-info {
+                display: none !important;
+            }
 
-    /* Quitar letra de índice (A, B, etc.) como en la versión vieja */
-    .section-index {
-        display: none !important;
-    }
+            /* Quitar letra de índice (A, B, etc.) como en la versión vieja */
+            .section-index {
+                display: none !important;
+            }
 
-    /* Alto contraste pero sin romper padding */
-    body, .container, .section, .header-info,
-    input, select, textarea, label, span, div, p {
-        background: #fff !important;
-        color: #000 !important;
-        box-shadow: none !important;
-        text-shadow: none !important;
-    }
+            /* Alto contraste pero sin romper padding */
+            body, .container, .section, .header-info,
+            input, select, textarea, label, span, div, p {
+                background: #fff !important;
+                color: #000 !important;
+                box-shadow: none !important;
+                text-shadow: none !important;
+            }
 
-    * {
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-    }
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
 
-    body {
-        padding: 0;
-        font-size: 11pt;
-        font-family: Arial, Helvetica, sans-serif;
-    }
+            body {
+                padding: 0;
+                font-size: 11pt;
+                font-family: Arial, Helvetica, sans-serif;
+            }
 
-    .container {
-        max-width: 100%;
-        margin: 0;
-        padding: 0 5px;
-        border: none !important;
-    }
+            .container {
+                max-width: 100%;
+                margin: 0;
+                padding: 0 5px;
+                border: none !important;
+            }
 
-    /* --- CORRECCIÓN CRÍTICA PARA ANDROID/MÓVIL --- */
-    /* Forzar que los inputs sean texto plano sin cajas ni fondo azul */
-    input[type="text"], 
-    input[type="date"], 
-    input[type="time"], 
-    input[type="number"],
-    select,
-    .flatpickr-input {
-        -webkit-appearance: none !important;
-        -moz-appearance: none !important;
-        appearance: none !important;
-        background-color: transparent !important;
-        background: transparent !important;
-        border: none !important;
-        box-shadow: none !important;
-        color: #000 !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        font-weight: normal;
-        /* Eliminar iconos nativos de fecha/hora en la impresión */
-        background-image: none !important; 
-    }
+            /* --- CORRECCIÓN CRÍTICA PARA ANDROID/MÓVIL --- */
+            /* Forzar que los inputs sean texto plano sin cajas ni fondo azul */
+            input[type="text"], 
+            input[type="date"], 
+            input[type="time"], 
+            input[type="number"],
+            select,
+            .flatpickr-input {
+                -webkit-appearance: none !important;
+                -moz-appearance: none !important;
+                appearance: none !important;
+                background-color: transparent !important;
+                background: transparent !important;
+                border: none !important;
+                box-shadow: none !important;
+                color: #000 !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                font-weight: normal;
+                /* Eliminar iconos nativos de fecha/hora en la impresión */
+                background-image: none !important; 
+            }
 
-    select {
-        text-indent: 0.01px;
-        text-overflow: "";
-    }
+            select {
+                text-indent: 0.01px;
+                text-overflow: "";
+            }
 
-    ::placeholder {
-        color: transparent !important;
-        opacity: 0 !important;
-    }
+            ::placeholder {
+                color: transparent !important;
+                opacity: 0 !important;
+            }
 
-    /* --------------------------- */
-    /* ENCABEZADO        */
-    /* --------------------------- */
+            /* --------------------------- */
+            /* ENCABEZADO        */
+            /* --------------------------- */
 
-    .logo-container {
-        text-align: left;
-        margin-bottom: 15px;
-        padding: 0 0 10px 0;
-        border-bottom: 2px solid #000;
-        display: flex;
-        align-items: center;
-        position: relative;
-    }
+            .logo-container {
+                text-align: left;
+                margin-bottom: 15px;
+                padding: 0 0 10px 0;
+                border-bottom: 2px solid #000;
+                display: flex;
+                align-items: center;
+                position: relative;
+            }
 
-    /* PNG oculto como antes */
-    .logo-screen {
-        display: none !important;
-    }
+            /* PNG oculto como antes */
+            .logo-screen {
+                display: none !important;
+            }
 
-    /* JPEG visible como antes */
-    .logo-print {
-        display: block !important;
-        max-width: 150px !important;
-        height: auto;
-        margin-right: 15px;
-    }
+            /* JPEG visible como antes */
+            .logo-print {
+                display: block !important;
+                max-width: 150px !important;
+                height: auto;
+                margin-right: 15px;
+            }
 
-    /* Título al estilo viejo */
-    .logo-container::after { 
-        content: "REPORTE Control de Calidad";
-        font-size: 15pt;
-        font-weight: bold;
-        margin-left: 10px;
-        display: block;
-        flex-grow: 1;
-    }
+            /* Título al estilo viejo */
+            .logo-container::after { 
+                content: "REPORTE Control de Calidad";
+                font-size: 15pt;
+                font-weight: bold;
+                margin-left: 10px;
+                display: block;
+                flex-grow: 1;
+            }
 
-    #print-date-display {
-        display: block !important;
-        position: absolute;
-        right: 0;
-        top: 0;
-        font-size: 10pt;
-        font-weight: bold;
-    }
+            #print-date-display {
+                display: block !important;
+                position: absolute;
+                right: 0;
+                top: 0;
+                font-size: 10pt;
+                font-weight: bold;
+            }
 
+            /* --------------------------- */
+            /* CABECERA DE INFORMACIÓN  */
+            /* --------------------------- */
+            .header-info {
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 5px;
+                border: 1px solid #000;
+                padding: 8px;
+                margin-bottom: 15px;
+                background: #fff !important;
+            }
 
+            .header-info label {
+                color: #000 !important;
+                font-size: 10pt;
+                font-weight: bold;
+                margin-bottom: 2px;
+            }
 
-    /* --------------------------- */
-    /* CABECERA DE INFORMACIÓN  */
-    /* --------------------------- */
+            /* --------------------------- */
+            /* SECCIONES           */
+            /* --------------------------- */
+            .section {
+                border: 1px solid #000 !important;
+                margin-bottom: 12px;
+                page-break-inside: avoid;
+                background: #fff !important;
+            }
 
-    .header-info {
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: 5px;
-        border: 1px solid #000;
-        padding: 8px;
-        margin-bottom: 15px;
-        background: #fff !important;
-    }
+            .section-header {
+                border-bottom: 1px solid #000;
+                padding: 8px 10px;
+                background: #e0e0e0 !important;
+                font-size: 12pt;
+                font-weight: bold;
+                color: #000 !important;
+            }
 
-    .header-info label {
-        color: #000 !important;
-        font-size: 10pt;
-        font-weight: bold;
-        margin-bottom: 2px;
-    }
+            .section-header.completed { 
+                /* --- CAMBIO SOLICITADO: COLOR GRIS EN VEZ DE VERDE --- */
+                background: #e0e0e0 !important;
+                color: #000 !important;
+            }
 
+            .status-indicator {
+                display: none !important;
+            }
 
+            /* --------------------------- */
+            /* ADMIN             */
+            /* --------------------------- */
+            .admin-row { 
+                border-bottom: 1px solid #bbb;
+                padding: 8px 10px;
+                background: #fff !important;
+            }
 
-    /* --------------------------- */
-    /* SECCIONES           */
-    /* --------------------------- */
+            .admin-question {
+                font-weight: bold;
+                color: #000 !important;
+                margin-bottom: 4px;
+                font-size: 10pt;
+            }
 
-    .section {
-        border: 1px solid #000 !important;
-        margin-bottom: 12px;
-        page-break-inside: avoid;
-        background: #fff !important;
-    }
+            #devolucion-block, #corregido-block {
+                border: 1px solid #000 !important;
+                background: #fff !important;
+                padding: 5px;
+                margin-top: 6px;
+            }
 
-    .section-header {
-        border-bottom: 1px solid #000;
-        padding: 8px 10px;
-        background: #e0e0e0 !important;
-        font-size: 12pt;
-        font-weight: bold;
-        color: #000 !important;
-    }
+            /* --------------------------- */
+            /* CHECKLIST          */
+            /* --------------------------- */
+            .checklist {
+                padding: 8px 12px;
+            }
 
-    .section-header.completed { 
-        /* --- CAMBIO SOLICITADO: COLOR GRIS EN VEZ DE VERDE --- */
-        background: #e0e0e0 !important;
-        color: #000 !important;
-    }
+            /* Ocultamos los checkboxes reales */
+            .check-item input[type="checkbox"] {
+                display: none !important;
+            }
 
-    .status-indicator {
-        display: none !important;
-    }
+            /* Ocultamos todos los items */
+            .check-item {
+                display: none !important;
+                border-bottom: 1px dotted #ccc;
+                padding: 4px 0;
+                font-size: 10pt;
+            }
 
+            /* Solo mostramos los marcados */
+            .check-item.is-checked-print {
+                display: block !important;
+            }
 
+            .check-item.is-checked-print label {
+                color: #000 !important;
+                font-weight: bold;
+            }
 
-    /* --------------------------- */
-    /* ADMIN             */
-    /* --------------------------- */
+            /* Icono estilo viejo pero limpio */
+            .check-item.is-checked-print label::before {
+                content: "☑ ";
+                font-size: 12pt;
+                margin-right: 4px;
+                font-weight: bold;
+            }
 
-    .admin-row { 
-        border-bottom: 1px solid #bbb;
-        padding: 8px 10px;
-        background: #fff !important;
-    }
+            /* --------------------------- */
+            /* ÁREA OBSERVACIONES    */
+            /* --------------------------- */
+            .obs-area {
+                border-top: 1px solid #000;
+                padding: 10px;
+                background: #fff !important;
+            }
 
-    .admin-question {
-        font-weight: bold;
-        color: #000 !important;
-        margin-bottom: 4px;
-        font-size: 10pt;
-    }
+            .obs-area textarea {
+                border: 1px solid #000 !important;
+                padding: 5px;
+                min-height: 40px;
+                resize: none !important;
+                font-size: 10pt;
+                color: #000 !important;
+            }
 
-    #devolucion-block, #corregido-block {
-        border: 1px solid #000 !important;
-        background: #fff !important;
-        padding: 5px;
-        margin-top: 6px;
-    }
+            .obs-area label {
+                font-size: 10pt;
+                font-weight: bold;
+                color: #000 !important;
+            }
 
+            /* Ocultar secciones vacías */
+            .obs-area.empty-print,
+            .section.empty-print {
+                display: none !important;
+            }
 
-
-    /* --------------------------- */
-    /* CHECKLIST          */
-    /* --------------------------- */
-
-    .checklist {
-        padding: 8px 12px;
-    }
-
-    /* Ocultamos los checkboxes reales */
-    .check-item input[type="checkbox"] {
-        display: none !important;
-    }
-
-    /* Ocultamos todos los items */
-    .check-item {
-        display: none !important;
-        border-bottom: 1px dotted #ccc;
-        padding: 4px 0;
-        font-size: 10pt;
-    }
-
-    /* Solo mostramos los marcados */
-    .check-item.is-checked-print {
-        display: block !important;
-    }
-
-    .check-item.is-checked-print label {
-        color: #000 !important;
-        font-weight: bold;
-    }
-
-    /* Icono estilo viejo pero limpio */
-    .check-item.is-checked-print label::before {
-        content: "☑ ";
-        font-size: 12pt;
-        margin-right: 4px;
-        font-weight: bold;
-    }
-
-
-
-    /* --------------------------- */
-    /* ÁREA OBSERVACIONES    */
-    /* --------------------------- */
-
-    .obs-area {
-        border-top: 1px solid #000;
-        padding: 10px;
-        background: #fff !important;
-    }
-
-    .obs-area textarea {
-        border: 1px solid #000 !important;
-        padding: 5px;
-        min-height: 40px;
-        resize: none !important;
-        font-size: 10pt;
-        color: #000 !important;
-    }
-
-    .obs-area label {
-        font-size: 10pt;
-        font-weight: bold;
-        color: #000 !important;
-    }
-
-
-
-    /* Ocultar secciones vacías */
-    .obs-area.empty-print,
-    .section.empty-print {
-        display: none !important;
-    }
-
-
-
-    /* --------------------------- */
-    /* NOMBRE / FIRMA       */
-    /* --------------------------- */
-
-    .signature-box {
-        display: flex !important;
-        justify-content: space-between;
-        margin-top: 40px;
-        margin-bottom: 20px;
-        padding: 0 10px;
-        page-break-inside: avoid;
-    }
-
-    .signature-box div {
-        font-size: 14pt;
-        font-weight: bold;
-        color: #000 !important;
-    }
-
-}
+            /* --------------------------- */
+            /* FIRMA DIGITAL IMPRESIÓN   */
+            /* --------------------------- */
+            .signature-pad-wrapper {
+                border: none;
+                background: transparent;
+                padding: 0;
+                margin: 0;
+                display: block !important; /* Forzar que se vea */
+                page-break-inside: avoid;
+            }
+            .signature-pad-body {
+                box-shadow: none;
+                border: 1px solid #000; /* Borde simple para impresión */
+            }
+            .signature-actions { display: none !important; }
+            .signature-label { display: none !important; }
+        }
 
     </style>
 </head>
@@ -1168,13 +1204,28 @@
         <button id="btn-print" class="btn-submit" onclick="generarReporte()">Finalizar e Imprimir Reporte</button>
     </div>
     
-    <div class="signature-box">
-        <div>Nombre: __________________________</div>
-        <div>Firma: __________________________</div>
+    <div class="signature-pad-wrapper">
+        <div style="width: 100%; max-width: 600px; margin-bottom:5px; display:flex; justify-content:space-between;">
+            <label>Firma del Responsable:</label>
+        </div>
+        
+        <div class="signature-pad-body">
+            <canvas id="signature-pad"></canvas>
+            <span class="signature-label">Firmar aquí</span>
+        </div>
+        
+        <div class="signature-actions">
+            <button class="btn-small" onclick="borrarFirma()">Borrar Firma</button>
+        </div>
+    </div>
+    
+    <div class="form-group" style="max-width: 600px; margin: 10px auto;">
+        <label>Nombre del Responsable:</label>
+        <input type="text" id="signerName" placeholder="Nombre de quien firma" class="uppercase-input">
     </div>
 
     <div class="footer-info">
-        <span class="hover-underline" id="version-link">Versión 1.1.9 - Control de Calidad GAS</span>
+        <span class="hover-underline" id="version-link">Versión 1.2.0 - Control de Calidad GAS</span>
     </div>
 </div>
 
@@ -1609,21 +1660,25 @@
                 saveToHistory();
                 localStorage.removeItem(STORAGE_KEY);
                 
-                                // Limpiar todos los inputs, selects y textareas inmediatamente
-                                document.querySelectorAll('input[type="text"], input[type="date"], input[type="time"], input[type="number"], select, textarea').forEach(el => {
-                                    el.value = '';
-                                });
+                // Limpiar también la firma
+                localStorage.removeItem(STORAGE_KEY + "_sig");
+                if(signaturePad) signaturePad.clear();
                 
-                                // Limpiar y desmarcar todos los checkboxes
-                                document.querySelectorAll('input[type="checkbox"]').forEach(el => {
-                                    el.checked = false;
-                                });
-                
-                                // Actualizar estado de secciones y progreso
-                                ["sec-sistema", "sec-pintura", "sec-armado", "sec-pulido", "sec-tapiceria", "sec-control"].forEach(id => {
-                                    checkSection(id);
-                                    updateSectionProgress(id);
-                                });
+                // Limpiar todos los inputs, selects y textareas inmediatamente
+                document.querySelectorAll('input[type="text"], input[type="date"], input[type="time"], input[type="number"], select, textarea').forEach(el => {
+                    el.value = '';
+                });
+
+                // Limpiar y desmarcar todos los checkboxes
+                document.querySelectorAll('input[type="checkbox"]').forEach(el => {
+                    el.checked = false;
+                });
+
+                // Actualizar estado de secciones y progreso
+                ["sec-sistema", "sec-pintura", "sec-armado", "sec-pulido", "sec-tapiceria", "sec-control"].forEach(id => {
+                    checkSection(id);
+                    updateSectionProgress(id);
+                });
                 
                 // Show undo toast with action
                 showRichToast(
@@ -2126,55 +2181,112 @@
         sectionIds.forEach(id => updateSectionProgress(id));
     }
 
-// --- FUNCIÓN PARA CONTROLAR EL FORMATO DE ORDEN DE TRABAJO ---
-function configurarInputOrden() {
-    const input = document.getElementById('orderNum');
-    if (!input) return;
+    // --- FUNCIÓN PARA CONTROLAR EL FORMATO DE ORDEN DE TRABAJO ---
+    function configurarInputOrden() {
+        const input = document.getElementById('orderNum');
+        if (!input) return;
 
-    // Función interna para formatear
-    const formatearOrden = () => {
-        let valor = input.value;
+        // Función interna para formatear
+        const formatearOrden = () => {
+            let valor = input.value;
+            
+            // 1. Si no empieza con OT-, lo forzamos. 
+            // Usamos replace para limpiar y quedarnos solo con los números que haya escrito
+            // (La expresión regular [^0-9] elimina todo lo que NO sea un número)
+            let numeros = valor.replace(/[^0-9]/g, '');
+
+            // 2. Limitamos a 4 dígitos máximo
+            if (numeros.length > 4) {
+                numeros = numeros.slice(0, 4);
+            }
+
+            // 3. Asignamos el valor final: Prefijo + Números
+            input.value = 'OT-' + numeros;
+        };
+
+        // Evento al escribir
+        input.addEventListener('input', function(e) {
+            formatearOrden();
+            saveForm(); // Guardamos cambios en localStorage
+        });
+
+        // Evento al hacer clic o enfocar (para asegurar que aparezca el OT-)
+        input.addEventListener('focus', function() {
+            if (this.value === '' || this.value === 'OT-') {
+                this.value = 'OT-';
+            }
+        });
+
+        // Validación extra: Impedir borrar el "OT-" con la tecla de borrar
+        input.addEventListener('keydown', function(e) {
+            // Si el cursor está en las primeras 3 posiciones y pulsan borrar/backspace
+            if ((e.key === 'Backspace' || e.key === 'Delete') && this.selectionStart <= 3) {
+                e.preventDefault();
+            }
+        });
         
-        // 1. Si no empieza con OT-, lo forzamos. 
-        // Usamos replace para limpiar y quedarnos solo con los números que haya escrito
-        // (La expresión regular [^0-9] elimina todo lo que NO sea un número)
-        let numeros = valor.replace(/[^0-9]/g, '');
+        // Inicialización: Si está vacío al cargar, poner formato base
+        if (!input.value) {
+            input.value = 'OT-';
+        }
+    }
 
-        // 2. Limitamos a 4 dígitos máximo
-        if (numeros.length > 4) {
-            numeros = numeros.slice(0, 4);
+    // --- LÓGICA DE FIRMA DIGITAL ---
+    let signaturePad;
+
+    function initSignaturePad() {
+        const canvas = document.getElementById('signature-pad');
+        if (!canvas) return;
+
+        // Inicializar SignaturePad con opciones para que se vea real
+        signaturePad = new SignaturePad(canvas, {
+            minWidth: 1,
+            maxWidth: 2.5, // Simula presión de bolígrafo
+            penColor: "black", // Tinta negra (mejor para impresión)
+            backgroundColor: "white" // Fondo blanco
+        });
+
+        // FUNCIÓN CRÍTICA: Ajustar resolución para pantallas retina/móviles
+        // Si no haces esto, la firma se ve borrosa en celulares
+        function resizeCanvas() {
+            const ratio = Math.max(window.devicePixelRatio || 1, 1);
+            
+            // Guardar imagen actual si existe para no perderla al redimensionar
+            let data = null;
+            if(!signaturePad.isEmpty()) data = signaturePad.toDataURL();
+
+            canvas.width = canvas.offsetWidth * ratio;
+            canvas.height = canvas.offsetHeight * ratio;
+            canvas.getContext("2d").scale(ratio, ratio);
+
+            // Restaurar firma si había
+            if(data) signaturePad.fromDataURL(data);
         }
 
-        // 3. Asignamos el valor final: Prefijo + Números
-        input.value = 'OT-' + numeros;
+        window.addEventListener("resize", resizeCanvas);
+        resizeCanvas(); // Llamar al inicio
+
+        // Guardar firma cada vez que se termina un trazo
+        signaturePad.addEventListener("endStroke", () => {
+            localStorage.setItem(STORAGE_KEY + "_sig", signaturePad.toDataURL());
+        });
+    }
+    
+    // Función global para el botón de borrar
+    window.borrarFirma = function() {
+        if(signaturePad) {
+            signaturePad.clear();
+            localStorage.removeItem(STORAGE_KEY + "_sig");
+        }
     };
 
-    // Evento al escribir
-    input.addEventListener('input', function(e) {
-        formatearOrden();
-        saveForm(); // Guardamos cambios en localStorage
-    });
-
-    // Evento al hacer clic o enfocar (para asegurar que aparezca el OT-)
-    input.addEventListener('focus', function() {
-        if (this.value === '' || this.value === 'OT-') {
-            this.value = 'OT-';
+    // Función para cargar la firma guardada
+    function loadSignature() {
+        const savedSig = localStorage.getItem(STORAGE_KEY + "_sig");
+        if (savedSig && signaturePad) {
+            signaturePad.fromDataURL(savedSig);
         }
-    });
-
-    // Validación extra: Impedir borrar el "OT-" con la tecla de borrar
-    input.addEventListener('keydown', function(e) {
-        // Si el cursor está en las primeras 3 posiciones y pulsan borrar/backspace
-        if ((e.key === 'Backspace' || e.key === 'Delete') && this.selectionStart <= 3) {
-            e.preventDefault();
-        }
-    });
-    
-    // Inicialización: Si está vacío al cargar, poner formato base
-    if (!input.value) {
-        input.value = 'OT-';
     }
-}
 
     // 👉 Al cargar la página: inicializar pickers, cargar datos y activar autosave
     window.addEventListener("DOMContentLoaded", () => {
@@ -2186,14 +2298,18 @@ function configurarInputOrden() {
         
         configurarInputOrden();
 
+        // 3) Firma Digital
+        initSignaturePad();
+        loadSignature();
+
         actualizarBloquesAdmin();
 
-        // 3) Resto de listeners y comportamiento
+        // 4) Resto de listeners y comportamiento
         setupFocusListeners(); 
         updateAllSectionProgress(); // Inicializar barras de progreso
 
-document.getElementById("sys-ejecutados")
-    .addEventListener("change", actualizarBloquesAdmin);
+        document.getElementById("sys-ejecutados")
+            .addEventListener("change", actualizarBloquesAdmin);
 
         document.querySelectorAll("input, select, textarea").forEach(el => {
             el.addEventListener("input", (e) => {
@@ -2206,30 +2322,28 @@ document.getElementById("sys-ejecutados")
             });
         });
 
+        function actualizarBloquesAdmin() {
+            const valor = document.getElementById("sys-ejecutados").value;
 
-    function actualizarBloquesAdmin() {
-        const valor = document.getElementById("sys-ejecutados").value;
+            const devolucion = document.getElementById("devolucion-block");
+            const corregido = document.getElementById("corregido-block");
 
-        const devolucion = document.getElementById("devolucion-block");
-        const corregido = document.getElementById("corregido-block");
+            if (valor === "SI") {
+                // Ocultar ambos bloques
+                devolucion.style.display = "none";
+                corregido.style.display = "none";
+            } else if (valor === "NO") {
+                // Mostrar ambos bloques
+                devolucion.style.display = "block";
+                corregido.style.display = "block";
+            } else {
+                // Estado inicial (ni SI ni NO aún)
+                devolucion.style.display = "none";
+                corregido.style.display = "none";
+            }
+        }
 
-    if (valor === "SI") {
-        // Ocultar ambos bloques
-        devolucion.style.display = "none";
-        corregido.style.display = "none";
-    } else if (valor === "NO") {
-        // Mostrar ambos bloques
-        devolucion.style.display = "block";
-        corregido.style.display = "block";
-    } else {
-        // Estado inicial (ni SI ni NO aún)
-        devolucion.style.display = "none";
-        corregido.style.display = "none";
-    }
-}
-
-
-        // Ejecutar validación cada vez que los campos de devolución/corrección cambian (cuando no hay picker events por alguna razón)
+        // Ejecutar validación cada vez que los campos de devolución/corrección cambian
         ["devuelto-date","devuelto-time","corregido-date","corregido-time"].forEach(id => {
             const el = document.getElementById(id);
             if (el) {
