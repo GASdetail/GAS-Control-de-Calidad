@@ -707,6 +707,7 @@
             pointer-events: none; /* Para que no interfiera al dibujar */
             opacity: 0.5;
         }
+        
 
         /* --- MEDIA PRINT --- */
         @media print {
@@ -714,7 +715,82 @@
                 margin: 1cm;
                 size: auto;
             }
+            
+/* --------------------------- */
+/* FIRMA DIGITAL IMPRESIÓN MEJORADA */
+/* --------------------------- */
+.signature-pad-wrapper {
+    border: none;
+    background: transparent;
+    padding: 0;
+    /* REGLAS REFORZADAS PARA CENTRADO ABSOLUTO */
+    margin: 0 auto 5px auto !important; /* Se agrega !important */
+    display: block !important;
+    float: none !important; /* Se asegura que no haya flotación a la izquierda */
+    /* FIN REGLAS REFORZADAS */
+    page-break-inside: avoid;
+    width: 300px; 
+    text-align: center;
+    position: relative;
+}
+.signature-pad-body {
+    box-shadow: none;
+    border: none !important; 
+    background-color: #fff !important;
+    height: 120px; 
+    margin-bottom: 2px;
+}
+.signature-actions { display: none !important; }
+.signature-label { 
+    display: block !important; /* Mostrar de nuevo la etiqueta de Firma */
+    font-size: 9pt !important;
+    font-weight: normal !important;
+    color: #555 !important;
+    text-align: center;
+    margin-bottom: 5px;
+}
 
+/* Estilos para el nombre del responsable */
+.responsible-name-container {
+    text-align: center;
+    margin: 20px auto 40px auto !important; /* Más separación del bloque anterior y centrado */
+    width: 300px; /* Ancho para el bloque del nombre, alineado con la firma */
+    display: block !important;
+    page-break-inside: avoid;
+}
+
+.responsible-name-container label {
+    display: none !important; /* Ocultar la etiqueta original del input */
+}
+
+.responsible-name-container input#responsibleName {
+    display: block !important;
+    border: none !important;
+    text-align: center;
+    padding: 0 !important;
+    margin: 0 auto;
+    font-size: 11pt !important;
+    font-weight: bold;
+    color: #000 !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    /* Linea de firma */
+    border-bottom: 1px solid #000 !important;
+    width: 100%;
+    padding-bottom: 5px !important;
+    margin-bottom: 5px !important;
+}
+
+/* Título / Rol del responsable bajo la línea de firma */
+.responsible-name-container::after {
+    content: "Nombre del Responsable / Título"; /* Texto fijo para el título */
+    display: block;
+    text-align: center;
+    font-size: 9pt;
+    font-style: italic;
+    color: #555;
+    margin-top: 2px;
+}
             /* Ocultar lo que ya ocultabas */
             .print-hidden-icon,
             #save-indicator,
@@ -1199,12 +1275,13 @@
         </div>
     </div>
 
-    <div class="button-group">
-        <button class="btn-clear" onclick="limpiarFormulario()">Limpiar</button>
-        <button id="btn-print" class="btn-submit" onclick="generarReporte()">Finalizar e Imprimir Reporte</button>
-    </div>
     
-    <div class="signature-pad-wrapper">
+<div class="form-group responsible-name-container">
+            <label>Nombre del Responsable:</label>
+            <input type="text" id="responsibleName" class="uppercase-input" placeholder="Nombre y Apellido">
+        </div>
+
+                <div class="signature-pad-wrapper">
         <div style="width: 100%; max-width: 600px; margin-bottom:5px; display:flex; justify-content:space-between;">
             <label>Firma del Responsable:</label>
         </div>
@@ -1218,11 +1295,12 @@
             <button class="btn-small" onclick="borrarFirma()">Borrar Firma</button>
         </div>
     </div>
-    
-    <div class="form-group" style="max-width: 600px; margin: 10px auto;">
-        <label>Nombre del Responsable:</label>
-        <input type="text" id="signerName" placeholder="Nombre de quien firma" class="uppercase-input">
+    <div class="button-group">
+        <button class="btn-clear" onclick="limpiarFormulario()">Limpiar</button>
+        <button id="btn-print" class="btn-submit" onclick="generarReporte()">Finalizar e Imprimir Reporte</button>
     </div>
+    
+
 
     <div class="footer-info">
         <span class="hover-underline" id="version-link">Versión 1.2.0 - Control de Calidad GAS</span>
@@ -2181,55 +2259,70 @@
         sectionIds.forEach(id => updateSectionProgress(id));
     }
 
-    // --- FUNCIÓN PARA CONTROLAR EL FORMATO DE ORDEN DE TRABAJO ---
     function configurarInputOrden() {
-        const input = document.getElementById('orderNum');
-        if (!input) return;
+    const input = document.getElementById('orderNum');
+    if (!input) return;
 
-        // Función interna para formatear
-        const formatearOrden = () => {
-            let valor = input.value;
-            
-            // 1. Si no empieza con OT-, lo forzamos. 
-            // Usamos replace para limpiar y quedarnos solo con los números que haya escrito
-            // (La expresión regular [^0-9] elimina todo lo que NO sea un número)
-            let numeros = valor.replace(/[^0-9]/g, '');
-
-            // 2. Limitamos a 4 dígitos máximo
-            if (numeros.length > 4) {
-                numeros = numeros.slice(0, 4);
-            }
-
-            // 3. Asignamos el valor final: Prefijo + Números
-            input.value = 'OT-' + numeros;
-        };
-
-        // Evento al escribir
-        input.addEventListener('input', function(e) {
-            formatearOrden();
-            saveForm(); // Guardamos cambios en localStorage
-        });
-
-        // Evento al hacer clic o enfocar (para asegurar que aparezca el OT-)
-        input.addEventListener('focus', function() {
-            if (this.value === '' || this.value === 'OT-') {
-                this.value = 'OT-';
-            }
-        });
-
-        // Validación extra: Impedir borrar el "OT-" con la tecla de borrar
-        input.addEventListener('keydown', function(e) {
-            // Si el cursor está en las primeras 3 posiciones y pulsan borrar/backspace
-            if ((e.key === 'Backspace' || e.key === 'Delete') && this.selectionStart <= 3) {
-                e.preventDefault();
-            }
-        });
+    // Función principal de formateo, limpieza Y notificación
+    const formatearOrden = (mostrarToast) => {
+        const originalValor = input.value;
+        const prefijo = 'OT-'; 
         
-        // Inicialización: Si está vacío al cargar, poner formato base
-        if (!input.value) {
-            input.value = 'OT-';
+        // 1. Extraer la parte que debería ser numérica, eliminando el prefijo si existe
+        let parteNumerica = originalValor.startsWith(prefijo) ? originalValor.substring(prefijo.length) : originalValor;
+
+        // 2. Lógica de Detección y Aviso (Toast)
+        // Verificamos si la parte numérica original contiene no-dígitos
+        if (mostrarToast && /[^0-9]/.test(parteNumerica)) {
+            // Mostrar el aviso (toast) si se encontró un caracter no válido
+            showRichToast(
+                'Entrada no válida',
+                'Solo se permiten dígitos para el número de Orden de Trabajo (máximo 4).',
+                'warning', // Usa el mismo tipo de aviso 'warning' que el resto del formulario
+                3000 // Duración en ms
+            );
         }
+
+        // 3. Lógica de Limpieza: Eliminar todo lo que NO sea un número
+        let numerosLimpios = parteNumerica.replace(/[^0-9]/g, '');
+
+        // 4. Aplicar límite de 4 dígitos máximo
+        if (numerosLimpios.length > 4) {
+            numerosLimpios = numerosLimpios.slice(0, 4);
+        }
+
+        // 5. Asignar el valor final limpio: Prefijo + Números
+        input.value = prefijo + numerosLimpios;
+    };
+
+    // ---------------- EVENTOS ----------------
+    // Evento al escribir (incluye formateo y el aviso toast)
+    input.addEventListener('input', function(e) {
+        // Al escribir, llamamos a formatearOrden con 'true' para activar la lógica del toast
+        formatearOrden(true);
+        saveForm(); // Guardamos cambios en localStorage
+    });
+
+    // Evento al hacer clic o enfocar (para asegurar que aparezca el OT-)
+    input.addEventListener('focus', function() {
+        if (this.value === '' || this.value === 'OT-') {
+            this.value = 'OT-';
+        }
+    });
+
+    // Validación extra: Impedir borrar el "OT-" con la tecla de borrar
+    input.addEventListener('keydown', function(e) {
+        // Si el cursor está en las primeras 3 posiciones y pulsan borrar/backspace
+        if ((e.key === 'Backspace' || e.key === 'Delete') && this.selectionStart <= 3) {
+            e.preventDefault();
+        }
+    });
+
+    // Inicialización: Si está vacío al cargar, poner formato base
+    if (!input.value) {
+        input.value = 'OT-';
     }
+}
 
     // --- LÓGICA DE FIRMA DIGITAL ---
     let signaturePad;
