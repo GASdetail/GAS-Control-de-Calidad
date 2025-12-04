@@ -1284,119 +1284,97 @@
     }
 
 function generarReporte() {
-        // --- VALIDACIONES ---
-        const algunaMarcada = [...document.querySelectorAll('input[type="checkbox"]')].some(cb => cb.checked);
-        if (!algunaMarcada) { showToast("Debes marcar al menos un punto del checklist.", "warning"); return; }
+    const btnPrint = document.getElementById('btn-print');
+    
+    // 1. Deshabilitar el botón de impresión inmediatamente
+    if (btnPrint) btnPrint.setAttribute('disabled', 'true');
 
-        const responsable = document.getElementById("responsibleName").value.trim();
-        const firmaVacia = signaturePad.isEmpty();
-        if (responsable === "" && firmaVacia) { showToast("Falta el nombre del responsable y la firma.", "warning"); return; }
-        if (responsable === "") { showToast("Falta el nombre del responsable.", "warning"); return; }
-        if (firmaVacia) { showToast("Falta la firma del responsable.", "warning"); return; }
+    // =========================================================================
+    // 🛠️ FIX MÓVIL (1/3): Deshabilitar Inputs y Textareas 
+    // Esto asegura que el valor se imprima como texto estático y no se vea vacío.
+    // =========================================================================
+    document.querySelectorAll('input:not([type="checkbox"]), select, textarea').forEach(el => {
+        // Marcar para saber que lo deshabilitamos nosotros
+        el.setAttribute('data-print-disabled', 'true'); 
+        // Deshabilitar para forzar la visualización del valor
+        el.setAttribute('disabled', 'disabled');
 
-        const today = new Date();
-        const dateStr = today.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
-        document.getElementById('print-date-display').textContent = dateStr;
-
-        const btnPrint = document.getElementById('btn-print');
-        if (btnPrint) btnPrint.setAttribute('disabled', 'true');
-
-        const valid = validateCorrectionAfterReturn();
-        if (!valid) {
-            showCustomAlert("Fechas incorrectas", "La fecha de corrección no puede ser anterior a la fecha de devolución.", [], "error");
-            if(btnPrint) btnPrint.removeAttribute('disabled');
-            return;
+        // FIX específico para Textarea: asegurar que el textContent tenga el valor
+        if (el.tagName === 'TEXTAREA') {
+            el.textContent = el.value;
         }
+    });
 
-        const requiredFields = [{ id: 'plate', name: 'Placa', critical: true }, { id: 'orderNum', name: 'Nº Orden de Trabajo', critical: true }];
-        let stop = false;
-        requiredFields.forEach(f => {
-            const el = document.getElementById(f.id);
-            if (!el || !el.value.trim()) { showCustomAlert('Campo obligatorio', 'Falta: ' + f.name, [], 'error'); stop = true; }
-        });
-        if (stop) { if(btnPrint) btnPrint.removeAttribute('disabled'); return; }
+    // =========================================================================
+    // 2. LÓGICA DE PREPARACIÓN ORIGINAL (Aplica clases de impresión para Checkbox)
+    // =========================================================================
 
-        // --- PREPARAR IMPRESIÓN ---
-        
-        // 1. Aplicar clases para impresión
-        document.querySelectorAll('.check-item').forEach(item => {
-            item.classList.remove('is-checked-print', 'is-pass-print', 'is-fail-print');
-            const pass = item.querySelector('.check-pass');
-            const fail = item.querySelector('.check-fail');
-            const simple = item.querySelector('input[type="checkbox"]:not(.check-pass):not(.check-fail)');
+    // Aplicar las clases para mostrar los iconos de Pass/Fail (☑ / ☒)
+    document.querySelectorAll('.check-item').forEach(item => {
+        const checkboxPass = item.querySelector('.check-pass');
+        const checkboxFail = item.querySelector('.check-fail');
 
-            if (pass && pass.checked) {
-                item.classList.add('is-checked-print', 'is-pass-print');
-            } else if (fail && fail.checked) {
-                item.classList.add('is-checked-print', 'is-fail-print');
-            } else if (simple && simple.checked) {
-                item.classList.add('is-checked-print', 'is-pass-print');
-            }
-        });
+        // Limpiar clases viejas 
+        item.classList.remove('is-pass-print', 'is-fail-print');
 
-        // 2. Ocultar observaciones vacías
-        document.querySelectorAll('.obs-area').forEach(obsArea => {
-            const textarea = obsArea.querySelector('textarea');
-            if (textarea && textarea.value.trim() === '') obsArea.classList.add('empty-print');
-        });
-
-        // 3. Ocultar secciones vacías
-        document.querySelectorAll('.section').forEach(sec => {
-            sec.classList.remove('empty-print');
-            const hasChecked = sec.querySelectorAll('.is-checked-print').length > 0;
-            const obsVal = sec.querySelector('textarea') ? sec.querySelector('textarea').value.trim() : "";
-            if (!hasChecked && !obsVal) sec.classList.add('empty-print');
-        });
-
-        // Lógica de bloques Admin
-        const ejecutadosSelect = document.getElementById('sys-ejecutados').value;
-        const devolucion = document.getElementById('devolucion-block');
-        const corregido = document.getElementById('corregido-block');
-        if (ejecutadosSelect === 'SI') { 
-            if(devolucion) devolucion.classList.add('ocultar-admin-print'); 
-            if(corregido) corregido.classList.add('ocultar-admin-print'); 
+        if (checkboxPass && checkboxPass.checked) {
+            item.classList.add('is-pass-print');
+        } else if (checkboxFail && checkboxFail.checked) {
+            item.classList.add('is-fail-print');
         }
+    });
 
-        addPrintDate();
-
-        // --- SOLUCIÓN PARA ANDROID ---
-        // Definimos la función de limpieza por separado
-        const cleanupPrint = () => {
-            if (btnPrint) btnPrint.removeAttribute('disabled');
-            document.querySelectorAll('.check-item').forEach(i => i.classList.remove('is-checked-print', 'is-pass-print', 'is-fail-print'));
-            document.querySelectorAll('.obs-area').forEach(i => i.classList.remove('empty-print'));
-            document.querySelectorAll('.section').forEach(i => i.classList.remove('empty-print'));
-            if(devolucion) devolucion.classList.remove('ocultar-admin-print');
-            if(corregido) corregido.classList.remove('ocultar-admin-print');
-            removePrintDate();
-            
-            // Removemos los listeners para que no se ejecuten múltiples veces
-            window.removeEventListener('afterprint', cleanupPrint);
-            window.removeEventListener('focus', cleanupPrint);
-            document.removeEventListener('touchstart', cleanupPrint); 
-        };
-
-        // Pequeño retardo para asegurar que el DOM se actualice antes de llamar a print
-        setTimeout(() => {
-            window.print();
-
-            // EN LUGAR DE UN TIMEOUT FIJO, USAMOS EVENTOS:
-            
-            // 1. Intentar usar el evento estándar (funciona en PC)
-            window.addEventListener('afterprint', cleanupPrint);
-            
-            // 2. Para móviles: Limpiar cuando el usuario toque la pantalla o regrese al foco
-            // Esto mantiene el DOM modificado mientras el diálogo de impresión esté encima.
-            window.addEventListener('focus', cleanupPrint); 
-            
-            // Fallback final: Si el usuario toca la pantalla (significa que ya cerró el diálogo de impresión)
-            setTimeout(() => {
-                document.addEventListener('touchstart', cleanupPrint, { once: true });
-                document.addEventListener('click', cleanupPrint, { once: true });
-            }, 500);
-
-        }, 500);
+    // Ocultar bloques o secciones vacías (ejemplo: observaciones o firmas)
+    document.querySelectorAll('.observacion-block, .notes-block').forEach(block => {
+        const textarea = block.querySelector('textarea');
+        if (textarea && textarea.value.trim() === '') {
+            block.style.display = 'none';
+            block.setAttribute('data-print-hidden', 'true');
+        } else {
+            block.style.display = ''; 
+        }
+    });
+    
+    // Ocultar la firma si no está dibujada (asumiendo que 'signaturePad' es global)
+    const signatureBlock = document.getElementById('signature-pad-block');
+    const signatureCanvas = document.getElementById('signature-pad');
+    if (signatureBlock && signatureCanvas && typeof signaturePad !== 'undefined' && signaturePad.isEmpty()) {
+         signatureBlock.style.display = 'none';
+         signatureBlock.setAttribute('data-print-hidden', 'true');
     }
+
+
+    // =========================================================================
+    // 🛠️ FIX MÓVIL (2/3): Retrasar window.print()
+    // 50ms de retraso es crucial para que el DOM se renderice antes de la captura.
+    // =========================================================================
+    setTimeout(() => {
+        window.print();
+        
+        // =====================================================================
+        // 🛠️ FIX MÓVIL (3/3): Revertir cambios después de la impresión
+        // Se ejecuta un poco después para re-habilitar la interacción del formulario.
+        // =====================================================================
+        setTimeout(() => {
+            // Re-habilitar inputs deshabilitados (Usamos la etiqueta data-print-disabled)
+            document.querySelectorAll('[data-print-disabled]').forEach(el => {
+                 el.removeAttribute('disabled');
+                 el.removeAttribute('data-print-disabled');
+            });
+
+            // Re-mostrar secciones ocultas temporalmente
+            document.querySelectorAll('[data-print-hidden]').forEach(block => {
+                block.style.display = '';
+                block.removeAttribute('data-print-hidden');
+            });
+            
+            // Re-habilitar el botón de impresión
+            if(btnPrint) btnPrint.removeAttribute('disabled');
+            
+        }, 100); // Retraso para la re-habilitación
+        
+    }, 50); // Retraso para la llamada a print()
+}
     
     if (window.matchMedia) { const mql = window.matchMedia('print'); mql.addListener((m) => { if (m.matches) addPrintDate(); else removePrintDate(); }); }
     window.addEventListener('beforeprint', addPrintDate);
