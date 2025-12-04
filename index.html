@@ -244,92 +244,104 @@
         .btn-small:hover { background-color: var(--error); }
         .signature-label { color: #000; position: absolute; bottom: 5px; left: 10px; font-size: 0.8em; pointer-events: none; opacity: 0.5; }
 
-        /* --- MEDIA PRINT (MODIFICADO PARA SOPORTAR DOBLE CHECK Y CORREGIDO PARA ANDROID) --- */
-        @media print {
-            @page { margin: 1cm; size: auto; }
-            .print-hidden-icon, #save-indicator, .button-group, h1, .footer-info, .section-index, .toast-container, .signature-actions { display: none !important; }
-            
-            body, .container, .section, .header-info, input, select, textarea, label, span, div, p { background: #fff !important; color: #000 !important; box-shadow: none !important; text-shadow: none !important; }
-            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-            body { padding: 0; font-size: 11pt; font-family: Arial, Helvetica, sans-serif; }
-            .container { max-width: 100%; margin: 0; padding: 0 5px; border: none !important; }
+       @media print {
+    /* --- CONFIGURACIÓN CRÍTICA PARA MÓVILES --- */
+    body {
+        -webkit-print-color-adjust: exact !important; /* Obliga a Chrome/Safari a imprimir colores/gráficos */
+        print-color-adjust: exact !important;
+        font-size: 10pt;
+        background-color: white !important;
+        color: black !important;
+        margin: 0; padding: 0;
+    }
 
-            /* INPUTS PLANOS */
-            input[type="text"], input[type="date"], input[type="time"], input[type="number"], select, .flatpickr-input {
-                -webkit-appearance: none !important; appearance: none !important; background: transparent !important; border: none !important; box-shadow: none !important; color: #000 !important; padding: 0 !important; margin: 0 !important; font-weight: normal; background-image: none !important; 
-            }
-            select { text-indent: 0.01px; text-overflow: ""; }
-            ::placeholder { color: transparent !important; opacity: 0 !important; }
+    .container {
+        box-shadow: none !important; border: none !important;
+        background: white !important; padding: 0; margin: 0;
+        max-width: 100%; width: 100%;
+    }
 
-            /* HEADER */
-            .logo-container { text-align: left; margin-bottom: 15px; padding: 0 0 10px 0; border-bottom: 2px solid #000; display: flex; align-items: center; position: relative; }
-            .logo-screen { display: none !important; }
-            .logo-print { display: block !important; max-width: 150px !important; height: auto; margin-right: 15px; }
-            .logo-container::after { content: "REPORTE Control de Calidad"; font-size: 15pt; font-weight: bold; margin-left: 10px; display: block; flex-grow: 1; }
-            #print-date-display { display: block !important; position: absolute; right: 0; top: 0; font-size: 10pt; font-weight: bold; }
+    /* OCULTAR ELEMENTOS DE INTERFAZ */
+    .button-group, #save-indicator, .toast-container,
+    .print-hidden-icon, .section-progress-bar, .footer-info,
+    .signature-actions, .signature-label, .logo-screen {
+        display: none !important;
+    }
 
-            .header-info { grid-template-columns: 1fr 1fr 1fr; gap: 5px; border: 1px solid #000; padding: 8px; margin-bottom: 15px; background: #fff !important; }
-            .header-info label { color: #000 !important; font-size: 10pt; font-weight: bold; margin-bottom: 2px; }
+    /* VISIBILIDAD DE LOGOS Y FECHA */
+    .logo-print { display: block !important; max-width: 250px; height: auto; margin: 0 auto 15px; }
+    #print-date-display { display: block !important; text-align: right; font-size: 0.75em; margin-bottom: 15px; color: #333; }
 
-            /* SECCIONES */
-            .section { border: 1px solid #000 !important; margin-bottom: 12px; page-break-inside: avoid; background: #fff !important; }
-            .section-header { border-bottom: 1px solid #000; padding: 8px 10px; background: #e0e0e0 !important; font-size: 12pt; font-weight: bold; color: #000 !important; }
-            .section-header.completed { background: #e0e0e0 !important; color: #000 !important; }
-            .status-indicator { display: none !important; }
+    /* ESTILOS DE FORMULARIO LIMPIO */
+    .header-info, input, select, textarea, .section, .check-item, .admin-row {
+        background-color: white !important; color: black !important;
+        border-color: #ddd !important; box-shadow: none !important;
+    }
+    .section::before { display: none; }
+    
+    /* CABECERAS DE SECCIÓN */
+    .section-header {
+        background: #f0f0f0 !important; color: #000 !important;
+        border-bottom: 1px solid #999; padding: 8px 0;
+    }
+    .status-indicator { display: none !important; }
 
-            .admin-row { border-bottom: 1px solid #bbb; padding: 8px 10px; background: #fff !important; }
-            .admin-question { font-weight: bold; color: #000 !important; margin-bottom: 4px; font-size: 10pt; }
-            #devolucion-block, #corregido-block { border: 1px solid #000 !important; background: #fff !important; padding: 5px; margin-top: 6px; }
+    /* --- LÓGICA DE VISIBILIDAD DE ITEMS (CSS PURO) --- */
+    
+    /* 1. Ocultar checkbox real */
+    .check-item input[type="checkbox"] { display: none !important; }
 
-            /* --- LÓGICA DE IMPRESIÓN DE CHECKLIST --- */
-            .checklist { padding: 8px 12px; }
-            /* Ocultamos checkboxes reales */
-            .check-item input[type="checkbox"] { display: none !important; }
-            /* Ocultamos todo por defecto */
-            .check-item { display: none !important; border-bottom: 1px dotted #ccc; padding: 4px 0; font-size: 10pt; }
-            
-            /* Mostramos solo los que tienen clase .is-checked-print */
-            .check-item.is-checked-print { display: block !important; }
-            
-            /* --- REGLA SALVAVIDAS: Si el input está chequeado, mostrar SIEMPRE --- */
-            .check-item:has(input:checked) { display: block !important; }
+    /* 2. Ocultar items NO marcados (Requiere ayuda del JS para ocultar la fila completa) */
+    .checklist .check-item:not(.is-checked-print) { display: none !important; }
+    .section.empty-print { display: none !important; }
+    .obs-area.empty-print { display: none !important; }
 
-            .check-item.is-checked-print label, .check-item:has(input:checked) label { color: #000 !important; font-weight: bold; }
+    /* 3. GENERAR EL CHECK VISUAL (USANDO SELECTORES CSS :checked) 
+       Esto arregla el bug en móviles porque no depende de JS para pintar el texto */
+    
+    /* Cuando el checkbox VERDE está marcado, poner "✓ OK" antes del label */
+    .check-pass:checked ~ label::before {
+        content: '✓ OK';
+        color: #27ae60 !important;
+        font-weight: 900;
+        margin-right: 12px;
+        border: 1px solid #27ae60;
+        padding: 2px 6px;
+        border-radius: 4px;
+        display: inline-block;
+    }
 
-            /* ICONOS SEGÚN ESTADO */
-            /* Si pasó (OK) */
-            .check-item.is-pass-print label::before,
-            .check-item:has(input.check-pass:checked) label::before { content: "☑ "; font-size: 12pt; margin-right: 4px; font-weight: bold; }
-            
-            /* Si falló (X) */
-            .check-item.is-fail-print label::before,
-            .check-item:has(input.check-fail:checked) label::before { content: "☒ DEFECTO: "; font-size: 12pt; margin-right: 4px; font-weight: bold; }
+    /* Cuando el checkbox ROJO está marcado, poner "✗ FALLA" antes del label */
+    .check-fail:checked ~ label::before {
+        content: '✗ FALLA';
+        color: #c0392b !important;
+        font-weight: 900;
+        margin-right: 12px;
+        border: 1px solid #c0392b;
+        padding: 2px 6px;
+        border-radius: 4px;
+        display: inline-block;
+    }
 
-            /* Mostrar la caja de texto solo si es un fallo */
-            .specific-obs { display: none; }
-            .check-item.is-fail-print .specific-obs.visible,
-            .check-item:has(input.check-fail:checked) .specific-obs.visible { display: block !important; margin-top: 2px; padding-left: 20px; }
-            
-            .check-item.is-fail-print .specific-obs input,
-            .check-item:has(input.check-fail:checked) .specific-obs input { border: none !important; font-style: italic; width: 100%; color: #000 !important; background: transparent !important; }
+    /* CAJAS DE OBSERVACIONES */
+    .specific-obs { display: none !important; }
+    /* Solo mostrar la caja específica si el Fail está marcado */
+    .check-fail:checked ~ .specific-obs {
+        display: block !important;
+        margin-top: 5px;
+        padding-left: 0 !important;
+    }
+    .specific-obs input {
+        border: 1px dashed #e74c3c !important;
+        color: black !important;
+        background: transparent !important;
+        width: 100%;
+    }
 
-            /* OBSERVACIONES GENERALES */
-            .obs-area { border-top: 1px solid #000; padding: 10px; background: #fff !important; }
-            .obs-area textarea { border: 1px solid #000 !important; padding: 5px; min-height: 40px; resize: none !important; font-size: 10pt; color: #000 !important; }
-            
-            /* OCULTAR VACÍOS */
-            .obs-area.empty-print, .section.empty-print { display: none !important; }
-
-            /* FIRMA (MANTENIDA EXACTA AL ORIGINAL) */
-            .signature-pad-wrapper { border: none; background: transparent; padding: 0; margin: 0 auto 5px auto !important; display: block !important; float: none !important; page-break-inside: avoid; width: 300px; text-align: center; position: relative; }
-            .signature-pad-body { box-shadow: none; border: none !important; background-color: #fff !important; height: 120px; margin-bottom: 2px; }
-            .signature-label { display: block !important; font-size: 9pt !important; font-weight: normal !important; color: #555 !important; text-align: center; margin-bottom: 5px; }
-
-            .responsible-name-container { text-align: center; margin: 20px auto 40px auto !important; width: 300px; display: block !important; page-break-inside: avoid; }
-            .responsible-name-container label { display: none !important; }
-            .responsible-name-container input#responsibleName { display: block !important; border: none !important; text-align: center; padding: 0 !important; margin: 0 auto; font-size: 11pt !important; font-weight: bold; color: #000 !important; background-color: transparent !important; box-shadow: none !important; border-bottom: 1px solid #000 !important; width: 100%; padding-bottom: 5px !important; margin-bottom: 5px !important; }
-            .responsible-name-container::after { content: "Nombre del Responsable"; display: block; text-align: center; font-size: 9pt; font-style: italic; color: #555; margin-top: 2px; }
-        }
+    /* AREA DE FIRMA */
+    .signature-pad-wrapper { border: 1px solid #ccc !important; }
+    .signature-pad-body { box-shadow: none !important; }
+}
     </style>
 </head>
 <body>
@@ -858,7 +870,7 @@
     </div>
 
     <div class="footer-info">
-        <span class="hover-underline" id="version-link">Versión 1.3.2 - Control de Calidad GAS (Fix Android)</span>
+        <span class="hover-underline" id="version-link">Versión 1.3.0 - Control de Calidad GAS</span>
     </div>
 </div>
 
@@ -872,7 +884,7 @@
     let datePickers = [];
     let timePickers = [];
 
-    // --- MANEJO DE PARES (CHECK VERDE / CHECK ROJO) ---
+    // --- NUEVA FUNCIÓN: MANEJO DE PARES (CHECK VERDE / CHECK ROJO) ---
     function handleCheckPair(clickedId, otherId, obsBoxId) {
         const clicked = document.getElementById(clickedId);
         const other = document.getElementById(otherId);
@@ -880,45 +892,54 @@
         
         if (!clicked || !other) return;
 
+        // Exclusividad: Si marcas uno, se desmarca el otro
         if (clicked.checked) {
             other.checked = false;
         }
 
+        // Visibilidad de la caja de observación
         if (obsBox) {
+            // Si el que se marcó es el FAIL (contiene 'fail')
             if (clickedId.includes('fail') && clicked.checked) {
                 obsBox.classList.add('visible');
                 const input = obsBox.querySelector('input');
                 if(input) setTimeout(() => input.focus(), 100);
             } 
+            // Si se marcó el PASS (OK)
             else if (!clickedId.includes('fail') && clicked.checked) {
                 obsBox.classList.remove('visible');
             }
+            // Si ninguno está marcado
             else if (!clicked.checked && !other.checked) {
                 obsBox.classList.remove('visible');
             }
         }
     }
 
-    // --- VERIFICACIÓN DE SECCIÓN ---
+    // --- MODIFICADA: VERIFICACIÓN DE SECCIÓN ---
     function checkSection(sectionId) {
         const section = document.getElementById(sectionId);
         const header = section.querySelector('.section-header');
         const indicator = section.querySelector('.status-indicator');
         
+        // Obtenemos solo los checkboxes "PASS" (los verdes) para iterar
         const passCheckboxes = Array.from(section.querySelectorAll('.check-pass'));
         
         let allChecked = true;
 
         if (passCheckboxes.length > 0) {
+            // Lógica nueva: Está completo si (pass está checked) O (fail está checked)
             passCheckboxes.forEach(passBox => {
                 const failBoxId = passBox.id + '-fail';
                 const failBox = document.getElementById(failBoxId);
                 
+                // Si pass NO está marcado Y (no existe failBox O failBox no está marcado)
                 if (!passBox.checked && (!failBox || !failBox.checked)) {
                     allChecked = false;
                 }
             });
         } else {
+            // Lógica antigua (para secciones sin .check-pass, si las hubiera)
             const checkboxes = section.querySelectorAll('input[type="checkbox"]');
             checkboxes.forEach(box => {
                 if (!box.checked) allChecked = false;
@@ -936,11 +957,12 @@
         updateSectionProgress(sectionId);
     }
 
-    // --- PROGRESO DE SECCIÓN ---
+    // --- MODIFICADA: PROGRESO DE SECCIÓN ---
     function updateSectionProgress(sectionId) {
         const section = document.getElementById(sectionId);
         if (!section) return;
 
+        // Intentar usar lógica de pares primero
         const passCheckboxes = Array.from(section.querySelectorAll('.check-pass'));
         let total = passCheckboxes.length;
         let checkedCount = 0;
@@ -953,6 +975,7 @@
                 }
             });
         } else {
+            // Fallback lógica simple
             const allChecks = Array.from(section.querySelectorAll('input[type="checkbox"]'))
                 .filter(cb => !cb.id.includes('-ok'));
             total = allChecks.length;
@@ -1067,6 +1090,7 @@
             if (!el) continue;
             if (el.type === "checkbox") {
                 el.checked = data[id];
+                // LÓGICA DE RECUPERACIÓN PARA CAJAS DE TEXTO OCULTAS
                 if (data[id] === true && id.includes('fail')) {
                     const baseId = id.split('-fail')[0];
                     const obsBox = document.getElementById(baseId + '-obs-box');
@@ -1110,6 +1134,30 @@
             localStorage.setItem(STORAGE_KEY, history[index].data);
             window.location.reload();
         }
+    }
+
+    function showHistoryModal() {
+        const history = getHistory();
+        if (!history || !history.length) { showRichToast('', 'No hay historial guardado', 'info', 3000); return; }
+        const overlay = document.createElement('div'); overlay.className = 'modal-overlay'; overlay.tabIndex = -1;
+        const dialog = document.createElement('div'); dialog.className = 'history-modal';
+        const title = document.createElement('div'); title.className = 'hm-title'; title.textContent = 'Historial de Cambios';
+        const list = document.createElement('ul'); list.className = 'hm-list';
+        history.forEach((entry, idx) => {
+            const li = document.createElement('li');
+            const label = document.createElement('span'); label.textContent = entry.timestamp;
+            const btn = document.createElement('button'); btn.className = 'hm-restore'; btn.textContent = 'Restaurar';
+            btn.addEventListener('click', () => restoreFromHistory(idx));
+            li.appendChild(label); li.appendChild(btn); list.appendChild(li);
+        });
+        const closeDiv = document.createElement('div'); closeDiv.className = 'hm-close';
+        const closeBtn = document.createElement('button'); closeBtn.className = 'btn-close-history'; closeBtn.textContent = 'Cerrar';
+        closeDiv.appendChild(closeBtn);
+        dialog.appendChild(title); dialog.appendChild(list); dialog.appendChild(closeDiv);
+        overlay.appendChild(dialog); document.body.appendChild(overlay);
+        function closeModal() { try { dialog.classList.add('animate-out'); } catch (e) {} setTimeout(() => { if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay); }, 180); }
+        closeBtn.addEventListener('click', closeModal);
+        overlay.addEventListener('click', (ev) => { if (ev.target === overlay) closeModal(); });
     }
 
     // --- Diálogo de confirmación visual ---
@@ -1257,8 +1305,9 @@
         showRichToast(title || '', composedMessage.join('\n\n'), kind, finalDuration, actions);
     }
 
-    // --- FUNCIÓN GENERAR REPORTE (MODIFICADA PARA ANDROID) ---
     function generarReporte() {
+        
+        
         // --- VALIDACIONES ---
         const algunaMarcada = [...document.querySelectorAll('input[type="checkbox"]')].some(cb => cb.checked);
         if (!algunaMarcada) { showToast("Debes marcar al menos un punto del checklist.", "warning"); return; }
@@ -1291,13 +1340,13 @@
         });
         if (stop) { if(btnPrint) btnPrint.removeAttribute('disabled'); return; }
 
-        // --- PREPARAR DOM PARA IMPRESIÓN ---
-        // 1. Asignar clases
+        // --- PREPARAR IMPRESIÓN (LOGICA NUEVA) ---
+        // 1. Limpiar clases viejas
         document.querySelectorAll('.check-item').forEach(item => {
             item.classList.remove('is-checked-print', 'is-pass-print', 'is-fail-print');
             const pass = item.querySelector('.check-pass');
             const fail = item.querySelector('.check-fail');
-            const simple = item.querySelector('input[type="checkbox"]:not(.check-pass):not(.check-fail)');
+            const simple = item.querySelector('input[type="checkbox"]:not(.check-pass):not(.check-fail)'); // Admin
 
             if (pass && pass.checked) {
                 item.classList.add('is-checked-print', 'is-pass-print');
@@ -1325,39 +1374,28 @@
         const ejecutadosSelect = document.getElementById('sys-ejecutados').value;
         const devolucion = document.getElementById('devolucion-block');
         const corregido = document.getElementById('corregido-block');
-        if (ejecutadosSelect === 'SI') { 
-            if(devolucion) devolucion.classList.add('ocultar-admin-print'); 
-            if(corregido) corregido.classList.add('ocultar-admin-print'); 
-        }
+        if (ejecutadosSelect === 'SI') { devolucion.classList.add('ocultar-admin-print'); corregido.classList.add('ocultar-admin-print'); }
 
         addPrintDate();
 
-        // --- FUNCIÓN DE LIMPIEZA (RESTAURACIÓN) ---
-        const cleanupPrint = () => {
-            if (btnPrint) btnPrint.removeAttribute('disabled');
-            document.querySelectorAll('.check-item').forEach(i => i.classList.remove('is-checked-print', 'is-pass-print', 'is-fail-print'));
-            document.querySelectorAll('.obs-area').forEach(i => i.classList.remove('empty-print'));
-            document.querySelectorAll('.section').forEach(i => i.classList.remove('empty-print'));
-            if(devolucion) devolucion.classList.remove('ocultar-admin-print');
-            if(corregido) corregido.classList.remove('ocultar-admin-print');
-            removePrintDate();
-            
-            // Remover listeners para evitar duplicidad
-            window.removeEventListener('afterprint', cleanupPrint);
-        };
-
-        // --- EJECUTAR IMPRESIÓN ---
+// Esperamos 1 segundo completo para asegurar que el móvil renderice el DOM
         setTimeout(() => {
             window.print();
             
-            // En PC usamos 'afterprint'
-            window.addEventListener('afterprint', cleanupPrint); 
-
-            // EN ANDROID: NO usamos focus/touchstart porque limpian antes de guardar el PDF.
-            // Usamos un simple delay de 5 segundos para dar tiempo al sistema.
-            setTimeout(cleanupPrint, 5000);
-
-        }, 500);
+            // Restaurar la vista normal después de imprimir
+            setTimeout(() => {
+                if (btnPrint) btnPrint.removeAttribute('disabled');
+                
+                // Limpiamos las clases de impresión
+                document.querySelectorAll('.check-item').forEach(i => i.classList.remove('is-checked-print'));
+                document.querySelectorAll('.obs-area').forEach(i => i.classList.remove('empty-print'));
+                document.querySelectorAll('.section').forEach(i => i.classList.remove('empty-print'));
+                
+                if(devolucion) devolucion.classList.remove('ocultar-admin-print');
+                if(corregido) corregido.classList.remove('ocultar-admin-print');
+                removePrintDate();
+            }, 1000); // Espera breve tras cerrar el diálogo
+        }, 1000); // 1000ms da tiempo a Chrome Mobile para aplicar estilos
     }
     
     if (window.matchMedia) { const mql = window.matchMedia('print'); mql.addListener((m) => { if (m.matches) addPrintDate(); else removePrintDate(); }); }
