@@ -848,7 +848,7 @@
     </div>
 
     <div class="footer-info">
-        <span class="hover-underline" id="version-link">Versión 1.3.1 - Control de Calidad GAS (Fix Android Print)</span>
+        <span class="hover-underline" id="version-link">Versión 1.3.0 - Control de Calidad GAS</span>
     </div>
 </div>
 
@@ -862,7 +862,7 @@
     let datePickers = [];
     let timePickers = [];
 
-    // --- MANEJO DE PARES (CHECK VERDE / CHECK ROJO) ---
+    // --- NUEVA FUNCIÓN: MANEJO DE PARES (CHECK VERDE / CHECK ROJO) ---
     function handleCheckPair(clickedId, otherId, obsBoxId) {
         const clicked = document.getElementById(clickedId);
         const other = document.getElementById(otherId);
@@ -870,45 +870,54 @@
         
         if (!clicked || !other) return;
 
+        // Exclusividad: Si marcas uno, se desmarca el otro
         if (clicked.checked) {
             other.checked = false;
         }
 
+        // Visibilidad de la caja de observación
         if (obsBox) {
+            // Si el que se marcó es el FAIL (contiene 'fail')
             if (clickedId.includes('fail') && clicked.checked) {
                 obsBox.classList.add('visible');
                 const input = obsBox.querySelector('input');
                 if(input) setTimeout(() => input.focus(), 100);
             } 
+            // Si se marcó el PASS (OK)
             else if (!clickedId.includes('fail') && clicked.checked) {
                 obsBox.classList.remove('visible');
             }
+            // Si ninguno está marcado
             else if (!clicked.checked && !other.checked) {
                 obsBox.classList.remove('visible');
             }
         }
     }
 
-    // --- VERIFICACIÓN DE SECCIÓN ---
+    // --- MODIFICADA: VERIFICACIÓN DE SECCIÓN ---
     function checkSection(sectionId) {
         const section = document.getElementById(sectionId);
         const header = section.querySelector('.section-header');
         const indicator = section.querySelector('.status-indicator');
         
+        // Obtenemos solo los checkboxes "PASS" (los verdes) para iterar
         const passCheckboxes = Array.from(section.querySelectorAll('.check-pass'));
         
         let allChecked = true;
 
         if (passCheckboxes.length > 0) {
+            // Lógica nueva: Está completo si (pass está checked) O (fail está checked)
             passCheckboxes.forEach(passBox => {
                 const failBoxId = passBox.id + '-fail';
                 const failBox = document.getElementById(failBoxId);
                 
+                // Si pass NO está marcado Y (no existe failBox O failBox no está marcado)
                 if (!passBox.checked && (!failBox || !failBox.checked)) {
                     allChecked = false;
                 }
             });
         } else {
+            // Lógica antigua (para secciones sin .check-pass, si las hubiera)
             const checkboxes = section.querySelectorAll('input[type="checkbox"]');
             checkboxes.forEach(box => {
                 if (!box.checked) allChecked = false;
@@ -926,11 +935,12 @@
         updateSectionProgress(sectionId);
     }
 
-    // --- PROGRESO DE SECCIÓN ---
+    // --- MODIFICADA: PROGRESO DE SECCIÓN ---
     function updateSectionProgress(sectionId) {
         const section = document.getElementById(sectionId);
         if (!section) return;
 
+        // Intentar usar lógica de pares primero
         const passCheckboxes = Array.from(section.querySelectorAll('.check-pass'));
         let total = passCheckboxes.length;
         let checkedCount = 0;
@@ -943,6 +953,7 @@
                 }
             });
         } else {
+            // Fallback lógica simple
             const allChecks = Array.from(section.querySelectorAll('input[type="checkbox"]'))
                 .filter(cb => !cb.id.includes('-ok'));
             total = allChecks.length;
@@ -1057,6 +1068,7 @@
             if (!el) continue;
             if (el.type === "checkbox") {
                 el.checked = data[id];
+                // LÓGICA DE RECUPERACIÓN PARA CAJAS DE TEXTO OCULTAS
                 if (data[id] === true && id.includes('fail')) {
                     const baseId = id.split('-fail')[0];
                     const obsBox = document.getElementById(baseId + '-obs-box');
@@ -1100,6 +1112,30 @@
             localStorage.setItem(STORAGE_KEY, history[index].data);
             window.location.reload();
         }
+    }
+
+    function showHistoryModal() {
+        const history = getHistory();
+        if (!history || !history.length) { showRichToast('', 'No hay historial guardado', 'info', 3000); return; }
+        const overlay = document.createElement('div'); overlay.className = 'modal-overlay'; overlay.tabIndex = -1;
+        const dialog = document.createElement('div'); dialog.className = 'history-modal';
+        const title = document.createElement('div'); title.className = 'hm-title'; title.textContent = 'Historial de Cambios';
+        const list = document.createElement('ul'); list.className = 'hm-list';
+        history.forEach((entry, idx) => {
+            const li = document.createElement('li');
+            const label = document.createElement('span'); label.textContent = entry.timestamp;
+            const btn = document.createElement('button'); btn.className = 'hm-restore'; btn.textContent = 'Restaurar';
+            btn.addEventListener('click', () => restoreFromHistory(idx));
+            li.appendChild(label); li.appendChild(btn); list.appendChild(li);
+        });
+        const closeDiv = document.createElement('div'); closeDiv.className = 'hm-close';
+        const closeBtn = document.createElement('button'); closeBtn.className = 'btn-close-history'; closeBtn.textContent = 'Cerrar';
+        closeDiv.appendChild(closeBtn);
+        dialog.appendChild(title); dialog.appendChild(list); dialog.appendChild(closeDiv);
+        overlay.appendChild(dialog); document.body.appendChild(overlay);
+        function closeModal() { try { dialog.classList.add('animate-out'); } catch (e) {} setTimeout(() => { if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay); }, 180); }
+        closeBtn.addEventListener('click', closeModal);
+        overlay.addEventListener('click', (ev) => { if (ev.target === overlay) closeModal(); });
     }
 
     // --- Diálogo de confirmación visual ---
@@ -1247,8 +1283,9 @@
         showRichToast(title || '', composedMessage.join('\n\n'), kind, finalDuration, actions);
     }
 
-    // --- FUNCIÓN GENERAR REPORTE (MODIFICADA PARA ANDROID) ---
     function generarReporte() {
+        
+        
         // --- VALIDACIONES ---
         const algunaMarcada = [...document.querySelectorAll('input[type="checkbox"]')].some(cb => cb.checked);
         if (!algunaMarcada) { showToast("Debes marcar al menos un punto del checklist.", "warning"); return; }
@@ -1281,13 +1318,13 @@
         });
         if (stop) { if(btnPrint) btnPrint.removeAttribute('disabled'); return; }
 
-        // --- PREPARAR DOM PARA IMPRESIÓN ---
-        // 1. Asignar clases
+        // --- PREPARAR IMPRESIÓN (LOGICA NUEVA) ---
+        // 1. Limpiar clases viejas
         document.querySelectorAll('.check-item').forEach(item => {
             item.classList.remove('is-checked-print', 'is-pass-print', 'is-fail-print');
             const pass = item.querySelector('.check-pass');
             const fail = item.querySelector('.check-fail');
-            const simple = item.querySelector('input[type="checkbox"]:not(.check-pass):not(.check-fail)');
+            const simple = item.querySelector('input[type="checkbox"]:not(.check-pass):not(.check-fail)'); // Admin
 
             if (pass && pass.checked) {
                 item.classList.add('is-checked-print', 'is-pass-print');
@@ -1315,43 +1352,21 @@
         const ejecutadosSelect = document.getElementById('sys-ejecutados').value;
         const devolucion = document.getElementById('devolucion-block');
         const corregido = document.getElementById('corregido-block');
-        if (ejecutadosSelect === 'SI') { 
-            if(devolucion) devolucion.classList.add('ocultar-admin-print'); 
-            if(corregido) corregido.classList.add('ocultar-admin-print'); 
-        }
+        if (ejecutadosSelect === 'SI') { devolucion.classList.add('ocultar-admin-print'); corregido.classList.add('ocultar-admin-print'); }
 
         addPrintDate();
 
-        // --- FUNCIÓN DE LIMPIEZA (RESTAURACIÓN) ---
-        const cleanupPrint = () => {
-            if (btnPrint) btnPrint.removeAttribute('disabled');
-            document.querySelectorAll('.check-item').forEach(i => i.classList.remove('is-checked-print', 'is-pass-print', 'is-fail-print'));
-            document.querySelectorAll('.obs-area').forEach(i => i.classList.remove('empty-print'));
-            document.querySelectorAll('.section').forEach(i => i.classList.remove('empty-print'));
-            if(devolucion) devolucion.classList.remove('ocultar-admin-print');
-            if(corregido) corregido.classList.remove('ocultar-admin-print');
-            removePrintDate();
-            
-            // Remover listeners para evitar duplicidad
-            window.removeEventListener('afterprint', cleanupPrint);
-            window.removeEventListener('focus', cleanupPrint);
-            document.removeEventListener('touchstart', cleanupPrint); 
-            document.removeEventListener('click', cleanupPrint); 
-        };
-
-        // --- EJECUTAR IMPRESIÓN ---
         setTimeout(() => {
             window.print();
-            
-            // Listeners para detectar cuando cerrar la "vista de impresión"
-            window.addEventListener('afterprint', cleanupPrint); // PC
-            window.addEventListener('focus', cleanupPrint); // Android (al volver a la tab)
-            
-            // Fallback para Android: Si tocas la pantalla es que ya saliste del dialogo de impresion
             setTimeout(() => {
-                document.addEventListener('touchstart', cleanupPrint, { once: true });
-                document.addEventListener('click', cleanupPrint, { once: true });
-            }, 800);
+                if (btnPrint) btnPrint.removeAttribute('disabled');
+                document.querySelectorAll('.check-item').forEach(i => i.classList.remove('is-checked-print', 'is-pass-print', 'is-fail-print'));
+                document.querySelectorAll('.obs-area').forEach(i => i.classList.remove('empty-print'));
+                document.querySelectorAll('.section').forEach(i => i.classList.remove('empty-print'));
+                if(devolucion) devolucion.classList.remove('ocultar-admin-print');
+                if(corregido) corregido.classList.remove('ocultar-admin-print');
+                removePrintDate();
+            }, 2000);
         }, 500);
     }
     
