@@ -441,7 +441,7 @@
                 </div>
                 <div id="p1-obs-box" class="specific-obs"><input type="text" id="p1-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
             </div>
-
+                                                                                                                                                                                                                                                /* Ayuda*/
             <div class="check-item">
                 <div class="check-row-wrapper">
                     <input type="checkbox" id="p2" class="check-pass" onchange="handleCheckPair('p2', 'p2-fail', 'p2-obs-box'); checkSection('sec-pintura'); saveForm();">
@@ -807,7 +807,7 @@
         </div>
         <div class="obs-area"><label class="form-group">Observaciones Interior:</label><textarea id="obs-interior" placeholder="Observaciones"></textarea></div>
     </div>
-
+                                                                                                                                                                                                                                                                           /*Lo siento por el que vaya a leer esto*/
     <div class="section" id="sec-control">
         <div class="section-header"><span><span class="print-hidden-icon">⚙️</span> <span class="section-index">F.</span> CONTROL MECÁNICO BÁSICO</span><span class="status-indicator">PENDIENTE</span></div>
         <div class="checklist">
@@ -1273,7 +1273,7 @@
         if (responsable === "" && firmaVacia) { showToast("Falta el nombre del responsable y la firma.", "warning"); return; }
         if (responsable === "") { showToast("Falta el nombre del responsable.", "warning"); return; }
         if (firmaVacia) { showToast("Falta la firma del responsable.", "warning"); return; }
-
+                                                                                                             
         const today = new Date();
         const dateStr = today.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
         document.getElementById('print-date-display').textContent = dateStr;
@@ -1461,4 +1461,5 @@
 
 </body>
 </html>
+
 
