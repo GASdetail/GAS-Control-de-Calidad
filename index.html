@@ -1283,7 +1283,7 @@
         showRichToast(title || '', composedMessage.join('\n\n'), kind, finalDuration, actions);
     }
 
-    function generarReporte() {
+function generarReporte() {
         // --- VALIDACIONES ---
         const algunaMarcada = [...document.querySelectorAll('input[type="checkbox"]')].some(cb => cb.checked);
         if (!algunaMarcada) { showToast("Debes marcar al menos un punto del checklist.", "warning"); return; }
@@ -1316,13 +1316,14 @@
         });
         if (stop) { if(btnPrint) btnPrint.removeAttribute('disabled'); return; }
 
-        // --- PREPARAR IMPRESIÓN (LOGICA NUEVA) ---
-        // 1. Limpiar clases viejas
+        // --- PREPARAR IMPRESIÓN ---
+        
+        // 1. Aplicar clases para impresión
         document.querySelectorAll('.check-item').forEach(item => {
             item.classList.remove('is-checked-print', 'is-pass-print', 'is-fail-print');
             const pass = item.querySelector('.check-pass');
             const fail = item.querySelector('.check-fail');
-            const simple = item.querySelector('input[type="checkbox"]:not(.check-pass):not(.check-fail)'); // Admin
+            const simple = item.querySelector('input[type="checkbox"]:not(.check-pass):not(.check-fail)');
 
             if (pass && pass.checked) {
                 item.classList.add('is-checked-print', 'is-pass-print');
@@ -1347,24 +1348,53 @@
             if (!hasChecked && !obsVal) sec.classList.add('empty-print');
         });
 
+        // Lógica de bloques Admin
         const ejecutadosSelect = document.getElementById('sys-ejecutados').value;
         const devolucion = document.getElementById('devolucion-block');
         const corregido = document.getElementById('corregido-block');
-        if (ejecutadosSelect === 'SI') { devolucion.classList.add('ocultar-admin-print'); corregido.classList.add('ocultar-admin-print'); }
+        if (ejecutadosSelect === 'SI') { 
+            if(devolucion) devolucion.classList.add('ocultar-admin-print'); 
+            if(corregido) corregido.classList.add('ocultar-admin-print'); 
+        }
 
         addPrintDate();
 
+        // --- SOLUCIÓN PARA ANDROID ---
+        // Definimos la función de limpieza por separado
+        const cleanupPrint = () => {
+            if (btnPrint) btnPrint.removeAttribute('disabled');
+            document.querySelectorAll('.check-item').forEach(i => i.classList.remove('is-checked-print', 'is-pass-print', 'is-fail-print'));
+            document.querySelectorAll('.obs-area').forEach(i => i.classList.remove('empty-print'));
+            document.querySelectorAll('.section').forEach(i => i.classList.remove('empty-print'));
+            if(devolucion) devolucion.classList.remove('ocultar-admin-print');
+            if(corregido) corregido.classList.remove('ocultar-admin-print');
+            removePrintDate();
+            
+            // Removemos los listeners para que no se ejecuten múltiples veces
+            window.removeEventListener('afterprint', cleanupPrint);
+            window.removeEventListener('focus', cleanupPrint);
+            document.removeEventListener('touchstart', cleanupPrint); 
+        };
+
+        // Pequeño retardo para asegurar que el DOM se actualice antes de llamar a print
         setTimeout(() => {
             window.print();
+
+            // EN LUGAR DE UN TIMEOUT FIJO, USAMOS EVENTOS:
+            
+            // 1. Intentar usar el evento estándar (funciona en PC)
+            window.addEventListener('afterprint', cleanupPrint);
+            
+            // 2. Para móviles: Limpiar cuando el usuario toque la pantalla o regrese al foco
+            // Esto mantiene el DOM modificado mientras el diálogo de impresión esté encima.
+            window.addEventListener('focus', cleanupPrint); 
+            
+            // Fallback final: Si el usuario toca la pantalla (significa que ya cerró el diálogo de impresión)
             setTimeout(() => {
-                if (btnPrint) btnPrint.removeAttribute('disabled');
-                document.querySelectorAll('.check-item').forEach(i => i.classList.remove('is-checked-print', 'is-pass-print', 'is-fail-print'));
-                document.querySelectorAll('.obs-area').forEach(i => i.classList.remove('empty-print'));
-                document.querySelectorAll('.section').forEach(i => i.classList.remove('empty-print'));
-                if(devolucion) devolucion.classList.remove('ocultar-admin-print');
-                if(corregido) corregido.classList.remove('ocultar-admin-print');
-                removePrintDate();
-            }, 2000);
+                document.addEventListener('touchstart', cleanupPrint, { once: true });
+                document.addEventListener('click', cleanupPrint, { once: true });
+            }, 500);
+
         }, 500);
     }
     
