@@ -244,7 +244,160 @@
         .btn-small:hover { background-color: var(--error); }
         .signature-label { color: #000; position: absolute; bottom: 5px; left: 10px; font-size: 0.8em; pointer-events: none; opacity: 0.5; }
 
-       
+       @media print {
+    /* AJUSTES DE VISIBILIDAD SOLICITADOS */
+
+    /* 1. Oculta la SECCIÓN COMPLETA si no hay checks marcados Y no hay texto en la obs general.
+       (ESTO REQUIERE QUE EL JS AÑADA LA CLASE .empty-print al div.section) */
+    .section.empty-print {
+        display: none !important;
+    }
+
+    /* 2. OCULTAR OBSERVACIONES GENERALES DE CADA SECCIÓN (SOLICITADO POR EL USUARIO PARA AHORRAR ESPACIO) */
+    .obs-area {
+        display: none !important;
+    }
+
+    /* 3. Ocultar todos los ítems del checklist que NO estén marcados.
+       (Requiere que el JS añada la clase .is-checked-print al div.check-item) */
+    .checklist .check-item:not(.is-checked-print) {
+        display: none !important;
+    }
+    
+    /* 4. Ocultar botones, indicadores de guardado y progreso, y el pie de página. */
+    .button-group,
+    #save-indicator,
+    .toast-container,
+    .print-hidden-icon, /* Iconos como 📝, 🖌️, 🔩 */
+    .section-progress-bar,
+    .footer-info {
+        display: none !important;
+    }
+
+    /* 5. Ocultar el texto "firma aqui" (etiqueta) y el botón de borrar firma */
+    .signature-actions, 
+    .signature-label {
+        display: none !important;
+    }
+    
+    /* --- AJUSTES VISUALES PARA EL REPORTE IMPRESO --- */
+    
+    body {
+        font-size: 10pt;
+        background-color: white !important;
+        color: black !important;
+        padding: 0;
+    }
+    .container {
+        box-shadow: none !important;
+        border: none !important;
+        background: white !important;
+        padding: 0;
+        max-width: 100%;
+        width: 100%;
+    }
+    
+    /* LOGOS Y FECHA DE IMPRESIÓN */
+    .logo-screen { display: none !important; }
+    .logo-print { display: block !important; max-width: 250px; height: auto; margin: 0 auto 15px; }
+    #print-date-display { 
+        display: block !important; 
+        text-align: right; 
+        font-size: 0.75em; 
+        margin-bottom: 15px; 
+        color: #333;
+    }
+    
+    /* ESTILOS DE SECCIÓN Y CHECKLIST */
+    .header-info, input, select, textarea {
+        background-color: white !important;
+        color: black !important;
+        border-color: #ddd !important;
+        box-shadow: none !important;
+    }
+    .section, .check-item, .admin-row {
+        background-color: white !important;
+        border-color: #ddd !important;
+        box-shadow: none !important;
+        transform: none !important;
+    }
+    .section::before {
+        display: none;
+    }
+    .section-header {
+        background: #eee !important;
+        color: #333 !important;
+        border-bottom: 1px solid #ddd;
+    }
+    .section-header.completed {
+        background-color: #d4edda !important; 
+        color: #155724 !important;
+        border-bottom-color: #c3e6cb !important;
+    }
+    .section-header.completed .status-indicator { 
+        background: transparent !important; 
+        color: #155724 !important;
+    }
+    .status-indicator {
+        background: transparent !important;
+        color: #555 !important;
+        padding: 0;
+        border-radius: 0;
+    }
+    
+    /* OCULTAR CHECKBOXES Y MOSTRAR ESTADO */
+    .check-item input[type="checkbox"] {
+        display: none; /* Ocultamos los checkboxes de la vista impresa */
+    }
+    
+    /* Indicador visual de si pasó/falló */
+    .check-item.is-pass-print .check-row-wrapper::before {
+        content: '✓ OK';
+        color: #27ae60;
+        font-weight: bold;
+        margin-right: 15px;
+        min-width: 40px;
+        text-align: center;
+        display: inline-block;
+    }
+    .check-item.is-fail-print .check-row-wrapper::before {
+        content: '✗ FALLA';
+        color: #e74c3c;
+        font-weight: bold;
+        margin-right: 15px;
+        min-width: 40px;
+        text-align: center;
+        display: inline-block;
+    }
+
+    /* Mostrar la caja de texto de la observación específica solo si es un 'FAIL' marcado */
+    .specific-obs {
+        display: none !important;
+        padding-left: 0 !important;
+    }
+    .check-item.is-fail-print .specific-obs {
+        display: block !important;
+        margin-top: 10px;
+        padding-left: 55px !important; /* Ajuste para impresión */
+    }
+    .specific-obs input {
+        border: 1px dashed #e74c3c !important;
+        background-color: #fff !important;
+        color: black !important;
+        padding: 5px;
+        min-height: 40px;
+    }
+    
+    /* Área de firma */
+    .signature-pad-wrapper {
+        background-color: white !important;
+        border: 1px solid #ddd !important;
+    }
+    .signature-pad-body {
+        background-color: white !important;
+        box-shadow: none !important;
+    }
+}
     </style>
 </head>
 <body>
