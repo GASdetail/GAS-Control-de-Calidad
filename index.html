@@ -811,6 +811,7 @@
     <div class="section" id="sec-control">
         <div class="section-header"><span><span class="print-hidden-icon">⚙️</span> <span class="section-index">F.</span> CONTROL MECÁNICO BÁSICO</span><span class="status-indicator">PENDIENTE</span></div>
         <div class="checklist">
+            
             <div class="check-item">
                 <div class="check-row-wrapper">
                     <input type="checkbox" id="m1" class="check-pass" onchange="handleCheckPair('m1','m1-fail','m1-obs-box'); checkSection('sec-control'); saveForm();">
@@ -827,6 +828,44 @@
                 </div>
                 <div id="m2-obs-box" class="specific-obs"><input type="text" id="m2-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
             </div>
+
+            <div class="check-item">
+    <div class="check-row-wrapper">
+        <input type="checkbox" id="f1" class="check-pass" 
+            onchange="handleCheckPair('f1','f1-fail','f1-obs-box'); checkSection('sec-mecanico'); saveForm();">
+        <input type="checkbox" id="f1-fail" class="check-fail" 
+            onchange="handleCheckPair('f1-fail','f1','f1-obs-box'); checkSection('sec-mecanico'); saveForm();">
+        <label for="f1">Pantallas funcionan correctamente</label>
+    </div>
+    <div id="f1-obs-box" class="specific-obs">
+        <input type="text" id="f1-txt" placeholder="Describa el defecto..." oninput="saveForm()">
+    </div>
+</div>
+            <div class="check-item">
+    <div class="check-row-wrapper">
+        <input type="checkbox" id="f2" class="check-pass" 
+            onchange="handleCheckPair('f2','f2-fail','f2-obs-box'); checkSection('sec-mecanico'); saveForm();">
+        <input type="checkbox" id="f2-fail" class="check-fail" 
+            onchange="handleCheckPair('f2-fail','f2','f2-obs-box'); checkSection('sec-mecanico'); saveForm();">
+        <label for="f2">Cámaras operativas (reversa / 360° / sensores)</label>
+    </div>
+    <div id="f2-obs-box" class="specific-obs">
+        <input type="text" id="f2-txt" placeholder="Describa el defecto..." oninput="saveForm()">
+    </div>
+</div>
+            <div class="check-item">
+    <div class="check-row-wrapper">
+        <input type="checkbox" id="f3" class="check-pass" 
+            onchange="handleCheckPair('f3','f3-fail','f3-obs-box'); checkSection('sec-mecanico'); saveForm();">
+        <input type="checkbox" id="f3-fail" class="check-fail" 
+            onchange="handleCheckPair('f3-fail','f3','f3-obs-box'); checkSection('sec-mecanico'); saveForm();">
+        <label for="f3">Aire acondicionado enfría y funciona correctamente</label>
+    </div>
+    <div id="f3-obs-box" class="specific-obs">
+        <input type="text" id="f3-txt" placeholder="Describa el defecto..." oninput="saveForm()">
+    </div>
+</div>
+            
             <div class="check-item">
                 <div class="check-row-wrapper">
                     <input type="checkbox" id="m3" class="check-pass" onchange="handleCheckPair('m3','m3-fail','m3-obs-box'); checkSection('sec-control'); saveForm();">
@@ -1577,3 +1616,4 @@
 
 </body>
 </html>
+
