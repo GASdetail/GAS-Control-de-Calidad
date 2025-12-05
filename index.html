@@ -112,12 +112,51 @@
         .flatpickr-input, input.flatpickr-input, .flatpickr-alt-input { background-color: var(--input-bg) !important; color: var(--text-light) !important; border: 1px solid var(--border-dark) !important; padding: 10px !important; border-radius: 4px !important; }
         /* Dark theme para flatpickr calendar (el popup) */
         .flatpickr-calendar {
-        background: var(--input-bg) !important;
-        border: 1px solid var(--border-dark) !important;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.5) !important; }
-        .flatpickr-months, .flatpickr-weekdays { background: var(--primary-dark) !important; }
-        .flatpickr-day { color: var(--text-light) !important; }
-        .flatpickr-day.selected { background: var(--primary-blue) !important; border-color: var(--primary-blue) !important; color: white !important; }
+    background: var(--input-bg) !important;
+    border: 1px solid var(--border-dark) !important;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.5) !important;
+}
+.flatpickr-calendar.open {
+    background: var(--input-bg) !important;
+}
+/* Cabecera de Mes y Año */
+.flatpickr-months {
+    background: var(--primary-dark) !important;
+}
+.flatpickr-months .flatpickr-month {
+    background: var(--primary-dark) !important;
+    color: var(--text-light) !important;
+}
+/* Flechas de navegación */
+.flatpickr-months .flatpickr-prev-month,
+.flatpickr-months .flatpickr-next-month {
+    color: var(--primary-blue) !important;
+    fill: var(--primary-blue) !important;
+}
+.flatpickr-months .flatpickr-prev-month:hover,
+.flatpickr-months .flatpickr-next-month:hover {
+    color: var(--text-light) !important;
+    fill: var(--text-light) !important;
+}
+/* Días de la semana */
+.flatpickr-weekdays {
+    background: var(--primary-dark) !important;
+}
+.flatpickr-weekday {
+    background: var(--primary-dark) !important;
+    color: var(--text-muted) !important;
+    font-weight: 600;
+}
+/* Contenedor de los días */
+.flatpickr-days {
+    background: var(--input-bg) !important;
+}
+/* Días individuales */
+.flatpickr-day {
+    color: var(--text-light) !important;
+    background: transparent;
+    border: 1px solid transparent;
+}
         
         /* Iconos Flatpickr Mobile */
         .flat-date, .flat-date + input { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23bdc3c7' viewBox='0 0 24 24'%3E%3Cpath d='M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm-8 4H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z'/%3E%3C/svg%3E") !important; background-repeat: no-repeat !important; background-position: right 15px center !important; background-size: 20px !important; padding-right: 35px !important; }
@@ -1652,5 +1691,6 @@
 
 </body>
 </html>
+
 
 
