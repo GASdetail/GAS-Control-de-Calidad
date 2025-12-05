@@ -110,7 +110,11 @@
 
         /* FLATPICKR */
         .flatpickr-input, input.flatpickr-input, .flatpickr-alt-input { background-color: var(--input-bg) !important; color: var(--text-light) !important; border: 1px solid var(--border-dark) !important; padding: 10px !important; border-radius: 4px !important; }
-        .flatpickr-calendar { background: var(--input-bg) !important; border: 1px solid var(--border-dark) !important; box-shadow: 0 8px 20px rgba(0,0,0,0.5) !important; }
+        /* Dark theme para flatpickr calendar (el popup) */
+        .flatpickr-calendar {
+        background: var(--input-bg) !important;
+        border: 1px solid var(--border-dark) !important;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.5) !important; }
         .flatpickr-months, .flatpickr-weekdays { background: var(--primary-dark) !important; }
         .flatpickr-day { color: var(--text-light) !important; }
         .flatpickr-day.selected { background: var(--primary-blue) !important; border-color: var(--primary-blue) !important; color: white !important; }
@@ -500,75 +504,107 @@
     </div>
 
     <div class="section" id="sec-armado">
-        <div class="section-header"><span><span class="print-hidden-icon">🔩</span> <span class="section-index">C.</span> ARMADO Y AJUSTE DE PIEZAS</span><span class="status-indicator">PENDIENTE</span></div>
-        <div class="checklist">
-            <div class="check-item">
-                <div class="check-row-wrapper">
-                    <input type="checkbox" id="a1" class="check-pass" onchange="handleCheckPair('a1', 'a1-fail', 'a1-obs-box'); checkSection('sec-armado'); saveForm();">
-                    <input type="checkbox" id="a1-fail" class="check-fail" onchange="handleCheckPair('a1-fail', 'a1', 'a1-obs-box'); checkSection('sec-armado'); saveForm();">
-                    <label for="a1">El interior de las piezas reparadas está libre de residuos de pulimento o suciedad</label>
-                </div>
-                <div id="a1-obs-box" class="specific-obs"><input type="text" id="a1-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
-            </div>
-            <div class="check-item">
-                <div class="check-row-wrapper">
-                    <input type="checkbox" id="a2" class="check-pass" onchange="handleCheckPair('a2', 'a2-fail', 'a2-obs-box'); checkSection('sec-armado'); saveForm();">
-                    <input type="checkbox" id="a2-fail" class="check-fail" onchange="handleCheckPair('a2-fail', 'a2', 'a2-obs-box'); checkSection('sec-armado'); saveForm();">
-                    <label for="a2">Las piezas reparadas y aledañas son móviles, abren y cierran con la suavidad original y sin golpes</label>
-                </div>
-                <div id="a2-obs-box" class="specific-obs"><input type="text" id="a2-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
-            </div>
-            <div class="check-item">
-                <div class="check-row-wrapper">
-                    <input type="checkbox" id="a3" class="check-pass" onchange="handleCheckPair('a3', 'a3-fail', 'a3-obs-box'); checkSection('sec-armado'); saveForm();">
-                    <input type="checkbox" id="a3-fail" class="check-fail" onchange="handleCheckPair('a3-fail', 'a3', 'a3-obs-box'); checkSection('sec-armado'); saveForm();">
-                    <label for="a3">Las piezas ajustan correctamente y no presentan levantamientos o desalineaciones</label>
-                </div>
-                <div id="a3-obs-box" class="specific-obs"><input type="text" id="a3-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
-            </div>
-            <div class="check-item">
-                <div class="check-row-wrapper">
-                    <input type="checkbox" id="a4" class="check-pass" onchange="handleCheckPair('a4', 'a4-fail', 'a4-obs-box'); checkSection('sec-armado'); saveForm();">
-                    <input type="checkbox" id="a4-fail" class="check-fail" onchange="handleCheckPair('a4-fail', 'a4', 'a4-obs-box'); checkSection('sec-armado'); saveForm();">
-                    <label for="a4">Los niveles de aceite, líquido de frenos y refrigerante son los adecuados</label>
-                </div>
-                <div id="a4-obs-box" class="specific-obs"><input type="text" id="a4-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
-            </div>
-            <div class="check-item">
-                <div class="check-row-wrapper">
-                    <input type="checkbox" id="a5" class="check-pass" onchange="handleCheckPair('a5', 'a5-fail', 'a5-obs-box'); checkSection('sec-armado'); saveForm();">
-                    <input type="checkbox" id="a5-fail" class="check-fail" onchange="handleCheckPair('a5-fail', 'a5', 'a5-obs-box'); checkSection('sec-armado'); saveForm();">
-                    <label for="a5">Las luces y testigos funcionan correctamente</label>
-                </div>
-                <div id="a5-obs-box" class="specific-obs"><input type="text" id="a5-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
-            </div>
-            <div class="check-item">
-                <div class="check-row-wrapper">
-                    <input type="checkbox" id="a6" class="check-pass" onchange="handleCheckPair('a6', 'a6-fail', 'a6-obs-box'); checkSection('sec-armado'); saveForm();">
-                    <input type="checkbox" id="a6-fail" class="check-fail" onchange="handleCheckPair('a6-fail', 'a6', 'a6-obs-box'); checkSection('sec-armado'); saveForm();">
-                    <label for="a6">Las molduras, parrillas, empaques, escobillas u otras piezas están limpias y sin daños</label>
-                </div>
-                <div id="a6-obs-box" class="specific-obs"><input type="text" id="a6-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
-            </div>
-            <div class="check-item">
-                <div class="check-row-wrapper">
-                    <input type="checkbox" id="a7" class="check-pass" onchange="handleCheckPair('a7', 'a7-fail', 'a7-obs-box'); checkSection('sec-armado'); saveForm();">
-                    <input type="checkbox" id="a7-fail" class="check-fail" onchange="handleCheckPair('a7-fail', 'a7', 'a7-obs-box'); checkSection('sec-armado'); saveForm();">
-                    <label for="a7">Los vidrios no presentan daños derivados del proceso de reparación</label>
-                </div>
-                <div id="a7-obs-box" class="specific-obs"><input type="text" id="a7-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
-            </div>
-            <div class="check-item">
-                <div class="check-row-wrapper">
-                    <input type="checkbox" id="a8" class="check-pass" onchange="handleCheckPair('a8', 'a8-fail', 'a8-obs-box'); checkSection('sec-armado'); saveForm();">
-                    <input type="checkbox" id="a8-fail" class="check-fail" onchange="handleCheckPair('a8-fail', 'a8', 'a8-obs-box'); checkSection('sec-armado'); saveForm();">
-                    <label for="a8">El exterior del auto está libre de suciedad producida por el proceso de reparación (polvo, cinta, residuos)</label>
-                </div>
-                <div id="a8-obs-box" class="specific-obs"><input type="text" id="a8-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
-            </div>
-        </div>
-        <div class="obs-area"><label class="form-group">Observaciones Armado/Ajuste:</label><textarea id="obs-armado" placeholder="Observaciones"></textarea></div>
+    <div class="section-header">
+        <span><span class="print-hidden-icon">🔧</span> <span class="section-index">C.</span> ARMADO Y AJUSTE DE PIEZAS</span>
+        <span class="status-indicator">PENDIENTE</span>
+        <div class="section-progress-bar"><div class="section-progress-fill"></div></div>
     </div>
+    <div class="checklist">
+        <div class="check-item">
+            <div class="check-row-wrapper">
+                <input type="checkbox" id="a1" class="check-pass" onchange="handleCheckPair('a1', 'a1-fail', 'a1-obs-box'); checkSection('sec-armado'); saveForm();">
+                <input type="checkbox" id="a1-fail" class="check-fail" onchange="handleCheckPair('a1-fail', 'a1', 'a1-obs-box'); checkSection('sec-armado'); saveForm();">
+                <label for="a1">Los interiores han sido ensamblados correctamente</label>
+            </div>
+            <div id="a1-obs-box" class="specific-obs"><input type="text" id="a1-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+        </div>
+        <div class="check-item">
+            <div class="check-row-wrapper">
+                <input type="checkbox" id="a2" class="check-pass" onchange="handleCheckPair('a2', 'a2-fail', 'a2-obs-box'); checkSection('sec-armado'); saveForm();">
+                <input type="checkbox" id="a2-fail" class="check-fail" onchange="handleCheckPair('a2-fail', 'a2', 'a2-obs-box'); checkSection('sec-armado'); saveForm();">
+                <label for="a2">Los exteriores han sido ensamblados correctamente</label>
+            </div>
+            <div id="a2-obs-box" class="specific-obs"><input type="text" id="a2-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+        </div>
+        <div class="check-item">
+            <div class="check-row-wrapper">
+                <input type="checkbox" id="a3" class="check-pass" onchange="handleCheckPair('a3', 'a3-fail', 'a3-obs-box'); checkSection('sec-armado'); saveForm();">
+                <input type="checkbox" id="a3-fail" class="check-fail" onchange="handleCheckPair('a3-fail', 'a3', 'a3-obs-box'); checkSection('sec-armado'); saveForm();">
+                <label for="a3">Las uniones de piezas (molduras, vidrios, etc.) no tienen exceso de pegamento o sellador</label>
+            </div>
+            <div id="a3-obs-box" class="specific-obs"><input type="text" id="a3-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+        </div>
+        
+        <div class="check-item">
+            <div class="check-row-wrapper">
+                <input type="checkbox" id="a4" class="check-pass" onchange="handleCheckPair('a4', 'a4-fail', 'a4-obs-box'); checkSection('sec-armado'); saveForm();">
+                <input type="checkbox" id="a4-fail" class="check-fail" onchange="handleCheckPair('a4-fail', 'a4', 'a4-obs-box'); checkSection('sec-armado'); saveForm();">
+                <label for="a4">Las luces y testigos funcionan correctamente</label>
+            </div>
+            <div id="a4-obs-box" class="specific-obs"><input type="text" id="a4-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+        </div>
+        <div class="check-item">
+            <div class="check-row-wrapper">
+                <input type="checkbox" id="a5" class="check-pass" onchange="handleCheckPair('a5', 'a5-fail', 'a5-obs-box'); checkSection('sec-armado'); saveForm();">
+                <input type="checkbox" id="a5-fail" class="check-fail" onchange="handleCheckPair('a5-fail', 'a5', 'a5-obs-box'); checkSection('sec-armado'); saveForm();">
+                <label for="a5">Las molduras, parrillas, empaques, escobillas u otras piezas están limpias y sin daños</label>
+            </div>
+            <div id="a5-obs-box" class="specific-obs"><input type="text" id="a5-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+        </div>
+        <div class="check-item">
+            <div class="check-row-wrapper">
+                <input type="checkbox" id="a6" class="check-pass" onchange="handleCheckPair('a6', 'a6-fail', 'a6-obs-box'); checkSection('sec-armado'); saveForm();">
+                <input type="checkbox" id="a6-fail" class="check-fail" onchange="handleCheckPair('a6-fail', 'a6', 'a6-obs-box'); checkSection('sec-armado'); saveForm();">
+                <label for="a6">Los vidrios no presentan daños derivados del proceso de reparación</label>
+            </div>
+            <div id="a6-obs-box" class="specific-obs"><input type="text" id="a6-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+        </div>
+        <div class="check-item">
+            <div class="check-row-wrapper">
+                <input type="checkbox" id="a7" class="check-pass" onchange="handleCheckPair('a7', 'a7-fail', 'a7-obs-box'); checkSection('sec-armado'); saveForm();">
+                <input type="checkbox" id="a7-fail" class="check-fail" onchange="handleCheckPair('a7-fail', 'a7', 'a7-obs-box'); checkSection('sec-armado'); saveForm();">
+                <label for="a7">El vehículo arranca correctamente y la batería no está descargada</label>
+            </div>
+            <div id="a7-obs-box" class="specific-obs"><input type="text" id="a7-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+        </div>
+        <div class="check-item">
+            <div class="check-row-wrapper">
+                <input type="checkbox" id="a8" class="check-pass" onchange="handleCheckPair('a8', 'a8-fail', 'a8-obs-box'); checkSection('sec-armado'); saveForm();">
+                <input type="checkbox" id="a8-fail" class="check-fail" onchange="handleCheckPair('a8-fail', 'a8', 'a8-obs-box'); checkSection('sec-armado'); saveForm();">
+                <label for="a8">El control remoto, la llave y el encendido del auto funcionan</label>
+            </div>
+            <div id="a8-obs-box" class="specific-obs"><input type="text" id="a8-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+        </div>
+        <div class="check-item">
+            <div class="check-row-wrapper">
+                <input type="checkbox" id="a9" class="check-pass" onchange="handleCheckPair('a9', 'a9-fail', 'a9-obs-box'); checkSection('sec-armado'); saveForm();">
+                <input type="checkbox" id="a9-fail" class="check-fail" onchange="handleCheckPair('a9-fail', 'a9', 'a9-obs-box'); checkSection('sec-armado'); saveForm();">
+                <label for="a9">Los sistemas de audio y navegación funcionan correctamente</label>
+            </div>
+            <div id="a9-obs-box" class="specific-obs"><input type="text" id="a9-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+        </div>
+        <div class="check-item">
+            <div class="check-row-wrapper">
+                <input type="checkbox" id="a10" class="check-pass" onchange="handleCheckPair('a10', 'a10-fail', 'a10-obs-box'); checkSection('sec-armado'); saveForm();">
+                <input type="checkbox" id="a10-fail" class="check-fail" onchange="handleCheckPair('a10-fail', 'a10', 'a10-obs-box'); checkSection('sec-armado'); saveForm();">
+                <label for="a10">La carrocería del vehículo está libre de residuos o suciedad</label>
+            </div>
+            <div id="a10-obs-box" class="specific-obs"><input type="text" id="a10-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+        </div>
+        <div class="check-item">
+            <div class="check-row-wrapper">
+                <input type="checkbox" id="a11" class="check-pass" onchange="handleCheckPair('a11', 'a11-fail', 'a11-obs-box'); checkSection('sec-armado'); saveForm();">
+                <input type="checkbox" id="a11-fail" class="check-fail" onchange="handleCheckPair('a11-fail', 'a11', 'a11-obs-box'); checkSection('sec-armado'); saveForm();">
+                <label for="a11">La llanta de repuesto y herramientas del vehículo se encuentran en el lugar de origen</label>
+            </div>
+            <div id="a11-obs-box" class="specific-obs"><input type="text" id="a11-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+        </div>
+    </div>
+    <div class="obs-area">
+        <label class="form-group">Observaciones:</label>
+        <textarea id="obs-armado" placeholder="Observaciones de Armado"></textarea>
+    </div>
+</div>
 
     <div class="section" id="sec-pulido">
         <div class="section-header"><span><span class="print-hidden-icon">✨</span> <span class="section-index">D.</span> PULIDO Y EXTERIOR</span><span class="status-indicator">PENDIENTE</span></div>
@@ -1616,4 +1652,5 @@
 
 </body>
 </html>
+
 
