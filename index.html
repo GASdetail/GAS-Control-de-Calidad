@@ -124,7 +124,121 @@
         .flat-time, .flat-time + input { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23bdc3c7' viewBox='0 0 24 24'%3E%3Cpath d='M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z'/%3E%3C/svg%3E") !important; background-repeat: no-repeat !important; background-position: right 15px center !important; background-size: 20px !important; padding-right: 35px !important; }
         ::placeholder { color: #bdc3c7 !important; opacity: 1 !important; }
         @media (max-width: 600px) { .input-cluster { flex-direction: row; flex-wrap: wrap; } .input-cluster input { min-width: 130px !important; flex-grow: 1; } }
+        
+        
+.flatpickr-calendar.open {
+    background: var(--input-bg) !important;
+}
+/* Cabecera de Mes y Año */
+.flatpickr-months {
+    background: var(--primary-dark) !important;
+}
+.flatpickr-months .flatpickr-month {
+    background: var(--primary-dark) !important;
+    color: var(--text-light) !important;
+}
+/* Flechas de navegación */
+.flatpickr-months .flatpickr-prev-month,
+.flatpickr-months .flatpickr-next-month {
+    color: var(--primary-blue) !important;
+    fill: var(--primary-blue) !important;
+}
+.flatpickr-months .flatpickr-prev-month:hover,
+.flatpickr-months .flatpickr-next-month:hover {
+    color: var(--text-light) !important;
+    fill: var(--text-light) !important;
+}
+/* Días de la semana */
+.flatpickr-weekdays {
+    background: var(--primary-dark) !important;
+}
+.flatpickr-weekday {
+    background: var(--primary-dark) !important;
+    color: var(--text-muted) !important;
+    font-weight: 600;
+}
+/* Contenedor de los días */
+.flatpickr-days {
+    background: var(--input-bg) !important;
+}
+/* Días individuales */
+.flatpickr-day {
+    color: var(--text-light) !important;
+    background: transparent;
+    border: 1px solid transparent;
+}
+/* Días al pasar el mouse */
+.flatpickr-day:hover,
+.flatpickr-day.prevMonthDay:hover,
+.flatpickr-day.nextMonthDay:hover,
+.flatpickr-day.disabled:hover,
+.flatpickr-day.disabled.prevMonthDay:hover,
+.flatpickr-day.disabled.nextMonthDay:hover {
+    background: var(--primary-blue) !important;
+    color: white !important;
+    border-color: var(--primary-blue) !important;
+}
+/* Día de Hoy */
+.flatpickr-day.today {
+    border-color: var(--success) !important;
+    color: var(--success) !important;
+    background: transparent !important;
+}
+.flatpickr-day.today:hover {
+    border-color: var(--success) !important;
+    background: var(--success) !important;
+    color: white !important;
+}
+/* Día Seleccionado / Rango */
+.flatpickr-day.selected,
+.flatpickr-day.startRange,
+.flatpickr-day.endRange,
+.flatpickr-day.selected.inRange {
+    background: var(--primary-blue) !important;
+    border-color: var(--primary-blue) !important;
+    color: white !important;
+}
+/* Días del mes anterior/siguiente */
+.flatpickr-day.prevMonthDay,
+.flatpickr-day.nextMonthDay {
+    color: var(--text-muted) !important;
+    background: rgba(0,0,0,0.1) !important;
+}
+/* Días deshabilitados */
+.flatpickr-day.disabled {
+    color: var(--text-muted) !important;
+    background: rgba(0,0,0,0.2) !important;
+    cursor: not-allowed;
+}
 
+/* Selector de Tiempo (parte inferior) */
+.flatpickr-time {
+    border-top: 1px solid var(--border-dark) !important;
+    background: var(--primary-dark) !important;
+}
+.flatpickr-time input,
+.flatpickr-time .flatpickr-am-pm {
+    background: var(--input-bg) !important;
+    color: var(--text-light) !important;
+}
+.flatpickr-time .flatpickr-am-pm:hover,
+.flatpickr-time .numInputWrapper span:hover {
+    background: var(--primary-blue) !important;
+    color: white !important;
+}
+/* Estilos para los dropdowns de mes/año (los que tienen texto) */
+.flatpickr-monthDropdown-months,
+.flatpickr-current-month input.cur-year {
+    background: #2c3e50 !important;
+    color: #ecf0f1 !important;
+    border: 1px solid #495a6b !important;
+}
+
+/* Opciones del dropdown */
+.flatpickr-monthDropdown-months option {
+    background: #2c3e50 !important;
+    color: #ecf0f1 !important;
+}
         /* OBSERVACIONES */
         .obs-area { padding: 15px; border-top: 1px dashed var(--border-dark); background-color: rgba(0,0,0,0.1); display: flex; flex-direction: column; }
         .obs-area textarea { width: 100%; box-sizing: border-box; }
