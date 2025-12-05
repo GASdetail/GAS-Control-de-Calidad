@@ -112,51 +112,12 @@
         .flatpickr-input, input.flatpickr-input, .flatpickr-alt-input { background-color: var(--input-bg) !important; color: var(--text-light) !important; border: 1px solid var(--border-dark) !important; padding: 10px !important; border-radius: 4px !important; }
         /* Dark theme para flatpickr calendar (el popup) */
         .flatpickr-calendar {
-    background: var(--input-bg) !important;
-    border: 1px solid var(--border-dark) !important;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.5) !important;
-}
-.flatpickr-calendar.open {
-    background: var(--input-bg) !important;
-}
-/* Cabecera de Mes y Año */
-.flatpickr-months {
-    background: var(--primary-dark) !important;
-}
-.flatpickr-months .flatpickr-month {
-    background: var(--primary-dark) !important;
-    color: var(--text-light) !important;
-}
-/* Flechas de navegación */
-.flatpickr-months .flatpickr-prev-month,
-.flatpickr-months .flatpickr-next-month {
-    color: var(--primary-blue) !important;
-    fill: var(--primary-blue) !important;
-}
-.flatpickr-months .flatpickr-prev-month:hover,
-.flatpickr-months .flatpickr-next-month:hover {
-    color: var(--text-light) !important;
-    fill: var(--text-light) !important;
-}
-/* Días de la semana */
-.flatpickr-weekdays {
-    background: var(--primary-dark) !important;
-}
-.flatpickr-weekday {
-    background: var(--primary-dark) !important;
-    color: var(--text-muted) !important;
-    font-weight: 600;
-}
-/* Contenedor de los días */
-.flatpickr-days {
-    background: var(--input-bg) !important;
-}
-/* Días individuales */
-.flatpickr-day {
-    color: var(--text-light) !important;
-    background: transparent;
-    border: 1px solid transparent;
-}
+        background: var(--input-bg) !important;
+        border: 1px solid var(--border-dark) !important;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.5) !important; }
+        .flatpickr-months, .flatpickr-weekdays { background: var(--primary-dark) !important; }
+        .flatpickr-day { color: var(--text-light) !important; }
+        .flatpickr-day.selected { background: var(--primary-blue) !important; border-color: var(--primary-blue) !important; color: white !important; }
         
         /* Iconos Flatpickr Mobile */
         .flat-date, .flat-date + input { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23bdc3c7' viewBox='0 0 24 24'%3E%3Cpath d='M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm-8 4H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z'/%3E%3C/svg%3E") !important; background-repeat: no-repeat !important; background-position: right 15px center !important; background-size: 20px !important; padding-right: 35px !important; }
@@ -287,6 +248,47 @@
         .btn-small:hover { background-color: var(--error); }
         .signature-label { color: #000; position: absolute; bottom: 5px; left: 10px; font-size: 0.8em; pointer-events: none; opacity: 0.5; }
 
+        /* --- ESTILOS PARA ACORDEÓN (PLEGAR/DESPLEGAR) --- */
+        .section-header {
+            cursor: pointer;
+            user-select: none;
+            transition: background-color 0.2s;
+            position: relative;
+        }
+        .section-header:hover { filter: brightness(1.1); }
+        
+        /* Flecha indicadora (Genérica) */
+        .section-header::after {
+            content: '▼';
+            display: inline-block;
+            margin-left: 15px;
+            font-size: 0.8em;
+            transition: transform 0.3s ease;
+            color: var(--text-muted);
+        }
+
+        /* Ocultar contenido al colapsar (excepto el header) */
+        .section.collapsed > *:not(.section-header) {
+            display: none !important;
+        }
+
+        /* Rotar flecha al colapsar */
+        .section.collapsed .section-header::after {
+            transform: rotate(-90deg);
+        }
+
+        /* EXCEPCIÓN PARA LA SECCIÓN A (sec-sistema) */
+        #sec-sistema .section-header {
+            cursor: default !important; /* No mostrar mano de click */
+        }
+        #sec-sistema .section-header::after {
+            display: none !important; /* No mostrar flecha */
+        }
+        #sec-sistema.section.collapsed > *:not(.section-header) {
+            display: block !important; /* Asegurar que siempre se muestre aunque por error tenga la clase */
+        }
+
+
         /* --- MEDIA PRINT (CORREGIDO PARA ANDROID & CHECKLIST VACIOS) --- */
         @media print {
             @page { margin: 1cm; size: auto; }
@@ -296,6 +298,14 @@
             * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
             body { padding: 0; font-size: 11pt; font-family: Arial, Helvetica, sans-serif; }
             .container { max-width: 100%; margin: 0; padding: 0 5px; border: none !important; }
+
+            /* FORZAR VISIBILIDAD DE CONTENIDO AL IMPRIMIR AUNQUE ESTÉ COLAPSADO */
+            .section.collapsed > *:not(.section-header) {
+                display: block !important;
+            }
+            .section-header::after {
+                display: none !important; /* Ocultar flecha en impresión */
+            }
 
             /* INPUTS PLANOS */
             input[type="text"], input[type="date"], input[type="time"], input[type="number"], select, .flatpickr-input {
@@ -1376,178 +1386,6 @@
         showRichToast(title || '', composedMessage.join('\n\n'), kind, finalDuration, actions);
     }
 
-    // --- FUNCIÓN GENERAR REPORTE (VERSIÓN FIX DEFINITIVO ANDROID) ---
-    function generarReporte() {
-        // --- VALIDACIONES ---
-        const algunaMarcada = [...document.querySelectorAll('input[type="checkbox"]')].some(cb => cb.checked);
-        if (!algunaMarcada) { showToast("Debes marcar al menos un punto del checklist.", "warning"); return; }
-
-        const responsable = document.getElementById("responsibleName").value.trim();
-        const firmaVacia = signaturePad.isEmpty();
-        if (responsable === "" && firmaVacia) { showToast("Falta el nombre del responsable y la firma.", "warning"); return; }
-        if (responsable === "") { showToast("Falta el nombre del responsable.", "warning"); return; }
-        if (firmaVacia) { showToast("Falta la firma del responsable.", "warning"); return; }
-                                                                                                             
-        const today = new Date();
-        const dateStr = today.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
-        document.getElementById('print-date-display').textContent = dateStr;
-
-        const btnPrint = document.getElementById('btn-print');
-        if (btnPrint) btnPrint.setAttribute('disabled', 'true');
-
-        const valid = validateCorrectionAfterReturn();
-        if (!valid) {
-            showCustomAlert("Fechas incorrectas", "La fecha de corrección no puede ser anterior a la fecha de devolución.", [], "error");
-            if(btnPrint) btnPrint.removeAttribute('disabled');
-            return;
-        }
-
-        const requiredFields = [{ id: 'plate', name: 'Placa', critical: true }, { id: 'orderNum', name: 'Nº Orden de Trabajo', critical: true }];
-        let stop = false;
-        requiredFields.forEach(f => {
-            const el = document.getElementById(f.id);
-            if (!el || !el.value.trim()) { showCustomAlert('Campo obligatorio', 'Falta: ' + f.name, [], 'error'); stop = true; }
-        });
-        if (stop) { if(btnPrint) btnPrint.removeAttribute('disabled'); return; }
-
-        // --- PREPARAR DOM PARA IMPRESIÓN ---
-        // 1. Asignar clases para estilos de impresión
-        document.querySelectorAll('.check-item').forEach(item => {
-            item.classList.remove('is-checked-print', 'is-pass-print', 'is-fail-print');
-            const pass = item.querySelector('.check-pass');
-            const fail = item.querySelector('.check-fail');
-            const simple = item.querySelector('input[type="checkbox"]:not(.check-pass):not(.check-fail)');
-
-            if (pass && pass.checked) {
-                item.classList.add('is-checked-print', 'is-pass-print');
-            } else if (fail && fail.checked) {
-                item.classList.add('is-checked-print', 'is-fail-print');
-            } else if (simple && simple.checked) {
-                item.classList.add('is-checked-print', 'is-pass-print');
-            }
-        });
-
-        // 2. Ocultar observaciones vacías
-        document.querySelectorAll('.obs-area').forEach(obsArea => {
-            const textarea = obsArea.querySelector('textarea');
-            if (textarea && textarea.value.trim() === '') obsArea.classList.add('empty-print');
-        });
-
-        // 3. Ocultar secciones enteras si están vacías
-        document.querySelectorAll('.section').forEach(sec => {
-            sec.classList.remove('empty-print');
-            const hasChecked = sec.querySelectorAll('.is-checked-print').length > 0;
-            const obsVal = sec.querySelector('textarea') ? sec.querySelector('textarea').value.trim() : "";
-            if (!hasChecked && !obsVal) sec.classList.add('empty-print');
-        });
-
-        const ejecutadosSelect = document.getElementById('sys-ejecutados').value;
-        const devolucion = document.getElementById('devolucion-block');
-        const corregido = document.getElementById('corregido-block');
-        if (ejecutadosSelect === 'SI') { 
-            if(devolucion) devolucion.classList.add('ocultar-admin-print'); 
-            if(corregido) corregido.classList.add('ocultar-admin-print'); 
-        }
-
-        addPrintDate();
-
-        // --- FUNCIÓN DE LIMPIEZA MANUAL ---
-        // En Android, NO usamos setTimeout automático porque interrumpe el guardado.
-        // Esperamos a que el usuario toque la pantalla.
-        const cleanupPrint = () => {
-            if (btnPrint) btnPrint.removeAttribute('disabled');
-            document.querySelectorAll('.check-item').forEach(i => i.classList.remove('is-checked-print', 'is-pass-print', 'is-fail-print'));
-            document.querySelectorAll('.obs-area').forEach(i => i.classList.remove('empty-print'));
-            document.querySelectorAll('.section').forEach(i => i.classList.remove('empty-print'));
-            if(devolucion) devolucion.classList.remove('ocultar-admin-print');
-            if(corregido) corregido.classList.remove('ocultar-admin-print');
-            removePrintDate();
-            
-            // Remover listeners
-            document.removeEventListener('click', cleanupPrint);
-            document.removeEventListener('touchstart', cleanupPrint);
-            showToast("Vista de impresión cerrada", "info", 2000);
-        };
-
-        // --- EJECUTAR IMPRESIÓN ---
-        setTimeout(() => {
-            window.print();
-            
-            // ESCUCHA EVENTOS PARA LIMPIAR SOLO CUANDO EL USUARIO REGRESE
-            // Pequeño delay para no detectar el click del botón "Imprimir"
-            setTimeout(() => {
-                document.addEventListener('click', cleanupPrint, { once: true });
-                document.addEventListener('touchstart', cleanupPrint, { once: true });
-            }, 1000);
-            
-        }, 500);
-    }
-    
-    if (window.matchMedia) { const mql = window.matchMedia('print'); mql.addListener((m) => { if (m.matches) addPrintDate(); else removePrintDate(); }); }
-    window.addEventListener('beforeprint', addPrintDate);
-    window.addEventListener('afterprint', removePrintDate);
-
-    function setupFocusListeners() {
-        const sectionIds = ["sec-sistema", "sec-pintura", "sec-armado", "sec-pulido", "sec-tapiceria", "sec-control"];
-        sectionIds.forEach(sectionId => {
-            const section = document.getElementById(sectionId);
-            if (!section) return;
-            section.querySelectorAll('input, select, textarea').forEach(input => {
-                input.addEventListener('focus', () => { section.classList.add('active-section'); });
-                input.addEventListener('blur', () => { setTimeout(() => { if (!section.contains(document.activeElement)) section.classList.remove('active-section'); }, 100); });
-            });
-        });
-    }
-
-    function configurarInputOrden() {
-        const input = document.getElementById('orderNum');
-        if (!input) return;
-        const formatearOrden = (mostrarToast) => {
-            const originalValor = input.value;
-            const prefijo = 'OT-'; 
-            let parteNumerica = originalValor.startsWith(prefijo) ? originalValor.substring(prefijo.length) : originalValor;
-            if (mostrarToast && /[^0-9]/.test(parteNumerica)) {
-                showRichToast('Entrada no válida', 'Solo se permiten dígitos para el número de Orden de Trabajo (máximo 4).', 'warning', 3000);
-            }
-            let numerosLimpios = parteNumerica.replace(/[^0-9]/g, '');
-            if (numerosLimpios.length > 4) numerosLimpios = numerosLimpios.slice(0, 4);
-            input.value = prefijo + numerosLimpios;
-        };
-        input.addEventListener('input', function(e) { formatearOrden(true); saveForm(); });
-        input.addEventListener('focus', function() { if (this.value === '' || this.value === 'OT-') this.value = 'OT-'; });
-        input.addEventListener('keydown', function(e) { if ((e.key === 'Backspace' || e.key === 'Delete') && this.selectionStart <= 3) e.preventDefault(); });
-        if (!input.value) input.value = 'OT-';
-    }
-
-    let signaturePad;
-    function initSignaturePad() {
-        const canvas = document.getElementById('signature-pad');
-        if (!canvas) return;
-        signaturePad = new SignaturePad(canvas, { minWidth: 1, maxWidth: 2.5, penColor: "black", backgroundColor: "white" });
-        function resizeCanvas() {
-            const ratio = Math.max(window.devicePixelRatio || 1, 1);
-            let data = null;
-            if(!signaturePad.isEmpty()) data = signaturePad.toDataURL();
-            canvas.width = canvas.offsetWidth * ratio; canvas.height = canvas.offsetHeight * ratio;
-            canvas.getContext("2d").scale(ratio, ratio);
-            if(data) signaturePad.fromDataURL(data);
-        }
-        window.addEventListener("resize", resizeCanvas);
-        resizeCanvas();
-        signaturePad.addEventListener("endStroke", () => { localStorage.setItem(STORAGE_KEY + "_sig", signaturePad.toDataURL()); });
-    }
-    
-    window.borrarFirma = function() { if(signaturePad) { signaturePad.clear(); localStorage.removeItem(STORAGE_KEY + "_sig"); } };
-    function loadSignature() { const savedSig = localStorage.getItem(STORAGE_KEY + "_sig"); if (savedSig && signaturePad) signaturePad.fromDataURL(savedSig); }
-
-    function actualizarBloquesAdmin() {
-        const valor = document.getElementById("sys-ejecutados").value;
-        const devolucion = document.getElementById("devolucion-block");
-        const corregido = document.getElementById("corregido-block");
-        if (valor === "SI") { devolucion.style.display = "none"; corregido.style.display = "none"; } 
-        else if (valor === "NO") { devolucion.style.display = "block"; corregido.style.display = "block"; } 
-        else { devolucion.style.display = "none"; corregido.style.display = "none"; }
-    }
     // --- FUNCIÓN GENERAR REPORTE (MODIFICADA PARA NOMBRE DE ARCHIVO) ---
     function generarReporte() {
         // --- VALIDACIONES ---
@@ -1665,6 +1503,98 @@
         }, 500);
     }
 
+    function setupFocusListeners() {
+        const sectionIds = ["sec-sistema", "sec-pintura", "sec-armado", "sec-pulido", "sec-tapiceria", "sec-control"];
+        sectionIds.forEach(sectionId => {
+            const section = document.getElementById(sectionId);
+            if (!section) return;
+            section.querySelectorAll('input, select, textarea').forEach(input => {
+                input.addEventListener('focus', () => { section.classList.add('active-section'); });
+                input.addEventListener('blur', () => { setTimeout(() => { if (!section.contains(document.activeElement)) section.classList.remove('active-section'); }, 100); });
+            });
+        });
+    }
+
+    function configurarInputOrden() {
+        const input = document.getElementById('orderNum');
+        if (!input) return;
+        const formatearOrden = (mostrarToast) => {
+            const originalValor = input.value;
+            const prefijo = 'OT-'; 
+            let parteNumerica = originalValor.startsWith(prefijo) ? originalValor.substring(prefijo.length) : originalValor;
+            if (mostrarToast && /[^0-9]/.test(parteNumerica)) {
+                showRichToast('Entrada no válida', 'Solo se permiten dígitos para el número de Orden de Trabajo (máximo 4).', 'warning', 3000);
+            }
+            let numerosLimpios = parteNumerica.replace(/[^0-9]/g, '');
+            if (numerosLimpios.length > 4) numerosLimpios = numerosLimpios.slice(0, 4);
+            input.value = prefijo + numerosLimpios;
+        };
+        input.addEventListener('input', function(e) { formatearOrden(true); saveForm(); });
+        input.addEventListener('focus', function() { if (this.value === '' || this.value === 'OT-') this.value = 'OT-'; });
+        input.addEventListener('keydown', function(e) { if ((e.key === 'Backspace' || e.key === 'Delete') && this.selectionStart <= 3) e.preventDefault(); });
+        if (!input.value) input.value = 'OT-';
+    }
+
+    let signaturePad;
+    function initSignaturePad() {
+        const canvas = document.getElementById('signature-pad');
+        if (!canvas) return;
+        signaturePad = new SignaturePad(canvas, { minWidth: 1, maxWidth: 2.5, penColor: "black", backgroundColor: "white" });
+        function resizeCanvas() {
+            const ratio = Math.max(window.devicePixelRatio || 1, 1);
+            let data = null;
+            if(!signaturePad.isEmpty()) data = signaturePad.toDataURL();
+            canvas.width = canvas.offsetWidth * ratio; canvas.height = canvas.offsetHeight * ratio;
+            canvas.getContext("2d").scale(ratio, ratio);
+            if(data) signaturePad.fromDataURL(data);
+        }
+        window.addEventListener("resize", resizeCanvas);
+        resizeCanvas();
+        signaturePad.addEventListener("endStroke", () => { localStorage.setItem(STORAGE_KEY + "_sig", signaturePad.toDataURL()); });
+    }
+    
+    window.borrarFirma = function() { if(signaturePad) { signaturePad.clear(); localStorage.removeItem(STORAGE_KEY + "_sig"); } };
+    function loadSignature() { const savedSig = localStorage.getItem(STORAGE_KEY + "_sig"); if (savedSig && signaturePad) signaturePad.fromDataURL(savedSig); }
+
+    function actualizarBloquesAdmin() {
+        const valor = document.getElementById("sys-ejecutados").value;
+        const devolucion = document.getElementById("devolucion-block");
+        const corregido = document.getElementById("corregido-block");
+        if (valor === "SI") { devolucion.style.display = "none"; corregido.style.display = "none"; } 
+        else if (valor === "NO") { devolucion.style.display = "block"; corregido.style.display = "block"; } 
+        else { devolucion.style.display = "none"; corregido.style.display = "none"; }
+    }
+
+    if (window.matchMedia) { const mql = window.matchMedia('print'); mql.addListener((m) => { if (m.matches) addPrintDate(); else removePrintDate(); }); }
+    window.addEventListener('beforeprint', addPrintDate);
+    window.addEventListener('afterprint', removePrintDate);
+
+    // --- FUNCIÓN PARA ACORDEÓN ---
+    function initAccordion() {
+        const sections = document.querySelectorAll('.section');
+        
+        sections.forEach(section => {
+            // SI ES LA SECCIÓN A (sec-sistema), IGNORARLA (siempre expandida)
+            if (section.id === 'sec-sistema') return;
+
+            // 1. Empezar colapsado por defecto
+            section.classList.add('collapsed');
+
+            const header = section.querySelector('.section-header');
+            if (header) {
+                // 2. Agregar evento de click al encabezado
+                header.addEventListener('click', () => {
+                    section.classList.toggle('collapsed');
+                });
+            }
+
+            // 3. Si el usuario navega con TAB y entra en un input oculto, abrir la sección
+            section.addEventListener('focusin', () => {
+                section.classList.remove('collapsed');
+            });
+        });
+    }
+
     window.addEventListener("DOMContentLoaded", () => {
         initFlatpickr();
         loadForm();
@@ -1674,6 +1604,9 @@
         actualizarBloquesAdmin();
         setupFocusListeners(); 
         updateAllSectionProgress();
+        
+        // Inicializar Acordeón
+        initAccordion();
 
         document.getElementById("sys-ejecutados").addEventListener("change", actualizarBloquesAdmin);
         document.querySelectorAll("input, select, textarea").forEach(el => {
@@ -1691,6 +1624,3 @@
 
 </body>
 </html>
-
-
-
