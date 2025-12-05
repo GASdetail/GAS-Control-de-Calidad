@@ -110,145 +110,48 @@
 
         /* FLATPICKR */
         .flatpickr-input, input.flatpickr-input, .flatpickr-alt-input { background-color: var(--input-bg) !important; color: var(--text-light) !important; border: 1px solid var(--border-dark) !important; padding: 10px !important; border-radius: 4px !important; }
-        /* Dark theme para flatpickr calendar (el popup) */
-        .flatpickr-calendar {
-        background: var(--input-bg) !important;
-        border: 1px solid var(--border-dark) !important;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.5) !important; }
+        /* Dark theme para flatpickr calendar */
+        .flatpickr-calendar { background: var(--input-bg) !important; border: 1px solid var(--border-dark) !important; box-shadow: 0 8px 20px rgba(0,0,0,0.5) !important; }
         .flatpickr-months, .flatpickr-weekdays { background: var(--primary-dark) !important; }
         .flatpickr-day { color: var(--text-light) !important; }
         .flatpickr-day.selected { background: var(--primary-blue) !important; border-color: var(--primary-blue) !important; color: white !important; }
         
-        /* Iconos Flatpickr Mobile */
         .flat-date, .flat-date + input { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23bdc3c7' viewBox='0 0 24 24'%3E%3Cpath d='M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zM9 14H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2zm-8 4H7v-2h2v2zm4 0h-2v-2h2v2zm4 0h-2v-2h2v2z'/%3E%3C/svg%3E") !important; background-repeat: no-repeat !important; background-position: right 15px center !important; background-size: 20px !important; padding-right: 35px !important; }
         .flat-time, .flat-time + input { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23bdc3c7' viewBox='0 0 24 24'%3E%3Cpath d='M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z'/%3E%3C/svg%3E") !important; background-repeat: no-repeat !important; background-position: right 15px center !important; background-size: 20px !important; padding-right: 35px !important; }
         ::placeholder { color: #bdc3c7 !important; opacity: 1 !important; }
         @media (max-width: 600px) { .input-cluster { flex-direction: row; flex-wrap: wrap; } .input-cluster input { min-width: 130px !important; flex-grow: 1; } }
         
-        
-.flatpickr-calendar.open {
-    background: var(--input-bg) !important;
-}
-/* Cabecera de Mes y Año */
-.flatpickr-months {
-    background: var(--primary-dark) !important;
-}
-.flatpickr-months .flatpickr-month {
-    background: var(--primary-dark) !important;
-    color: var(--text-light) !important;
-}
-/* Flechas de navegación */
-.flatpickr-months .flatpickr-prev-month,
-.flatpickr-months .flatpickr-next-month {
-    color: var(--primary-blue) !important;
-    fill: var(--primary-blue) !important;
-}
-.flatpickr-months .flatpickr-prev-month:hover,
-.flatpickr-months .flatpickr-next-month:hover {
-    color: var(--text-light) !important;
-    fill: var(--text-light) !important;
-}
-/* Días de la semana */
-.flatpickr-weekdays {
-    background: var(--primary-dark) !important;
-}
-.flatpickr-weekday {
-    background: var(--primary-dark) !important;
-    color: var(--text-muted) !important;
-    font-weight: 600;
-}
-/* Contenedor de los días */
-.flatpickr-days {
-    background: var(--input-bg) !important;
-}
-/* Días individuales */
-.flatpickr-day {
-    color: var(--text-light) !important;
-    background: transparent;
-    border: 1px solid transparent;
-}
-/* Días al pasar el mouse */
-.flatpickr-day:hover,
-.flatpickr-day.prevMonthDay:hover,
-.flatpickr-day.nextMonthDay:hover,
-.flatpickr-day.disabled:hover,
-.flatpickr-day.disabled.prevMonthDay:hover,
-.flatpickr-day.disabled.nextMonthDay:hover {
-    background: var(--primary-blue) !important;
-    color: white !important;
-    border-color: var(--primary-blue) !important;
-}
-/* Día de Hoy */
-.flatpickr-day.today {
-    border-color: var(--success) !important;
-    color: var(--success) !important;
-    background: transparent !important;
-}
-.flatpickr-day.today:hover {
-    border-color: var(--success) !important;
-    background: var(--success) !important;
-    color: white !important;
-}
-/* Día Seleccionado / Rango */
-.flatpickr-day.selected,
-.flatpickr-day.startRange,
-.flatpickr-day.endRange,
-.flatpickr-day.selected.inRange {
-    background: var(--primary-blue) !important;
-    border-color: var(--primary-blue) !important;
-    color: white !important;
-}
-/* Días del mes anterior/siguiente */
-.flatpickr-day.prevMonthDay,
-.flatpickr-day.nextMonthDay {
-    color: var(--text-muted) !important;
-    background: rgba(0,0,0,0.1) !important;
-}
-/* Días deshabilitados */
-.flatpickr-day.disabled {
-    color: var(--text-muted) !important;
-    background: rgba(0,0,0,0.2) !important;
-    cursor: not-allowed;
-}
+        .flatpickr-calendar.open { background: var(--input-bg) !important; }
+        .flatpickr-months { background: var(--primary-dark) !important; }
+        .flatpickr-months .flatpickr-month { background: var(--primary-dark) !important; color: var(--text-light) !important; }
+        .flatpickr-months .flatpickr-prev-month, .flatpickr-months .flatpickr-next-month { color: var(--primary-blue) !important; fill: var(--primary-blue) !important; }
+        .flatpickr-months .flatpickr-prev-month:hover, .flatpickr-months .flatpickr-next-month:hover { color: var(--text-light) !important; fill: var(--text-light) !important; }
+        .flatpickr-weekdays { background: var(--primary-dark) !important; }
+        .flatpickr-weekday { background: var(--primary-dark) !important; color: var(--text-muted) !important; font-weight: 600; }
+        .flatpickr-days { background: var(--input-bg) !important; }
+        .flatpickr-day { color: var(--text-light) !important; background: transparent; border: 1px solid transparent; }
+        .flatpickr-day:hover, .flatpickr-day.prevMonthDay:hover, .flatpickr-day.nextMonthDay:hover, .flatpickr-day.disabled:hover { background: var(--primary-blue) !important; color: white !important; border-color: var(--primary-blue) !important; }
+        .flatpickr-day.today { border-color: var(--success) !important; color: var(--success) !important; background: transparent !important; }
+        .flatpickr-day.today:hover { border-color: var(--success) !important; background: var(--success) !important; color: white !important; }
+        .flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange, .flatpickr-day.selected.inRange { background: var(--primary-blue) !important; border-color: var(--primary-blue) !important; color: white !important; }
+        .flatpickr-day.prevMonthDay, .flatpickr-day.nextMonthDay { color: var(--text-muted) !important; background: rgba(0,0,0,0.1) !important; }
+        .flatpickr-day.disabled { color: var(--text-muted) !important; background: rgba(0,0,0,0.2) !important; cursor: not-allowed; }
+        .flatpickr-time { border-top: 1px solid var(--border-dark) !important; background: var(--primary-dark) !important; }
+        .flatpickr-time input, .flatpickr-time .flatpickr-am-pm { background: var(--input-bg) !important; color: var(--text-light) !important; }
+        .flatpickr-time .flatpickr-am-pm:hover, .flatpickr-time .numInputWrapper span:hover { background: var(--primary-blue) !important; color: white !important; }
+        .flatpickr-monthDropdown-months, .flatpickr-current-month input.cur-year { background: #2c3e50 !important; color: #ecf0f1 !important; border: 1px solid #495a6b !important; }
+        .flatpickr-monthDropdown-months option { background: #2c3e50 !important; color: #ecf0f1 !important; }
 
-/* Selector de Tiempo (parte inferior) */
-.flatpickr-time {
-    border-top: 1px solid var(--border-dark) !important;
-    background: var(--primary-dark) !important;
-}
-.flatpickr-time input,
-.flatpickr-time .flatpickr-am-pm {
-    background: var(--input-bg) !important;
-    color: var(--text-light) !important;
-}
-.flatpickr-time .flatpickr-am-pm:hover,
-.flatpickr-time .numInputWrapper span:hover {
-    background: var(--primary-blue) !important;
-    color: white !important;
-}
-/* Estilos para los dropdowns de mes/año (los que tienen texto) */
-.flatpickr-monthDropdown-months,
-.flatpickr-current-month input.cur-year {
-    background: #2c3e50 !important;
-    color: #ecf0f1 !important;
-    border: 1px solid #495a6b !important;
-}
-
-/* Opciones del dropdown */
-.flatpickr-monthDropdown-months option {
-    background: #2c3e50 !important;
-    color: #ecf0f1 !important;
-}
         /* OBSERVACIONES */
         .obs-area { padding: 15px; border-top: 1px dashed var(--border-dark); background-color: rgba(0,0,0,0.1); display: flex; flex-direction: column; }
         .obs-area textarea { width: 100%; box-sizing: border-box; }
 
-        /* --- NUEVO CSS: CHECKLIST DE DOBLE OPCIÓN --- */
+        /* --- CHECKLIST DE DOBLE OPCIÓN --- */
         .checklist { padding: 10px 18px; }
         
         .check-item {
             display: flex;
-            flex-direction: column; /* Columna para que la caja de texto baje */
+            flex-direction: column; 
             padding: 12px 0;
             border-bottom: 1px solid var(--border-dark); 
             transition: 0.25s ease;
@@ -256,10 +159,8 @@
         .check-item:last-child { border-bottom: none; }
         .check-item:hover { transform: translateX(5px); background: rgba(255, 255, 255, 0.05); }
 
-        /* Wrapper para la fila de checkboxes y label */
         .check-row-wrapper { display: flex; align-items: center; width: 100%; }
 
-        /* Estilo base checkboxes (para todos, incluyendo admin) */
         .check-item input[type="checkbox"] {
             width: 22px; height: 22px; min-width: 22px;
             border: 2px solid var(--border-dark); border-radius: 6px; margin-right: 10px;
@@ -268,7 +169,6 @@
             transition: all 0.2s;
         }
 
-        /* CHECKBOX VERDE (OK) */
         .check-pass:hover { border-color: var(--success); box-shadow: 0 0 8px rgba(39, 174, 96, 0.4); }
         .check-pass:checked {
             background: linear-gradient(135deg, var(--success) 0%, #1e8449 100%);
@@ -277,7 +177,6 @@
         }
         .check-pass:checked::after { content: "✔"; color: white; font-size: 14px; font-weight: bold; }
 
-        /* CHECKBOX ROJO (FAIL) */
         .check-fail { border-color: #7f8c8d !important; margin-right: 15px !important; }
         .check-fail:hover { border-color: var(--error) !important; box-shadow: 0 0 8px rgba(231, 76, 60, 0.4); }
         .check-fail:checked {
@@ -289,17 +188,27 @@
 
         .check-row-wrapper label { color: var(--text-light); cursor: pointer; flex: 1; }
 
-        /* CAJA DE OBSERVACIÓN ESPECÍFICA (Oculta por defecto) */
+        /* --- ACTUALIZADO: CAJA DE OBSERVACIÓN ESPECÍFICA (TEXTAREA) --- */
         .specific-obs {
             display: none; width: 100%; margin-top: 8px; padding-left: 65px; 
             box-sizing: border-box; animation: slideDown 0.2s ease-out;
         }
         .specific-obs.visible { display: block; }
-        .specific-obs input {
-            width: 95%; padding: 8px; border: 1px solid var(--error);
-            background-color: rgba(231, 76, 60, 0.1); color: #ffcccc; font-size: 0.9em;
+        
+        .specific-obs textarea {
+            width: 95%; 
+            padding: 8px; 
+            border: 1px solid var(--error);
+            background-color: rgba(231, 76, 60, 0.1); 
+            color: #ffcccc; 
+            font-size: 0.9em;
+            font-family: inherit;
+            resize: none; 
+            overflow: hidden; 
+            min-height: 38px;
+            display: block;
         }
-        .specific-obs input::placeholder { color: #e59898; }
+        .specific-obs textarea::placeholder { color: #e59898; }
 
         @keyframes pulseCheck { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
         @keyframes slideDown { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
@@ -317,7 +226,7 @@
         /* INDICADOR GUARDADO */
         #save-indicator { position: fixed; top: 20px; right: 20px; background-color: var(--success); color: white; padding: 8px 15px; border-radius: 5px; opacity: 0; transition: opacity 0.5s; font-weight: bold; box-shadow: 0 4px 8px rgba(0,0,0,0.3); z-index: 1000; }
 
-        /* TOASTS (MANTENIDOS INTACTOS) */
+        /* TOASTS */
         .toast-container { position: fixed; right: 20px; bottom: 20px; z-index: 10001; display: flex; flex-direction: column; gap: 10px; align-items: flex-end; pointer-events: none; }
         .toast { pointer-events: auto; display:flex; align-items:flex-start; gap:10px; padding: 12px 14px; border-radius: 10px; background: rgba(0,0,0,0.88); color: #fff; box-shadow: 0 6px 20px rgba(0,0,0,0.45); min-width: 240px; max-width: 420px; transform: translateY(10px); animation: toastIn .35s ease forwards; }
         .toast.success { border-left: 6px solid #2ecc71; } .toast.error { border-left: 6px solid #e74c3c; } .toast.info { border-left: 6px solid #3498db; } .toast.warning { border-left: 6px solid #f1c40f; }
@@ -342,10 +251,6 @@
         .confirm-dialog .cd-actions { display: flex; gap: 10px; justify-content: flex-end; }
         .confirm-dialog .btn-cancel { background: transparent; border: 1px solid var(--border-dark); color: var(--text-light); padding: 10px 14px; border-radius: 6px; cursor: pointer; }
         .confirm-dialog .btn-confirm { background: var(--error); color: white; border: none; padding: 10px 14px; border-radius: 6px; cursor: pointer; }
-        .history-modal { background: var(--container-bg); color: var(--text-light); padding: 20px; border-radius: 10px; width: 92%; max-width: 520px; box-shadow: 0 12px 30px rgba(0,0,0,0.6); border: 1px solid var(--border-dark); animation: modalIn .22s cubic-bezier(.2,.9,.2,1) both; }
-        .history-modal .hm-list li { padding: 10px; margin-bottom: 8px; background: rgba(0,0,0,0.2); border-radius: 6px; display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; }
-        .history-modal .hm-restore { background: var(--success); color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; }
-        .history-modal .btn-close-history { background: transparent; border: 1px solid var(--border-dark); color: var(--text-light); padding: 10px 14px; border-radius: 6px; cursor: pointer; }
         @keyframes modalIn { from { opacity: 0; transform: translateY(8px) scale(.995); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
         /* FOOTER & FIRMA */
@@ -362,52 +267,19 @@
         .btn-small:hover { background-color: var(--error); }
         .signature-label { color: #000; position: absolute; bottom: 5px; left: 10px; font-size: 0.8em; pointer-events: none; opacity: 0.5; }
 
-        /* --- ESTILOS PARA ACORDEÓN (PLEGAR/DESPLEGAR) --- */
-        .section-header {
-            cursor: pointer;
-            user-select: none;
-            transition: background-color 0.2s;
-            position: relative;
-        }
+        /* ACORDEÓN */
+        .section-header { cursor: pointer; user-select: none; transition: background-color 0.2s; position: relative; }
         .section-header:hover { filter: brightness(1.1); }
-
-        /* === Para alineación: EL 'AUTO' QUE LO EMPUJA A LA DERECHA EL ESTADO === */
-        .status-indicator { 
-            margin-left: auto; 
-        }
-        /* Flecha indicadora (Genérica) */
-        .section-header::after {
-            content: '▼';
-            display: inline-block;
-            margin-left: 15px;
-            font-size: 0.8em;
-            transition: transform 0.3s ease;
-            color: var(--text-muted);
-        }
-
-        /* Ocultar contenido al colapsar (excepto el header) */
-        .section.collapsed > *:not(.section-header) {
-            display: none !important;
-        }
-
-        /* Rotar flecha al colapsar */
-        .section.collapsed .section-header::after {
-            transform: rotate(-90deg);
-        }
-
-        /* EXCEPCIÓN PARA LA SECCIÓN A (sec-sistema) */
-        #sec-sistema .section-header {
-            cursor: default !important; /* No mostrar mano de click */
-        }
-        #sec-sistema .section-header::after {
-            display: none !important; /* No mostrar flecha */
-        }
-        #sec-sistema.section.collapsed > *:not(.section-header) {
-            display: block !important; /* Asegurar que siempre se muestre aunque por error tenga la clase */
-        }
+        .status-indicator { margin-left: auto; }
+        .section-header::after { content: '▼'; display: inline-block; margin-left: 15px; font-size: 0.8em; transition: transform 0.3s ease; color: var(--text-muted); }
+        .section.collapsed > *:not(.section-header) { display: none !important; }
+        .section.collapsed .section-header::after { transform: rotate(-90deg); }
+        #sec-sistema .section-header { cursor: default !important; }
+        #sec-sistema .section-header::after { display: none !important; }
+        #sec-sistema.section.collapsed > *:not(.section-header) { display: block !important; }
 
 
-        /* --- MEDIA PRINT (CORREGIDO PARA ANDROID & CHECKLIST VACIOS) --- */
+        /* --- MEDIA PRINT (CORREGIDO PARA ANDROID & TEXTAREAS MULTILINEA) --- */
         @media print {
             @page { margin: 1cm; size: auto; }
             .print-hidden-icon, #save-indicator, .button-group, h1, .footer-info, .section-index, .toast-container, .signature-actions { display: none !important; }
@@ -417,15 +289,9 @@
             body { padding: 0; font-size: 11pt; font-family: Arial, Helvetica, sans-serif; }
             .container { max-width: 100%; margin: 0; padding: 0 5px; border: none !important; }
 
-            /* FORZAR VISIBILIDAD DE CONTENIDO AL IMPRIMIR AUNQUE ESTÉ COLAPSADO */
-            .section.collapsed > *:not(.section-header) {
-                display: block !important;
-            }
-            .section-header::after {
-                display: none !important; /* Ocultar flecha en impresión */
-            }
+            .section.collapsed > *:not(.section-header) { display: block !important; }
+            .section-header::after { display: none !important; }
 
-            /* INPUTS PLANOS */
             input[type="text"], input[type="date"], input[type="time"], input[type="number"], select, .flatpickr-input {
                 -webkit-appearance: none !important; appearance: none !important; background: transparent !important; border: none !important; box-shadow: none !important; color: #000 !important; padding: 0 !important; margin: 0 !important; font-weight: normal; background-image: none !important; 
             }
@@ -452,60 +318,52 @@
             .admin-question { font-weight: bold; color: #000 !important; margin-bottom: 4px; font-size: 10pt; }
             #devolucion-block, #corregido-block { border: 1px solid #000 !important; background: #fff !important; padding: 5px; margin-top: 6px; }
 
-            /* --- LÓGICA DE VISIBILIDAD DE CHECKLIST (FUERZA BRUTA) --- */
+            /* LOGICA VISIBILIDAD CHECKLIST */
             .checklist { padding: 8px 12px; }
             .check-item input[type="checkbox"] { display: none !important; }
-            
-            /* 1. OCULTAR TODO POR DEFECTO (Selector ultra específico para ganar prioridad) */
             .checklist .check-item { display: none !important; }
-
-            /* 2. MOSTRAR SOLO LO MARCADO */
-            /* Si tiene la clase puesta por JS O el input está marcado (backup con :has) */
-            .checklist .check-item.is-checked-print,
-            .checklist .check-item:has(input:checked) { 
-                display: block !important; 
-                border-bottom: 1px dotted #ccc !important; padding: 4px 0 !important; font-size: 10pt !important;
-            }
+            .checklist .check-item.is-checked-print, .checklist .check-item:has(input:checked) { display: block !important; border-bottom: 1px dotted #ccc !important; padding: 4px 0 !important; font-size: 10pt !important; }
 
             .check-item.is-checked-print label, .check-item:has(input:checked) label { color: #000 !important; font-weight: bold; }
+            .check-item.is-pass-print label::before, .check-item:has(input.check-pass:checked) label::before { content: "☑ "; font-size: 12pt; margin-right: 4px; font-weight: bold; }
+            .check-item.is-fail-print label::before, .check-item:has(input.check-fail:checked) label::before { content: "☒ DEFECTO: "; font-size: 12pt; margin-right: 4px; font-weight: bold; }
 
-            /* ICONOS SEGÚN ESTADO */
-            .check-item.is-pass-print label::before,
-            .check-item:has(input.check-pass:checked) label::before { content: "☑ "; font-size: 12pt; margin-right: 4px; font-weight: bold; }
-            
-            .check-item.is-fail-print label::before,
-            .check-item:has(input.check-fail:checked) label::before { content: "☒ DEFECTO: "; font-size: 12pt; margin-right: 4px; font-weight: bold; }
-
-            /* CAJAS DE TEXTO */
             .specific-obs { display: none; }
             .check-item.is-fail-print .specific-obs.visible,
             .check-item:has(input.check-fail:checked) .specific-obs.visible { display: block !important; margin-top: 2px; padding-left: 20px; }
             
-            .check-item.is-fail-print .specific-obs input,
-            .check-item:has(input.check-fail:checked) .specific-obs input { border: none !important; font-style: italic; width: 100%; color: #000 !important; background: transparent !important; }
+            /* --- ACTUALIZADO: CAJAS DE TEXTO MULTILINEA EN PRINT --- */
+            .check-item.is-fail-print .specific-obs textarea,
+            .check-item:has(input.check-fail:checked) .specific-obs textarea { 
+                border: none !important; 
+                font-style: italic; 
+                width: 100%; 
+                color: #000 !important; 
+                background: transparent !important; 
+                
+                /* CLAVE PARA QUE NO SE CORTE: */
+                height: auto !important; 
+                white-space: pre-wrap !important;
+                overflow: visible !important;
+                padding: 0 !important;
+                margin-top: 5px !important;
+            }
 
-            /* OBSERVACIONES GENERALES */
             .obs-area { border-top: 1px solid #000; padding: 10px; background: #fff !important; }
             .obs-area textarea { border: 1px solid #000 !important; padding: 5px; min-height: 40px; resize: none !important; font-size: 10pt; color: #000 !important; }
-            
             .obs-area.empty-print, .section.empty-print { display: none !important; }
-            
-            /* OCULTAR ADMIN SI NO APLICA */
             #devolucion-block.ocultar-admin-print, #corregido-block.ocultar-admin-print { display: none !important; }
 
-            /* FIRMA */
             .signature-pad-wrapper { border: none; background: transparent; padding: 0; margin: 0 auto 5px auto !important; display: block !important; float: none !important; page-break-inside: avoid; width: 300px; text-align: center; position: relative; }
             .signature-pad-body { box-shadow: none; border: none !important; background-color: #fff !important; height: 120px; margin-bottom: 2px; }
-            .signature-label { display: block !important; font-size: 9pt !important; font-weight: normal !important; color: #555 !important; text-align: center; margin-bottom: 5px; }
+            .signature-label { display: none !important; }
 
             .responsible-name-container { text-align: center; margin: 20px auto 40px auto !important; width: 300px; display: block !important; page-break-inside: avoid; }
             .responsible-name-container label { display: none !important; }
             .responsible-name-container input#responsibleName { display: block !important; border: none !important; text-align: center; padding: 0 !important; margin: 0 auto; font-size: 11pt !important; font-weight: bold; color: #000 !important; background-color: transparent !important; box-shadow: none !important; border-bottom: 1px solid #000 !important; width: 100%; padding-bottom: 5px !important; margin-bottom: 5px !important; }
             .responsible-name-container::after { content: "Nombre del Responsable"; display: block; text-align: center; font-size: 9pt; font-style: italic; color: #555; margin-top: 2px; }
         }
-        .signature-label {
-        display: none !important;
-    }
+        .signature-label { display: none !important; }
     </style>
 </head>
 <body>
@@ -610,7 +468,9 @@
                     <input type="checkbox" id="p1-fail" class="check-fail" title="Marcar defecto" onchange="handleCheckPair('p1-fail', 'p1', 'p1-obs-box'); checkSection('sec-pintura'); saveForm();">
                     <label for="p1">La textura del transparente es la adecuada, conforme con la originalidad del vehículo</label>
                 </div>
-                <div id="p1-obs-box" class="specific-obs"><input type="text" id="p1-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+                <div id="p1-obs-box" class="specific-obs">
+                    <textarea id="p1-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+                </div>
             </div>
             
             <div class="check-item">
@@ -619,7 +479,9 @@
                     <input type="checkbox" id="p2-fail" class="check-fail" title="Marcar defecto" onchange="handleCheckPair('p2-fail', 'p2', 'p2-obs-box'); checkSection('sec-pintura'); saveForm();">
                     <label for="p2">Los bordes, filos y líneas repintadas están libres de excesos de transparente o pintura</label>
                 </div>
-                <div id="p2-obs-box" class="specific-obs"><input type="text" id="p2-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+                <div id="p2-obs-box" class="specific-obs">
+                    <textarea id="p2-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+                </div>
             </div>
 
             <div class="check-item">
@@ -628,7 +490,9 @@
                     <input type="checkbox" id="p3-fail" class="check-fail" title="Marcar defecto" onchange="handleCheckPair('p3-fail', 'p3', 'p3-obs-box'); checkSection('sec-pintura'); saveForm();">
                     <label for="p3">Las líneas de las piezas repintadas son idénticas a las originales</label>
                 </div>
-                <div id="p3-obs-box" class="specific-obs"><input type="text" id="p3-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+                <div id="p3-obs-box" class="specific-obs">
+                    <textarea id="p3-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+                </div>
             </div>
 
             <div class="check-item">
@@ -637,7 +501,9 @@
                     <input type="checkbox" id="p4-fail" class="check-fail" title="Marcar defecto" onchange="handleCheckPair('p4-fail', 'p4', 'p4-obs-box'); checkSection('sec-pintura'); saveForm();">
                     <label for="p4">Las superficies pintadas están libres de defectos de repintado (rayas, opacamiento, manchas)</label>
                 </div>
-                <div id="p4-obs-box" class="specific-obs"><input type="text" id="p4-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+                <div id="p4-obs-box" class="specific-obs">
+                    <textarea id="p4-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+                </div>
             </div>
 
             <div class="check-item">
@@ -646,7 +512,9 @@
                     <input type="checkbox" id="p5-fail" class="check-fail" title="Marcar defecto" onchange="handleCheckPair('p5-fail', 'p5', 'p5-obs-box'); checkSection('sec-pintura'); saveForm();">
                     <label for="p5">Los empaques externos están libres de residuos de pintura, pulimento, o cualquier suciedad</label>
                 </div>
-                <div id="p5-obs-box" class="specific-obs"><input type="text" id="p5-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+                <div id="p5-obs-box" class="specific-obs">
+                    <textarea id="p5-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+                </div>
             </div>
 
             <div class="check-item">
@@ -655,7 +523,9 @@
                     <input type="checkbox" id="p6-fail" class="check-fail" title="Marcar defecto" onchange="handleCheckPair('p6-fail', 'p6', 'p6-obs-box'); checkSection('sec-pintura'); saveForm();">
                     <label for="p6">En caso de daños o defectos que no están en la reparación, verificarlo en la recepción del vehículo.</label>
                 </div>
-                <div id="p6-obs-box" class="specific-obs"><input type="text" id="p6-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+                <div id="p6-obs-box" class="specific-obs">
+                    <textarea id="p6-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+                </div>
             </div>
             
             <div class="check-item">
@@ -664,7 +534,9 @@
                     <input type="checkbox" id="p7-fail" class="check-fail" title="Marcar defecto" onchange="handleCheckPair('p7-fail', 'p7', 'p7-obs-box'); checkSection('sec-pintura'); saveForm();">
                     <label for="p7">En caso de Corrección de Pintura Total: verificar si los servicios incompletos fueron corregidos</label>
                 </div>
-                <div id="p7-obs-box" class="specific-obs"><input type="text" id="p7-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+                <div id="p7-obs-box" class="specific-obs">
+                    <textarea id="p7-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+                </div>
             </div>
         </div>
         <div class="obs-area"><label class="form-group">Observaciones:</label><textarea id="obs-pintura" placeholder="Defectos encontrados, correcciones pendientes..."></textarea></div>
@@ -683,7 +555,9 @@
                 <input type="checkbox" id="a1-fail" class="check-fail" onchange="handleCheckPair('a1-fail', 'a1', 'a1-obs-box'); checkSection('sec-armado'); saveForm();">
                 <label for="a1">Los interiores han sido ensamblados correctamente</label>
             </div>
-            <div id="a1-obs-box" class="specific-obs"><input type="text" id="a1-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            <div id="a1-obs-box" class="specific-obs">
+                <textarea id="a1-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+            </div>
         </div>
         <div class="check-item">
             <div class="check-row-wrapper">
@@ -691,7 +565,9 @@
                 <input type="checkbox" id="a2-fail" class="check-fail" onchange="handleCheckPair('a2-fail', 'a2', 'a2-obs-box'); checkSection('sec-armado'); saveForm();">
                 <label for="a2">Los exteriores han sido ensamblados correctamente</label>
             </div>
-            <div id="a2-obs-box" class="specific-obs"><input type="text" id="a2-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            <div id="a2-obs-box" class="specific-obs">
+                <textarea id="a2-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+            </div>
         </div>
         <div class="check-item">
             <div class="check-row-wrapper">
@@ -699,7 +575,9 @@
                 <input type="checkbox" id="a3-fail" class="check-fail" onchange="handleCheckPair('a3-fail', 'a3', 'a3-obs-box'); checkSection('sec-armado'); saveForm();">
                 <label for="a3">Las uniones de piezas (molduras, vidrios, etc.) no tienen exceso de pegamento o sellador</label>
             </div>
-            <div id="a3-obs-box" class="specific-obs"><input type="text" id="a3-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            <div id="a3-obs-box" class="specific-obs">
+                <textarea id="a3-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+            </div>
         </div>
         
         <div class="check-item">
@@ -708,7 +586,9 @@
                 <input type="checkbox" id="a4-fail" class="check-fail" onchange="handleCheckPair('a4-fail', 'a4', 'a4-obs-box'); checkSection('sec-armado'); saveForm();">
                 <label for="a4">Las luces y testigos funcionan correctamente</label>
             </div>
-            <div id="a4-obs-box" class="specific-obs"><input type="text" id="a4-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            <div id="a4-obs-box" class="specific-obs">
+                <textarea id="a4-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+            </div>
         </div>
         <div class="check-item">
             <div class="check-row-wrapper">
@@ -716,7 +596,9 @@
                 <input type="checkbox" id="a5-fail" class="check-fail" onchange="handleCheckPair('a5-fail', 'a5', 'a5-obs-box'); checkSection('sec-armado'); saveForm();">
                 <label for="a5">Las molduras, parrillas, empaques, escobillas u otras piezas están limpias y sin daños</label>
             </div>
-            <div id="a5-obs-box" class="specific-obs"><input type="text" id="a5-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            <div id="a5-obs-box" class="specific-obs">
+                <textarea id="a5-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+            </div>
         </div>
         <div class="check-item">
             <div class="check-row-wrapper">
@@ -724,7 +606,9 @@
                 <input type="checkbox" id="a6-fail" class="check-fail" onchange="handleCheckPair('a6-fail', 'a6', 'a6-obs-box'); checkSection('sec-armado'); saveForm();">
                 <label for="a6">Los vidrios no presentan daños derivados del proceso de reparación</label>
             </div>
-            <div id="a6-obs-box" class="specific-obs"><input type="text" id="a6-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            <div id="a6-obs-box" class="specific-obs">
+                <textarea id="a6-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+            </div>
         </div>
         <div class="check-item">
             <div class="check-row-wrapper">
@@ -732,7 +616,9 @@
                 <input type="checkbox" id="a7-fail" class="check-fail" onchange="handleCheckPair('a7-fail', 'a7', 'a7-obs-box'); checkSection('sec-armado'); saveForm();">
                 <label for="a7">El vehículo arranca correctamente y la batería no está descargada</label>
             </div>
-            <div id="a7-obs-box" class="specific-obs"><input type="text" id="a7-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            <div id="a7-obs-box" class="specific-obs">
+                <textarea id="a7-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+            </div>
         </div>
         <div class="check-item">
             <div class="check-row-wrapper">
@@ -740,7 +626,9 @@
                 <input type="checkbox" id="a8-fail" class="check-fail" onchange="handleCheckPair('a8-fail', 'a8', 'a8-obs-box'); checkSection('sec-armado'); saveForm();">
                 <label for="a8">El control remoto, la llave y el encendido del auto funcionan</label>
             </div>
-            <div id="a8-obs-box" class="specific-obs"><input type="text" id="a8-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            <div id="a8-obs-box" class="specific-obs">
+                <textarea id="a8-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+            </div>
         </div>
         <div class="check-item">
             <div class="check-row-wrapper">
@@ -748,7 +636,9 @@
                 <input type="checkbox" id="a9-fail" class="check-fail" onchange="handleCheckPair('a9-fail', 'a9', 'a9-obs-box'); checkSection('sec-armado'); saveForm();">
                 <label for="a9">Los sistemas de audio y navegación funcionan correctamente</label>
             </div>
-            <div id="a9-obs-box" class="specific-obs"><input type="text" id="a9-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            <div id="a9-obs-box" class="specific-obs">
+                <textarea id="a9-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+            </div>
         </div>
         <div class="check-item">
             <div class="check-row-wrapper">
@@ -756,7 +646,9 @@
                 <input type="checkbox" id="a11-fail" class="check-fail" onchange="handleCheckPair('a11-fail', 'a11', 'a11-obs-box'); checkSection('sec-armado'); saveForm();">
                 <label for="a11">La llanta de repuesto y herramientas del vehículo se encuentran en el lugar de origen</label>
             </div>
-            <div id="a11-obs-box" class="specific-obs"><input type="text" id="a11-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+            <div id="a11-obs-box" class="specific-obs">
+                <textarea id="a11-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+            </div>
         </div>
     </div>
     <div class="obs-area">
@@ -774,7 +666,9 @@
                     <input type="checkbox" id="pu1-fail" class="check-fail" onchange="handleCheckPair('pu1-fail', 'pu1', 'pu1-obs-box'); checkSection('sec-pulido'); saveForm();">
                     <label for="pu1">Componentes pulidos no presentan rayas, manchas ni opacamiento</label>
                 </div>
-                <div id="pu1-obs-box" class="specific-obs"><input type="text" id="pu1-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+                <div id="pu1-obs-box" class="specific-obs">
+                    <textarea id="pu1-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+                </div>
             </div>
             <div class="check-item">
                 <div class="check-row-wrapper">
@@ -782,7 +676,9 @@
                     <input type="checkbox" id="pu2-fail" class="check-fail" onchange="handleCheckPair('pu2-fail', 'pu2', 'pu2-obs-box'); checkSection('sec-pulido'); saveForm();">
                     <label for="pu2">Vidrios pulidos sin manchas ni marcas de agua</label>
                 </div>
-                <div id="pu2-obs-box" class="specific-obs"><input type="text" id="pu2-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+                <div id="pu2-obs-box" class="specific-obs">
+                    <textarea id="pu2-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+                </div>
             </div>
             <div class="check-item">
                 <div class="check-row-wrapper">
@@ -790,7 +686,9 @@
                     <input type="checkbox" id="pu3-fail" class="check-fail" onchange="handleCheckPair('pu3-fail', 'pu3', 'pu3-obs-box'); checkSection('sec-pulido'); saveForm();">
                     <label for="pu3">Partes negras acondicionadas y sin rastros de pulimiento o gomas</label>
                 </div>
-                <div id="pu3-obs-box" class="specific-obs"><input type="text" id="pu3-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+                <div id="pu3-obs-box" class="specific-obs">
+                    <textarea id="pu3-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+                </div>
             </div>
             <div class="check-item">
                 <div class="check-row-wrapper">
@@ -798,7 +696,9 @@
                     <input type="checkbox" id="pu4-fail" class="check-fail" onchange="handleCheckPair('pu4-fail', 'pu4', 'pu4-obs-box'); checkSection('sec-pulido'); saveForm();">
                     <label for="pu4">Manillas interiores y exteriores limpias (abrir para revisar)</label>
                 </div>
-                <div id="pu4-obs-box" class="specific-obs"><input type="text" id="pu4-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+                <div id="pu4-obs-box" class="specific-obs">
+                    <textarea id="pu4-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+                </div>
             </div>
             <div class="check-item">
                 <div class="check-row-wrapper">
@@ -806,7 +706,9 @@
                     <input type="checkbox" id="pu5-fail" class="check-fail" onchange="handleCheckPair('pu5-fail', 'pu5', 'pu5-obs-box'); checkSection('sec-pulido'); saveForm();">
                     <label for="pu5">Torpedo y escobillas detallados correctamente</label>
                 </div>
-                <div id="pu5-obs-box" class="specific-obs"><input type="text" id="pu5-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+                <div id="pu5-obs-box" class="specific-obs">
+                    <textarea id="pu5-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+                </div>
             </div>
             <div class="check-item">
                 <div class="check-row-wrapper">
@@ -814,7 +716,9 @@
                     <input type="checkbox" id="pu6-fail" class="check-fail" onchange="handleCheckPair('pu6-fail', 'pu6', 'pu6-obs-box'); checkSection('sec-pulido'); saveForm();">
                     <label for="pu6">Bordes del vehículo sin residuos de pulimiento o gomas</label>
                 </div>
-                <div id="pu6-obs-box" class="specific-obs"><input type="text" id="pu6-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+                <div id="pu6-obs-box" class="specific-obs">
+                    <textarea id="pu6-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+                </div>
             </div>
             <div class="check-item">
                 <div class="check-row-wrapper">
@@ -822,7 +726,9 @@
                     <input type="checkbox" id="pu7-fail" class="check-fail" onchange="handleCheckPair('pu7-fail', 'pu7', 'pu7-obs-box'); checkSection('sec-pulido'); saveForm();">
                     <label for="pu7">Superficies externas sin residuos de pulimento</label>
                 </div>
-                <div id="pu7-obs-box" class="specific-obs"><input type="text" id="pu7-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+                <div id="pu7-obs-box" class="specific-obs">
+                    <textarea id="pu7-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+                </div>
             </div>
             <div class="check-item">
                 <div class="check-row-wrapper">
@@ -830,7 +736,9 @@
                     <input type="checkbox" id="pu9-fail" class="check-fail" onchange="handleCheckPair('pu9-fail', 'pu9', 'pu9-obs-box'); checkSection('sec-pulido'); saveForm();">
                     <label for="pu9">Superficies lavadas correctamente y sin suciedad posterior al proceso</label>
                 </div>
-                <div id="pu9-obs-box" class="specific-obs"><input type="text" id="pu9-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+                <div id="pu9-obs-box" class="specific-obs">
+                    <textarea id="pu9-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+                </div>
             </div>
             <div class="check-item">
                 <div class="check-row-wrapper">
@@ -838,7 +746,9 @@
                     <input type="checkbox" id="pu10-fail" class="check-fail" onchange="handleCheckPair('pu10-fail', 'pu10', 'pu10-obs-box'); checkSection('sec-pulido'); saveForm();">
                     <label for="pu10">Las superficies exteriores están libres de rayas superficiales o daños que debieron eliminarse</label>
                 </div>
-                <div id="pu10-obs-box" class="specific-obs"><input type="text" id="pu10-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+                <div id="pu10-obs-box" class="specific-obs">
+                    <textarea id="pu10-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+                </div>
             </div>
         </div>
         <div class="obs-area"><label class="form-group">Observaciones Exterior/Pulido:</label><textarea id="obs-pulido" placeholder="Observaciones"></textarea></div>
@@ -853,7 +763,9 @@
                     <input type="checkbox" id="t1-fail" class="check-fail" onchange="handleCheckPair('t1-fail','t1','t1-obs-box'); checkSection('sec-tapiceria'); saveForm();">
                     <label for="t1">Aspirado detallado de piso y alfombras</label>
                 </div>
-                <div id="t1-obs-box" class="specific-obs"><input type="text" id="t1-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+                <div id="t1-obs-box" class="specific-obs">
+                    <textarea id="t1-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+                </div>
             </div>
             <div class="check-item">
                 <div class="check-row-wrapper">
@@ -861,7 +773,9 @@
                     <input type="checkbox" id="t2-fail" class="check-fail" onchange="handleCheckPair('t2-fail','t2','t2-obs-box'); checkSection('sec-tapiceria'); saveForm();">
                     <label for="t2">Tapicería aspirada y detallada correctamente</label>
                 </div>
-                <div id="t2-obs-box" class="specific-obs"><input type="text" id="t2-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+                <div id="t2-obs-box" class="specific-obs">
+                    <textarea id="t2-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+                </div>
             </div>
             <div class="check-item">
                 <div class="check-row-wrapper">
@@ -869,7 +783,9 @@
                     <input type="checkbox" id="t3-fail" class="check-fail" onchange="handleCheckPair('t3-fail','t3','t3-obs-box'); checkSection('sec-tapiceria'); saveForm();">
                     <label for="t3">Rejillas de ventilación limpias y detalladas</label>
                 </div>
-                <div id="t3-obs-box" class="specific-obs"><input type="text" id="t3-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+                <div id="t3-obs-box" class="specific-obs">
+                    <textarea id="t3-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+                </div>
             </div>
             <div class="check-item">
                 <div class="check-row-wrapper">
@@ -877,7 +793,9 @@
                     <input type="checkbox" id="t4-fail" class="check-fail" onchange="handleCheckPair('t4-fail','t4','t4-obs-box'); checkSection('sec-tapiceria'); saveForm();">
                     <label for="t4">Dash limpio y detallado</label>
                 </div>
-                <div id="t4-obs-box" class="specific-obs"><input type="text" id="t4-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+                <div id="t4-obs-box" class="specific-obs">
+                    <textarea id="t4-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+                </div>
             </div>
             <div class="check-item">
                 <div class="check-row-wrapper">
@@ -885,7 +803,9 @@
                     <input type="checkbox" id="t5-fail" class="check-fail" onchange="handleCheckPair('t5-fail','t5','t5-obs-box'); checkSection('sec-tapiceria'); saveForm();">
                     <label for="t5">Tapa soles limpios y detallados</label>
                 </div>
-                <div id="t5-obs-box" class="specific-obs"><input type="text" id="t5-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+                <div id="t5-obs-box" class="specific-obs">
+                    <textarea id="t5-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+                </div>
             </div>
             <div class="check-item">
                 <div class="check-row-wrapper">
@@ -893,7 +813,9 @@
                     <input type="checkbox" id="t6-fail" class="check-fail" onchange="handleCheckPair('t6-fail','t6','t6-obs-box'); checkSection('sec-tapiceria'); saveForm();">
                     <label for="t6">Consola central limpia y detallada</label>
                 </div>
-                <div id="t6-obs-box" class="specific-obs"><input type="text" id="t6-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+                <div id="t6-obs-box" class="specific-obs">
+                    <textarea id="t6-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+                </div>
             </div>
             <div class="check-item">
                 <div class="check-row-wrapper">
@@ -901,7 +823,9 @@
                     <input type="checkbox" id="t7-fail" class="check-fail" onchange="handleCheckPair('t7-fail','t7','t7-obs-box'); checkSection('sec-tapiceria'); saveForm();">
                     <label for="t7">Guantera y compartimentos limpios</label>
                 </div>
-                <div id="t7-obs-box" class="specific-obs"><input type="text" id="t7-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+                <div id="t7-obs-box" class="specific-obs">
+                    <textarea id="t7-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+                </div>
             </div>
             <div class="check-item">
                 <div class="check-row-wrapper">
@@ -909,7 +833,9 @@
                     <input type="checkbox" id="t8-fail" class="check-fail" onchange="handleCheckPair('t8-fail','t8','t8-obs-box'); checkSection('sec-tapiceria'); saveForm();">
                     <label for="t8">Cielo detallado y limpio</label>
                 </div>
-                <div id="t8-obs-box" class="specific-obs"><input type="text" id="t8-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+                <div id="t8-obs-box" class="specific-obs">
+                    <textarea id="t8-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+                </div>
             </div>
             <div class="check-item">
                 <div class="check-row-wrapper">
@@ -917,7 +843,9 @@
                     <input type="checkbox" id="t9-fail" class="check-fail" onchange="handleCheckPair('t9-fail','t9','t9-obs-box'); checkSection('sec-tapiceria'); saveForm();">
                     <label for="t9">Asientos detallados y limpios. Si son de cuero, acondicionados</label>
                 </div>
-                <div id="t9-obs-box" class="specific-obs"><input type="text" id="t9-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+                <div id="t9-obs-box" class="specific-obs">
+                    <textarea id="t9-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+                </div>
             </div>
             <div class="check-item">
                 <div class="check-row-wrapper">
@@ -925,7 +853,9 @@
                     <input type="checkbox" id="t10-fail" class="check-fail" onchange="handleCheckPair('t10-fail','t10','t10-obs-box'); checkSection('sec-tapiceria'); saveForm();">
                     <label for="t10">Empaques externos limpios y detallados</label>
                 </div>
-                <div id="t10-obs-box" class="specific-obs"><input type="text" id="t10-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+                <div id="t10-obs-box" class="specific-obs">
+                    <textarea id="t10-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+                </div>
             </div>
             <div class="check-item">
                 <div class="check-row-wrapper">
@@ -933,7 +863,9 @@
                     <input type="checkbox" id="t11-fail" class="check-fail" onchange="handleCheckPair('t11-fail','t11','t11-obs-box'); checkSection('sec-tapiceria'); saveForm();">
                     <label for="t11">Empaques internos limpios y detallados</label>
                 </div>
-                <div id="t11-obs-box" class="specific-obs"><input type="text" id="t11-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+                <div id="t11-obs-box" class="specific-obs">
+                    <textarea id="t11-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+                </div>
             </div>
             <div class="check-item">
                 <div class="check-row-wrapper">
@@ -941,7 +873,9 @@
                     <input type="checkbox" id="t12-fail" class="check-fail" onchange="handleCheckPair('t12-fail','t12','t12-obs-box'); checkSection('sec-tapiceria'); saveForm();">
                     <label for="t12">Empaque del capó limpio y detallado</label>
                 </div>
-                <div id="t12-obs-box" class="specific-obs"><input type="text" id="t12-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+                <div id="t12-obs-box" class="specific-obs">
+                    <textarea id="t12-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+                </div>
             </div>
             <div class="check-item">
                 <div class="check-row-wrapper">
@@ -949,7 +883,9 @@
                     <input type="checkbox" id="t13-fail" class="check-fail" onchange="handleCheckPair('t13-fail','t13','t13-obs-box'); checkSection('sec-tapiceria'); saveForm();">
                     <label for="t13">Empaque de la cajuela limpio y detallado</label>
                 </div>
-                <div id="t13-obs-box" class="specific-obs"><input type="text" id="t13-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+                <div id="t13-obs-box" class="specific-obs">
+                    <textarea id="t13-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+                </div>
             </div>
             <div class="check-item">
                 <div class="check-row-wrapper">
@@ -957,7 +893,9 @@
                     <input type="checkbox" id="t14-fail" class="check-fail" onchange="handleCheckPair('t14-fail','t14','t14-obs-box'); checkSection('sec-tapiceria'); saveForm();">
                     <label for="t14">Pantallas y espejos limpios</label>
                 </div>
-                <div id="t14-obs-box" class="specific-obs"><input type="text" id="t14-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+                <div id="t14-obs-box" class="specific-obs">
+                    <textarea id="t14-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+                </div>
             </div>
             <div class="check-item">
                 <div class="check-row-wrapper">
@@ -965,7 +903,9 @@
                     <input type="checkbox" id="t15-fail" class="check-fail" onchange="handleCheckPair('t15-fail','t15','t15-obs-box'); checkSection('sec-tapiceria'); saveForm();">
                     <label for="t15">Pedales correctamente limpios y detallados</label>
                 </div>
-                <div id="t15-obs-box" class="specific-obs"><input type="text" id="t15-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+                <div id="t15-obs-box" class="specific-obs">
+                    <textarea id="t15-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+                </div>
             </div>
             <div class="check-item">
                 <div class="check-row-wrapper">
@@ -973,7 +913,9 @@
                     <input type="checkbox" id="t16-fail" class="check-fail" onchange="handleCheckPair('t16-fail','t16','t16-obs-box'); checkSection('sec-tapiceria'); saveForm();">
                     <label for="t16">Cajuela aspirada y limpia</label>
                 </div>
-                <div id="t16-obs-box" class="specific-obs"><input type="text" id="t16-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+                <div id="t16-obs-box" class="specific-obs">
+                    <textarea id="t16-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+                </div>
             </div>
             <div class="check-item">
                 <div class="check-row-wrapper">
@@ -981,7 +923,9 @@
                     <input type="checkbox" id="t17-fail" class="check-fail" onchange="handleCheckPair('t17-fail','t17','t17-obs-box'); checkSection('sec-tapiceria'); saveForm();">
                     <label for="t17">Habitáculo/cajuela/batea limpios y detallados (según tipo de vehículo)</label>
                 </div>
-                <div id="t17-obs-box" class="specific-obs"><input type="text" id="t17-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+                <div id="t17-obs-box" class="specific-obs">
+                    <textarea id="t17-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+                </div>
             </div>
         </div>
         <div class="obs-area"><label class="form-group">Observaciones Interior:</label><textarea id="obs-interior" placeholder="Observaciones"></textarea></div>
@@ -997,7 +941,9 @@
                     <input type="checkbox" id="m1-fail" class="check-fail" onchange="handleCheckPair('m1-fail','m1','m1-obs-box'); checkSection('sec-control'); saveForm();">
                     <label for="m1">Niveles de líquidos adecuados (aceite, frenos, refrigerante)</label>
                 </div>
-                <div id="m1-obs-box" class="specific-obs"><input type="text" id="m1-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+                <div id="m1-obs-box" class="specific-obs">
+                    <textarea id="m1-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+                </div>
             </div>
             <div class="check-item">
                 <div class="check-row-wrapper">
@@ -1005,7 +951,9 @@
                     <input type="checkbox" id="m2-fail" class="check-fail" onchange="handleCheckPair('m2-fail','m2','m2-obs-box'); checkSection('sec-control'); saveForm();">
                     <label for="m2">Luces exteriores funcionando</label>
                 </div>
-                <div id="m2-obs-box" class="specific-obs"><input type="text" id="m2-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+                <div id="m2-obs-box" class="specific-obs">
+                    <textarea id="m2-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+                </div>
             </div>
 
             <div class="check-item">
@@ -1017,7 +965,7 @@
         <label for="f1">Pantallas funcionan correctamente</label>
     </div>
     <div id="f1-obs-box" class="specific-obs">
-        <input type="text" id="f1-txt" placeholder="Describa el defecto..." oninput="saveForm()">
+        <textarea id="f1-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
     </div>
 </div>
             <div class="check-item">
@@ -1029,7 +977,7 @@
         <label for="f2">Cámaras operativas (reversa / 360° / sensores) y visualizadas en pantalla</label>
     </div>
     <div id="f2-obs-box" class="specific-obs">
-        <input type="text" id="f2-txt" placeholder="Describa el defecto..." oninput="saveForm()">
+        <textarea id="f2-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
     </div>
 </div>
             <div class="check-item">
@@ -1041,7 +989,7 @@
         <label for="f3">Aire acondicionado enfría y funciona correctamente</label>
     </div>
     <div id="f3-obs-box" class="specific-obs">
-        <input type="text" id="f3-txt" placeholder="Describa el defecto..." oninput="saveForm()">
+        <textarea id="f3-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
     </div>
 </div>
             
@@ -1051,7 +999,9 @@
                     <input type="checkbox" id="m3-fail" class="check-fail" onchange="handleCheckPair('m3-fail','m3','m3-obs-box'); checkSection('sec-control'); saveForm();">
                     <label for="m3">Testigos apagados en el tablero</label>
                 </div>
-                <div id="m3-obs-box" class="specific-obs"><input type="text" id="m3-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
+                <div id="m3-obs-box" class="specific-obs">
+                    <textarea id="m3-txt" rows="1" placeholder="Describa el defecto..." oninput="autoResize(this); saveForm()"></textarea>
+                </div>
             </div>
         </div>
         <div class="obs-area"><label class="form-group">Observaciones Control Mecánico:</label><textarea id="obs-control" placeholder="Observaciones"></textarea></div>
@@ -1081,7 +1031,7 @@
     </div>
 
     <div class="footer-info">
-        <span class="hover-underline" id="version-link">Versión 1.3.3 - Control de Calidad GAS</span>
+        <span class="hover-underline" id="version-link">Versión 1.3.4 - Control de Calidad GAS</span>
     </div>
 </div>
 
@@ -1110,8 +1060,14 @@
         if (obsBox) {
             if (clickedId.includes('fail') && clicked.checked) {
                 obsBox.classList.add('visible');
-                const input = obsBox.querySelector('input');
-                if(input) setTimeout(() => input.focus(), 100);
+                // ACTUALIZADO: Buscar textarea en lugar de input
+                const input = obsBox.querySelector('textarea'); 
+                if(input) {
+                    setTimeout(() => {
+                        input.focus();
+                        autoResize(input);
+                    }, 100);
+                }
             } 
             else if (!clickedId.includes('fail') && clicked.checked) {
                 obsBox.classList.remove('visible');
@@ -1121,10 +1077,24 @@
             }
         }
     }
+    
+    // --- AUTO-RESIZE PARA TEXTAREAS ---
+    function autoResize(el) {
+        el.style.height = 'auto'; // Resetea la altura
+        el.style.height = el.scrollHeight + 'px'; // Ajusta a la altura del contenido
+    }
+
+    // Al cargar, ajustamos todos los textareas que tengan contenido
+    function resizeAllTextareas() {
+        document.querySelectorAll('.specific-obs textarea').forEach(el => {
+            if (el.value !== "") autoResize(el);
+        });
+    }
 
     // --- VERIFICACIÓN DE SECCIÓN ---
     function checkSection(sectionId) {
         const section = document.getElementById(sectionId);
+        if(!section) return; // Validación extra
         const header = section.querySelector('.section-header');
         const indicator = section.querySelector('.status-indicator');
         
@@ -1310,6 +1280,8 @@
         updateAllSectionProgress();
         validateCorrectionAfterReturn();
         actualizarBloquesAdmin();
+        // Ajustamos tamaños después de cargar los datos
+        resizeAllTextareas();
     }
 
     // --- Funciones de Historial Local ---
@@ -1480,9 +1452,8 @@
         showRichToast(title || '', composedMessage.join('\n\n'), kind, finalDuration, actions);
     }
 
-    // --- FUNCIÓN GENERAR REPORTE (MODIFICADA PARA NOMBRE DE ARCHIVO) ---
+    // --- FUNCIÓN GENERAR REPORTE ---
     function generarReporte() {
-        // --- VALIDACIONES ---
         const algunaMarcada = [...document.querySelectorAll('input[type="checkbox"]')].some(cb => cb.checked);
         if (!algunaMarcada) { showToast("Debes marcar al menos un punto del checklist.", "warning"); return; }
 
@@ -1514,16 +1485,12 @@
         });
         if (stop) { if(btnPrint) btnPrint.removeAttribute('disabled'); return; }
 
-        // --- NUEVO: CAMBIAR EL NOMBRE DEL ARCHIVO PDF ---
-        // Guardamos el título original para restaurarlo después
+        // --- NOMBRE DEL ARCHIVO PDF ---
         const tituloOriginal = document.title;
-        // Obtenemos el valor de la orden (ej: OT-1234)
         const numeroOrden = document.getElementById('orderNum').value.trim();
-        // Definimos el nuevo título que el navegador usará como nombre de archivo
         document.title = `${numeroOrden} Formulario de Control de Calidad GAS`;
 
         // --- PREPARAR DOM PARA IMPRESIÓN ---
-        // 1. Asignar clases para estilos de impresión
         document.querySelectorAll('.check-item').forEach(item => {
             item.classList.remove('is-checked-print', 'is-pass-print', 'is-fail-print');
             const pass = item.querySelector('.check-pass');
@@ -1539,13 +1506,11 @@
             }
         });
 
-        // 2. Ocultar observaciones vacías
         document.querySelectorAll('.obs-area').forEach(obsArea => {
             const textarea = obsArea.querySelector('textarea');
             if (textarea && textarea.value.trim() === '') obsArea.classList.add('empty-print');
         });
 
-        // 3. Ocultar secciones enteras si están vacías
         document.querySelectorAll('.section').forEach(sec => {
             sec.classList.remove('empty-print');
             const hasChecked = sec.querySelectorAll('.is-checked-print').length > 0;
@@ -1557,7 +1522,6 @@
         const devolucion = document.getElementById("devolucion-block");
         const corregido = document.getElementById("corregido-block");
         
-        // Corrección de seguridad por si los elementos no existen
         if (ejecutadosSelect === 'SI') { 
             if(devolucion) devolucion.classList.add('ocultar-admin-print'); 
             if(corregido) corregido.classList.add('ocultar-admin-print'); 
@@ -1565,7 +1529,6 @@
 
         addPrintDate();
 
-        // --- FUNCIÓN DE LIMPIEZA MANUAL ---
         const cleanupPrint = () => {
             if (btnPrint) btnPrint.removeAttribute('disabled');
             document.querySelectorAll('.check-item').forEach(i => i.classList.remove('is-checked-print', 'is-pass-print', 'is-fail-print'));
@@ -1575,25 +1538,19 @@
             if(corregido) corregido.classList.remove('ocultar-admin-print');
             removePrintDate();
             
-            // --- NUEVO: RESTAURAR EL TÍTULO ORIGINAL ---
             document.title = tituloOriginal;
 
-            // Remover listeners
             document.removeEventListener('click', cleanupPrint);
             document.removeEventListener('touchstart', cleanupPrint);
             showToast("Vista de impresión cerrada", "info", 2000);
         };
 
-        // --- EJECUTAR IMPRESIÓN ---
         setTimeout(() => {
             window.print();
-            
-            // ESCUCHA EVENTOS PARA LIMPIAR SOLO CUANDO EL USUARIO REGRESE
             setTimeout(() => {
                 document.addEventListener('click', cleanupPrint, { once: true });
                 document.addEventListener('touchstart', cleanupPrint, { once: true });
             }, 1000);
-            
         }, 500);
     }
 
@@ -1668,21 +1625,14 @@
         const sections = document.querySelectorAll('.section');
         
         sections.forEach(section => {
-            // SI ES LA SECCIÓN A (sec-sistema), IGNORARLA (siempre expandida)
             if (section.id === 'sec-sistema') return;
-
-            // 1. Empezar colapsado por defecto
             section.classList.add('collapsed');
-
             const header = section.querySelector('.section-header');
             if (header) {
-                // 2. Agregar evento de click al encabezado
                 header.addEventListener('click', () => {
                     section.classList.toggle('collapsed');
                 });
             }
-
-            // 3. Si el usuario navega con TAB y entra en un input oculto, abrir la sección
             section.addEventListener('focusin', () => {
                 section.classList.remove('collapsed');
             });
@@ -1692,14 +1642,14 @@
     window.addEventListener("DOMContentLoaded", () => {
         initFlatpickr();
         loadForm();
+        // Llamada explícita para ajustar cajas después de cargar
+        resizeAllTextareas(); 
         configurarInputOrden();
         initSignaturePad();
         loadSignature();
         actualizarBloquesAdmin();
         setupFocusListeners(); 
         updateAllSectionProgress();
-        
-        // Inicializar Acordeón
         initAccordion();
 
         document.getElementById("sys-ejecutados").addEventListener("change", actualizarBloquesAdmin);
@@ -1718,8 +1668,3 @@
 
 </body>
 </html>
-
-
-
-
-
