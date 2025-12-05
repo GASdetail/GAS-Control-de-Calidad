@@ -289,7 +289,10 @@
             body { padding: 0; font-size: 11pt; font-family: Arial, Helvetica, sans-serif; }
             .container { max-width: 100%; margin: 0; padding: 0 5px; border: none !important; }
 
-            .section.collapsed > *:not(.section-header) { display: block !important; }
+            /* FORZAR VISIBILIDAD DE CONTENIDO AL IMPRIMIR (Excluyendo lo vacío) */
+            .section.collapsed > *:not(.section-header):not(.empty-print) {
+                display: block !important;
+            }
             .section-header::after { display: none !important; }
 
             input[type="text"], input[type="date"], input[type="time"], input[type="number"], select, .flatpickr-input {
@@ -1031,7 +1034,7 @@
     </div>
 
     <div class="footer-info">
-        <span class="hover-underline" id="version-link">Versión 1.3.4 - Control de Calidad GAS</span>
+        <span class="hover-underline" id="version-link">Versión 1.3.5 - Control de Calidad GAS</span>
     </div>
 </div>
 
