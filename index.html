@@ -604,7 +604,7 @@
                 <div class="check-row-wrapper">
                     <input type="checkbox" id="p1" class="check-pass" onchange="handleCheckPair('p1', 'p1-fail', 'p1-obs-box'); checkSection('sec-pintura'); saveForm();">
                     <input type="checkbox" id="p1-fail" class="check-fail" title="Marcar defecto" onchange="handleCheckPair('p1-fail', 'p1', 'p1-obs-box'); checkSection('sec-pintura'); saveForm();">
-                    <label for="p1">La textura del transparente es la adecuada conforme con la originalidad del vehículo</label>
+                    <label for="p1">La textura del transparente es la adecuada, conforme con la originalidad del vehículo</label>
                 </div>
                 <div id="p1-obs-box" class="specific-obs"><input type="text" id="p1-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
             </div>
@@ -613,7 +613,7 @@
                 <div class="check-row-wrapper">
                     <input type="checkbox" id="p2" class="check-pass" onchange="handleCheckPair('p2', 'p2-fail', 'p2-obs-box'); checkSection('sec-pintura'); saveForm();">
                     <input type="checkbox" id="p2-fail" class="check-fail" title="Marcar defecto" onchange="handleCheckPair('p2-fail', 'p2', 'p2-obs-box'); checkSection('sec-pintura'); saveForm();">
-                    <label for="p2">Los bordes, filos y líneas repasadas están libres de excesos de transparente o pintura</label>
+                    <label for="p2">Los bordes, filos y líneas repintadas están libres de excesos de transparente o pintura</label>
                 </div>
                 <div id="p2-obs-box" class="specific-obs"><input type="text" id="p2-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
             </div>
@@ -748,14 +748,6 @@
         </div>
         <div class="check-item">
             <div class="check-row-wrapper">
-                <input type="checkbox" id="a10" class="check-pass" onchange="handleCheckPair('a10', 'a10-fail', 'a10-obs-box'); checkSection('sec-armado'); saveForm();">
-                <input type="checkbox" id="a10-fail" class="check-fail" onchange="handleCheckPair('a10-fail', 'a10', 'a10-obs-box'); checkSection('sec-armado'); saveForm();">
-                <label for="a10">La carrocería del vehículo está libre de residuos o suciedad</label>
-            </div>
-            <div id="a10-obs-box" class="specific-obs"><input type="text" id="a10-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
-        </div>
-        <div class="check-item">
-            <div class="check-row-wrapper">
                 <input type="checkbox" id="a11" class="check-pass" onchange="handleCheckPair('a11', 'a11-fail', 'a11-obs-box'); checkSection('sec-armado'); saveForm();">
                 <input type="checkbox" id="a11-fail" class="check-fail" onchange="handleCheckPair('a11-fail', 'a11', 'a11-obs-box'); checkSection('sec-armado'); saveForm();">
                 <label for="a11">La llanta de repuesto y herramientas del vehículo se encuentran en el lugar de origen</label>
@@ -776,7 +768,7 @@
                 <div class="check-row-wrapper">
                     <input type="checkbox" id="pu1" class="check-pass" onchange="handleCheckPair('pu1', 'pu1-fail', 'pu1-obs-box'); checkSection('sec-pulido'); saveForm();">
                     <input type="checkbox" id="pu1-fail" class="check-fail" onchange="handleCheckPair('pu1-fail', 'pu1', 'pu1-obs-box'); checkSection('sec-pulido'); saveForm();">
-                    <label for="pu1">Sin rayas, manchas u opacamiento por pulido</label>
+                    <label for="pu1">Componentes pulidos no presentan rayas, manchas ni opacamiento</label>
                 </div>
                 <div id="pu1-obs-box" class="specific-obs"><input type="text" id="pu1-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
             </div>
@@ -784,7 +776,7 @@
                 <div class="check-row-wrapper">
                     <input type="checkbox" id="pu2" class="check-pass" onchange="handleCheckPair('pu2', 'pu2-fail', 'pu2-obs-box'); checkSection('sec-pulido'); saveForm();">
                     <input type="checkbox" id="pu2-fail" class="check-fail" onchange="handleCheckPair('pu2-fail', 'pu2', 'pu2-obs-box'); checkSection('sec-pulido'); saveForm();">
-                    <label for="pu2">Vidrios pulidos (sin manchas ni marcas de agua)</label>
+                    <label for="pu2">Vidrios pulidos sin manchas ni marcas de agua</label>
                 </div>
                 <div id="pu2-obs-box" class="specific-obs"><input type="text" id="pu2-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
             </div>
@@ -792,7 +784,7 @@
                 <div class="check-row-wrapper">
                     <input type="checkbox" id="pu3" class="check-pass" onchange="handleCheckPair('pu3', 'pu3-fail', 'pu3-obs-box'); checkSection('sec-pulido'); saveForm();">
                     <input type="checkbox" id="pu3-fail" class="check-fail" onchange="handleCheckPair('pu3-fail', 'pu3', 'pu3-obs-box'); checkSection('sec-pulido'); saveForm();">
-                    <label for="pu3">Partes negras acondicionadas</label>
+                    <label for="pu3">Partes negras acondicionadas y sin rastros de pulimiento o gomas</label>
                 </div>
                 <div id="pu3-obs-box" class="specific-obs"><input type="text" id="pu3-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
             </div>
@@ -800,7 +792,7 @@
                 <div class="check-row-wrapper">
                     <input type="checkbox" id="pu4" class="check-pass" onchange="handleCheckPair('pu4', 'pu4-fail', 'pu4-obs-box'); checkSection('sec-pulido'); saveForm();">
                     <input type="checkbox" id="pu4-fail" class="check-fail" onchange="handleCheckPair('pu4-fail', 'pu4', 'pu4-obs-box'); checkSection('sec-pulido'); saveForm();">
-                    <label for="pu4">Manillas de puertas limpias (interior y exterior)</label>
+                    <label for="pu4">Manillas interiores y exteriores limpias (abrir para revisar)</label>
                 </div>
                 <div id="pu4-obs-box" class="specific-obs"><input type="text" id="pu4-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
             </div>
@@ -816,7 +808,7 @@
                 <div class="check-row-wrapper">
                     <input type="checkbox" id="pu6" class="check-pass" onchange="handleCheckPair('pu6', 'pu6-fail', 'pu6-obs-box'); checkSection('sec-pulido'); saveForm();">
                     <input type="checkbox" id="pu6-fail" class="check-fail" onchange="handleCheckPair('pu6-fail', 'pu6', 'pu6-obs-box'); checkSection('sec-pulido'); saveForm();">
-                    <label for="pu6">Bordes del vehículo sin residuos</label>
+                    <label for="pu6">Bordes del vehículo sin residuos de pulimiento o gomas</label>
                 </div>
                 <div id="pu6-obs-box" class="specific-obs"><input type="text" id="pu6-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
             </div>
@@ -827,14 +819,6 @@
                     <label for="pu7">Superficies externas sin residuos de pulimento</label>
                 </div>
                 <div id="pu7-obs-box" class="specific-obs"><input type="text" id="pu7-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
-            </div>
-            <div class="check-item">
-                <div class="check-row-wrapper">
-                    <input type="checkbox" id="pu8" class="check-pass" onchange="handleCheckPair('pu8', 'pu8-fail', 'pu8-obs-box'); checkSection('sec-pulido'); saveForm();">
-                    <input type="checkbox" id="pu8-fail" class="check-fail" onchange="handleCheckPair('pu8-fail', 'pu8', 'pu8-obs-box'); checkSection('sec-pulido'); saveForm();">
-                    <label for="pu8">Capó, guardabarros, tapa motor, y superficies externas limpias</label>
-                </div>
-                <div id="pu8-obs-box" class="specific-obs"><input type="text" id="pu8-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
             </div>
             <div class="check-item">
                 <div class="check-row-wrapper">
@@ -863,7 +847,7 @@
                 <div class="check-row-wrapper">
                     <input type="checkbox" id="t1" class="check-pass" onchange="handleCheckPair('t1','t1-fail','t1-obs-box'); checkSection('sec-tapiceria'); saveForm();">
                     <input type="checkbox" id="t1-fail" class="check-fail" onchange="handleCheckPair('t1-fail','t1','t1-obs-box'); checkSection('sec-tapiceria'); saveForm();">
-                    <label for="t1">Aspirado de piso y alfombras detallado</label>
+                    <label for="t1">Aspirado detallado de piso y alfombras</label>
                 </div>
                 <div id="t1-obs-box" class="specific-obs"><input type="text" id="t1-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
             </div>
@@ -895,7 +879,7 @@
                 <div class="check-row-wrapper">
                     <input type="checkbox" id="t5" class="check-pass" onchange="handleCheckPair('t5','t5-fail','t5-obs-box'); checkSection('sec-tapiceria'); saveForm();">
                     <input type="checkbox" id="t5-fail" class="check-fail" onchange="handleCheckPair('t5-fail','t5','t5-obs-box'); checkSection('sec-tapiceria'); saveForm();">
-                    <label for="t5">Guarda soles limpios y detallados</label>
+                    <label for="t5">Tapa soles limpios y detallados</label>
                 </div>
                 <div id="t5-obs-box" class="specific-obs"><input type="text" id="t5-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
             </div>
@@ -911,7 +895,7 @@
                 <div class="check-row-wrapper">
                     <input type="checkbox" id="t7" class="check-pass" onchange="handleCheckPair('t7','t7-fail','t7-obs-box'); checkSection('sec-tapiceria'); saveForm();">
                     <input type="checkbox" id="t7-fail" class="check-fail" onchange="handleCheckPair('t7-fail','t7','t7-obs-box'); checkSection('sec-tapiceria'); saveForm();">
-                    <label for="t7">Guantera y compartimientos limpios</label>
+                    <label for="t7">Guantera y compartimentos limpios</label>
                 </div>
                 <div id="t7-obs-box" class="specific-obs"><input type="text" id="t7-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
             </div>
@@ -919,7 +903,7 @@
                 <div class="check-row-wrapper">
                     <input type="checkbox" id="t8" class="check-pass" onchange="handleCheckPair('t8','t8-fail','t8-obs-box'); checkSection('sec-tapiceria'); saveForm();">
                     <input type="checkbox" id="t8-fail" class="check-fail" onchange="handleCheckPair('t8-fail','t8','t8-obs-box'); checkSection('sec-tapiceria'); saveForm();">
-                    <label for="t8">Cielo (techo) detallado y limpio</label>
+                    <label for="t8">Cielo detallado y limpio</label>
                 </div>
                 <div id="t8-obs-box" class="specific-obs"><input type="text" id="t8-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
             </div>
@@ -927,7 +911,7 @@
                 <div class="check-row-wrapper">
                     <input type="checkbox" id="t9" class="check-pass" onchange="handleCheckPair('t9','t9-fail','t9-obs-box'); checkSection('sec-tapiceria'); saveForm();">
                     <input type="checkbox" id="t9-fail" class="check-fail" onchange="handleCheckPair('t9-fail','t9','t9-obs-box'); checkSection('sec-tapiceria'); saveForm();">
-                    <label for="t9">Asientos detallados y limpios</label>
+                    <label for="t9">Asientos detallados y limpios. Si son de cuero, acondicionados</label>
                 </div>
                 <div id="t9-obs-box" class="specific-obs"><input type="text" id="t9-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
             </div>
@@ -991,7 +975,7 @@
                 <div class="check-row-wrapper">
                     <input type="checkbox" id="t17" class="check-pass" onchange="handleCheckPair('t17','t17-fail','t17-obs-box'); checkSection('sec-tapiceria'); saveForm();">
                     <input type="checkbox" id="t17-fail" class="check-fail" onchange="handleCheckPair('t17-fail','t17','t17-obs-box'); checkSection('sec-tapiceria'); saveForm();">
-                    <label for="t17">Habitáculo/cajuela/batea limpio y detallado (según tipo de vehículo)</label>
+                    <label for="t17">Habitáculo/cajuela/batea limpios y detallados (según tipo de vehículo)</label>
                 </div>
                 <div id="t17-obs-box" class="specific-obs"><input type="text" id="t17-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
             </div>
@@ -1015,7 +999,7 @@
                 <div class="check-row-wrapper">
                     <input type="checkbox" id="m2" class="check-pass" onchange="handleCheckPair('m2','m2-fail','m2-obs-box'); checkSection('sec-control'); saveForm();">
                     <input type="checkbox" id="m2-fail" class="check-fail" onchange="handleCheckPair('m2-fail','m2','m2-obs-box'); checkSection('sec-control'); saveForm();">
-                    <label for="m2">Luces y testigos funcionando</label>
+                    <label for="m2">Luces exteriores funcionando</label>
                 </div>
                 <div id="m2-obs-box" class="specific-obs"><input type="text" id="m2-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
             </div>
@@ -1038,7 +1022,7 @@
             onchange="handleCheckPair('f2','f2-fail','f2-obs-box'); checkSection('sec-mecanico'); saveForm();">
         <input type="checkbox" id="f2-fail" class="check-fail" 
             onchange="handleCheckPair('f2-fail','f2','f2-obs-box'); checkSection('sec-mecanico'); saveForm();">
-        <label for="f2">Cámaras operativas (reversa / 360° / sensores)</label>
+        <label for="f2">Cámaras operativas (reversa / 360° / sensores) y visualizadas en pantalla</label>
     </div>
     <div id="f2-obs-box" class="specific-obs">
         <input type="text" id="f2-txt" placeholder="Describa el defecto..." oninput="saveForm()">
@@ -1061,7 +1045,7 @@
                 <div class="check-row-wrapper">
                     <input type="checkbox" id="m3" class="check-pass" onchange="handleCheckPair('m3','m3-fail','m3-obs-box'); checkSection('sec-control'); saveForm();">
                     <input type="checkbox" id="m3-fail" class="check-fail" onchange="handleCheckPair('m3-fail','m3','m3-obs-box'); checkSection('sec-control'); saveForm();">
-                    <label for="m3">Vehículo listo para la entrega sin reportes pendientes</label>
+                    <label for="m3">Testigos apagados en el tablero</label>
                 </div>
                 <div id="m3-obs-box" class="specific-obs"><input type="text" id="m3-txt" placeholder="Describa el defecto..." oninput="saveForm()"></div>
             </div>
@@ -1730,6 +1714,7 @@
 
 </body>
 </html>
+
 
 
 
