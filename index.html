@@ -1434,6 +1434,122 @@
         else if (valor === "NO") { devolucion.style.display = "block"; corregido.style.display = "block"; } 
         else { devolucion.style.display = "none"; corregido.style.display = "none"; }
     }
+    // --- FUNCIÓN GENERAR REPORTE (MODIFICADA PARA NOMBRE DE ARCHIVO) ---
+    function generarReporte() {
+        // --- VALIDACIONES ---
+        const algunaMarcada = [...document.querySelectorAll('input[type="checkbox"]')].some(cb => cb.checked);
+        if (!algunaMarcada) { showToast("Debes marcar al menos un punto del checklist.", "warning"); return; }
+
+        const responsable = document.getElementById("responsibleName").value.trim();
+        const firmaVacia = signaturePad.isEmpty();
+        if (responsable === "" && firmaVacia) { showToast("Falta el nombre del responsable y la firma.", "warning"); return; }
+        if (responsable === "") { showToast("Falta el nombre del responsable.", "warning"); return; }
+        if (firmaVacia) { showToast("Falta la firma del responsable.", "warning"); return; }
+                                                                                                             
+        const today = new Date();
+        const dateStr = today.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        document.getElementById('print-date-display').textContent = dateStr;
+
+        const btnPrint = document.getElementById('btn-print');
+        if (btnPrint) btnPrint.setAttribute('disabled', 'true');
+
+        const valid = validateCorrectionAfterReturn();
+        if (!valid) {
+            showCustomAlert("Fechas incorrectas", "La fecha de corrección no puede ser anterior a la fecha de devolución.", [], "error");
+            if(btnPrint) btnPrint.removeAttribute('disabled');
+            return;
+        }
+
+        const requiredFields = [{ id: 'plate', name: 'Placa', critical: true }, { id: 'orderNum', name: 'Nº Orden de Trabajo', critical: true }];
+        let stop = false;
+        requiredFields.forEach(f => {
+            const el = document.getElementById(f.id);
+            if (!el || !el.value.trim()) { showCustomAlert('Campo obligatorio', 'Falta: ' + f.name, [], 'error'); stop = true; }
+        });
+        if (stop) { if(btnPrint) btnPrint.removeAttribute('disabled'); return; }
+
+        // --- NUEVO: CAMBIAR EL NOMBRE DEL ARCHIVO PDF ---
+        // Guardamos el título original para restaurarlo después
+        const tituloOriginal = document.title;
+        // Obtenemos el valor de la orden (ej: OT-1234)
+        const numeroOrden = document.getElementById('orderNum').value.trim();
+        // Definimos el nuevo título que el navegador usará como nombre de archivo
+        document.title = `${numeroOrden} Formulario de Control de Calidad GAS`;
+
+        // --- PREPARAR DOM PARA IMPRESIÓN ---
+        // 1. Asignar clases para estilos de impresión
+        document.querySelectorAll('.check-item').forEach(item => {
+            item.classList.remove('is-checked-print', 'is-pass-print', 'is-fail-print');
+            const pass = item.querySelector('.check-pass');
+            const fail = item.querySelector('.check-fail');
+            const simple = item.querySelector('input[type="checkbox"]:not(.check-pass):not(.check-fail)');
+
+            if (pass && pass.checked) {
+                item.classList.add('is-checked-print', 'is-pass-print');
+            } else if (fail && fail.checked) {
+                item.classList.add('is-checked-print', 'is-fail-print');
+            } else if (simple && simple.checked) {
+                item.classList.add('is-checked-print', 'is-pass-print');
+            }
+        });
+
+        // 2. Ocultar observaciones vacías
+        document.querySelectorAll('.obs-area').forEach(obsArea => {
+            const textarea = obsArea.querySelector('textarea');
+            if (textarea && textarea.value.trim() === '') obsArea.classList.add('empty-print');
+        });
+
+        // 3. Ocultar secciones enteras si están vacías
+        document.querySelectorAll('.section').forEach(sec => {
+            sec.classList.remove('empty-print');
+            const hasChecked = sec.querySelectorAll('.is-checked-print').length > 0;
+            const obsVal = sec.querySelector('textarea') ? sec.querySelector('textarea').value.trim() : "";
+            if (!hasChecked && !obsVal) sec.classList.add('empty-print');
+        });
+
+        const ejecutadosSelect = document.getElementById('sys-ejecutados').value;
+        const devolucion = document.getElementById("devolucion-block");
+        const corregido = document.getElementById("corregido-block");
+        
+        // Corrección de seguridad por si los elementos no existen
+        if (ejecutadosSelect === 'SI') { 
+            if(devolucion) devolucion.classList.add('ocultar-admin-print'); 
+            if(corregido) corregido.classList.add('ocultar-admin-print'); 
+        }
+
+        addPrintDate();
+
+        // --- FUNCIÓN DE LIMPIEZA MANUAL ---
+        const cleanupPrint = () => {
+            if (btnPrint) btnPrint.removeAttribute('disabled');
+            document.querySelectorAll('.check-item').forEach(i => i.classList.remove('is-checked-print', 'is-pass-print', 'is-fail-print'));
+            document.querySelectorAll('.obs-area').forEach(i => i.classList.remove('empty-print'));
+            document.querySelectorAll('.section').forEach(i => i.classList.remove('empty-print'));
+            if(devolucion) devolucion.classList.remove('ocultar-admin-print');
+            if(corregido) corregido.classList.remove('ocultar-admin-print');
+            removePrintDate();
+            
+            // --- NUEVO: RESTAURAR EL TÍTULO ORIGINAL ---
+            document.title = tituloOriginal;
+
+            // Remover listeners
+            document.removeEventListener('click', cleanupPrint);
+            document.removeEventListener('touchstart', cleanupPrint);
+            showToast("Vista de impresión cerrada", "info", 2000);
+        };
+
+        // --- EJECUTAR IMPRESIÓN ---
+        setTimeout(() => {
+            window.print();
+            
+            // ESCUCHA EVENTOS PARA LIMPIAR SOLO CUANDO EL USUARIO REGRESE
+            setTimeout(() => {
+                document.addEventListener('click', cleanupPrint, { once: true });
+                document.addEventListener('touchstart', cleanupPrint, { once: true });
+            }, 1000);
+            
+        }, 500);
+    }
 
     window.addEventListener("DOMContentLoaded", () => {
         initFlatpickr();
@@ -1461,6 +1577,3 @@
 
 </body>
 </html>
-
-
-
